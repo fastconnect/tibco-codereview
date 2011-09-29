@@ -1,6 +1,6 @@
 package com.mycompany.sonar.reference.batch;
 
-import com.mycompany.sonar.reference.SampleMetrics;
+import com.mycompany.sonar.reference.ExampleMetrics;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.sonar.api.batch.Decorator;
@@ -26,11 +26,11 @@ public class RandomDecorator implements Decorator {
       double value = RandomUtils.nextDouble();
 
       // Add a measure to the current Java method
-      context.saveMeasure(SampleMetrics.RANDOM, value);
+      context.saveMeasure(ExampleMetrics.RANDOM, value);
 
     } else {
       // we sum random values on resources different than method
-      context.saveMeasure(SampleMetrics.RANDOM, MeasureUtils.sum(true, context.getChildrenMeasures(SampleMetrics.RANDOM)));
+      context.saveMeasure(ExampleMetrics.RANDOM, MeasureUtils.sum(true, context.getChildrenMeasures(ExampleMetrics.RANDOM)));
     }
   }
 }

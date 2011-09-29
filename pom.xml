@@ -7,9 +7,12 @@
   <packaging>sonar-plugin</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Sonar Examples :: Reference Plugin</name>
+  <description>plugin description will be displayed in Sonar</description>
 
   <properties>
     <sonar.buildVersion>2.10</sonar.buildVersion>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jdk.min.version>1.5</jdk.min.version>
   </properties>
 
   <dependencies>
@@ -37,7 +40,7 @@
         <version>1.1</version>
         <extensions>true</extensions>
         <configuration>
-          <pluginClass>com.mycompany.sonar.reference.SamplePlugin</pluginClass>
+          <pluginClass>com.mycompany.sonar.reference.ExamplePlugin</pluginClass>
         </configuration>
       </plugin>
       <plugin>
@@ -45,10 +48,28 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-          <encoding>UTF-8</encoding>
+          <source>${jdk.min.version}</source>
+          <target>${jdk.min.version}</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <!-- UTF-8 bundles are not supported by Java, so they must be converted during build -->
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>native2ascii-maven-plugin</artifactId>
+        <version>1.0-alpha-1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>native2ascii</goal>
+            </goals>
+            <configuration>
+              <encoding>UTF8</encoding>
+              <src>${basedir}/src/main/resources</src>
+              <dest>${project.build.outputDirectory}</dest>
+              <includes>**/*.properties</includes>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

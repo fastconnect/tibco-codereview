@@ -7,7 +7,7 @@ import org.sonar.api.measures.Metrics;
 import java.util.Arrays;
 import java.util.List;
 
-public final class SampleMetrics implements Metrics {
+public final class ExampleMetrics implements Metrics {
 
   public static final Metric MESSAGE = new Metric.Builder("message_key", "Message", Metric.ValueType.STRING)
       .setDescription("This is a metric to store a well known message")
@@ -24,7 +24,7 @@ public final class SampleMetrics implements Metrics {
       .create();
 
   // getMetrics() method is defined in the Metrics interface and is used by
-  // Sonar to retrieve the list of new Metric
+  // Sonar to retrieve the list of new metrics
   public List<Metric> getMetrics() {
     return Arrays.asList(MESSAGE, RANDOM);
   }
