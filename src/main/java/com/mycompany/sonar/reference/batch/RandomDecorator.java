@@ -13,11 +13,13 @@ import org.sonar.api.resources.Scopes;
 
 public class RandomDecorator implements Decorator {
 
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
     // Execute only on Java projects
     return StringUtils.equals(project.getLanguageKey(), Java.KEY);
   }
 
+  @Override
   public void decorate(Resource resource, DecoratorContext context) {
     // This method is executed on the whole tree of resources.
     // Bottom-up navigation : Java methods -> Java classes -> files -> packages -> modules -> project

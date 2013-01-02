@@ -25,6 +25,7 @@ public final class ExampleMetrics implements Metrics {
 
   // getMetrics() method is defined in the Metrics interface and is used by
   // Sonar to retrieve the list of new metrics
+  @Override
   public List<Metric> getMetrics() {
     return Arrays.asList(MESSAGE, RANDOM);
   }
