@@ -25,7 +25,6 @@ public final class ExamplePlugin extends SonarPlugin {
   public static final String MY_PROPERTY = "sonar.example.myproperty";
 
   // This is where you're going to declare all your Sonar extensions
-  @Override
   public List getExtensions() {
     return Arrays.asList(
         // Definitions

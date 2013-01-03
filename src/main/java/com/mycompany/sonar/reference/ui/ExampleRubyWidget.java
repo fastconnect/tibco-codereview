@@ -31,12 +31,10 @@ import org.sonar.api.web.WidgetPropertyType;
 })
 public class ExampleRubyWidget extends AbstractRubyTemplate implements RubyRailsWidget {
 
-  @Override
   public String getId() {
     return "sample";
   }
 
-  @Override
   public String getTitle() {
     return "Sample";
   }
