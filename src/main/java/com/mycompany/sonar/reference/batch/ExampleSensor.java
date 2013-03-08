@@ -2,6 +2,8 @@ package com.mycompany.sonar.reference.batch;
 
 import com.mycompany.sonar.reference.ExampleMetrics;
 import com.mycompany.sonar.reference.ExamplePlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
@@ -9,6 +11,8 @@ import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
 
 public class ExampleSensor implements Sensor {
+
+  private static final Logger LOG = LoggerFactory.getLogger(ExampleSensor.class);
 
   private Settings settings;
 
@@ -25,7 +29,15 @@ public class ExampleSensor implements Sensor {
   }
 
   public void analyse(Project project, SensorContext sensorContext) {
-    Measure measure = new Measure(ExampleMetrics.MESSAGE, settings.getString(ExamplePlugin.MY_PROPERTY));
+    String value = settings.getString(ExamplePlugin.MY_PROPERTY);
+    LOG.info(ExamplePlugin.MY_PROPERTY + "=" + value);
+    Measure measure = new Measure(ExampleMetrics.MESSAGE, value);
     sensorContext.saveMeasure(measure);
   }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
 }

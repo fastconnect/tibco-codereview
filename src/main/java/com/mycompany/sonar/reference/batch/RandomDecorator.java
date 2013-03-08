@@ -33,4 +33,10 @@ public class RandomDecorator implements Decorator {
       context.saveMeasure(ExampleMetrics.RANDOM, MeasureUtils.sum(true, context.getChildrenMeasures(ExampleMetrics.RANDOM)));
     }
   }
+
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
 }
