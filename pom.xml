@@ -8,7 +8,7 @@
   <version>0.1-SNAPSHOT</version>
 
   <name>Sonar Examples :: Reference Plugin</name>
-  <description>plugin description will be displayed in Sonar</description>
+  <description>Plugin description will be displayed in SonarQube</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
