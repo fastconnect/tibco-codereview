@@ -1,6 +1,7 @@
 package com.mycompany.sonar.reference;
 
 import com.mycompany.sonar.reference.batch.ExampleSensor;
+import com.mycompany.sonar.reference.batch.IssueSensor;
 import com.mycompany.sonar.reference.batch.RandomDecorator;
 import com.mycompany.sonar.reference.ui.ExampleFooter;
 import com.mycompany.sonar.reference.ui.ExampleRubyWidget;
@@ -27,13 +28,13 @@ public final class ExamplePlugin extends SonarPlugin {
   // This is where you're going to declare all your Sonar extensions
   public List getExtensions() {
     return Arrays.asList(
-        // Definitions
-        ExampleMetrics.class,
+      // Definitions
+      ExampleMetrics.class,
 
-        // Batch
-        ExampleSensor.class, RandomDecorator.class,
+      // Batch
+      ExampleSensor.class, RandomDecorator.class, IssueSensor.class,
 
-        // UI
-        ExampleFooter.class, ExampleRubyWidget.class);
+      // UI
+      ExampleFooter.class, ExampleRubyWidget.class);
   }
 }
