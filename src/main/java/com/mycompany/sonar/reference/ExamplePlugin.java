@@ -1,16 +1,18 @@
 package com.mycompany.sonar.reference;
 
-import com.mycompany.sonar.reference.batch.ExampleSensor;
-import com.mycompany.sonar.reference.batch.IssueSensor;
-import com.mycompany.sonar.reference.batch.RandomDecorator;
-import com.mycompany.sonar.reference.ui.ExampleFooter;
-import com.mycompany.sonar.reference.ui.ExampleRubyWidget;
+import java.util.Arrays;
+import java.util.List;
+
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
 
-import java.util.Arrays;
-import java.util.List;
+import com.mycompany.sonar.reference.batch.ExampleSensor;
+import com.mycompany.sonar.reference.batch.IssueSensor;
+import com.mycompany.sonar.reference.batch.ListAllIssuesPostJob;
+import com.mycompany.sonar.reference.batch.RandomDecorator;
+import com.mycompany.sonar.reference.ui.ExampleFooter;
+import com.mycompany.sonar.reference.ui.ExampleRubyWidget;
 
 /**
  * This class is the entry point for all extensions
@@ -32,7 +34,7 @@ public final class ExamplePlugin extends SonarPlugin {
       ExampleMetrics.class,
 
       // Batch
-      ExampleSensor.class, RandomDecorator.class, IssueSensor.class,
+      ExampleSensor.class, RandomDecorator.class, IssueSensor.class, ListAllIssuesPostJob.class,
 
       // UI
       ExampleFooter.class, ExampleRubyWidget.class);
