@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<root xmlns = "http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd Connection%20parameter%20schema.xsd">
+	<connection-type extention = "sharedjdbc">
+		<xpath-global-variables label = "Driver">BWSharedResource/config/driver/text()</xpath-global-variables>
+		<xpath-global-variables label = "URL">BWSharedResource/config/location/text()</xpath-global-variables>
+		<xpath-global-variables label = "Password">BWSharedResource/config/password/text()</xpath-global-variables>
+		<xpath-global-variables label = "User">BWSharedResource/config/user/text()</xpath-global-variables>
+	</connection-type>
+	<connection-type extention = "sharedjmscon">
+		<xpath-global-variables label = "JNDI URL">BWSharedResource/config/NamingEnvironment/ProviderURL/text()</xpath-global-variables>
+		<xpath-global-variables label = "Username">BWSharedResource/config/ConnectionAttributes/username/text()</xpath-global-variables>
+		<xpath-global-variables label = "Password">BWSharedResource/config/ConnectionAttributes/password/text()</xpath-global-variables>
+	</connection-type>
+</root>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <pd:name>CodeReview/Processes/Review/MAI-005 - Projlib Import.process</pd:name>
+    <pd:description>Vérifie que les imports de projlib se font bien en .projlib.
+Détecte donc les .projlib1 .projlib2 etc...</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx4:review-result>
+            <pfx4:invalid-imports>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
+                </xsl:attribute>
+                <xsl:attribute name="ruleId">
+                    <xsl:value-of select="'MAI-005'"/>
+                </xsl:attribute>
+                <xsl:attribute name="grade">
+                    <xsl:value-of select="if(exists($Check-Imports/root/param)) then 0 else 100"/>
+                </xsl:attribute>
+                <xsl:attribute name="weight">
+                    <xsl:value-of select="20"/>
+                </xsl:attribute>
+                <xsl:for-each select="$Check-Imports/root/param">
+                    <pfx4:invalid-import>
+                        <xsl:value-of select="translate(., '\\', '')"/>
+                    </pfx4:invalid-import>
+                </xsl:for-each>
+            </pfx4:invalid-imports>
+        </pfx4:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:review-result"/>
+    <pd:endX>570</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1357291677611</pd:targetNamespace>
+    <pd:activity name="Get .designtimelibs">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>149</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Project explorer/Get file by type.process</processName>
+        </config>
+        <pd:inputBindings>
+            <type>
+                <xsl:value-of select="'designtimelibs'"/>
+            </type>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Check Imports">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>526</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="param" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Read-Parse-File/Output/Rows/root[&#xA;&#x9;not(starts-with(index, '#')) and &#xA;&#x9;tib:right(translate(filealias, '\\', ''), 7) !='projlib'&#xA;]">
+                    <param>
+                        <xsl:value-of select="filealias"/>
+                    </param>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read Parse File">
+        <pd:type>com.tibco.plugin.parse.ParseActivity</pd:type>
+        <pd:resourceType>ae.activities.ParseActivity</pd:resourceType>
+        <pd:x>369</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <InputType>String</InputType>
+            <Encoding>ASCII</Encoding>
+            <ParseSharedConfig>/CodeReview/Resources/Data Format/DesignTimeLibs.sharedparse</ParseSharedConfig>
+            <ContinueonError>true</ContinueonError>
+            <SpecifyStartRecord>false</SpecifyStartRecord>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <text>
+                    <xsl:value-of select="$Get-.designtimelibs/ns1:project/ns1:file[1]"/>
+                </text>
+                <noOfRecords>
+                    <xsl:value-of select="100"/>
+                </noOfRecords>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get .designtimelibs</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get .designtimelibs</pd:from>
+        <pd:to>Read Parse File</pd:to>
+        <pd:xpathDescription>Found .designtimelibs file</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>count($Get-.designtimelibs/ns1:project/ns1:file) &gt; 0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get .designtimelibs</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Check Imports</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read Parse File</pd:from>
+        <pd:to>Check Imports</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx3:root/pfx3:disabled = 'true'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

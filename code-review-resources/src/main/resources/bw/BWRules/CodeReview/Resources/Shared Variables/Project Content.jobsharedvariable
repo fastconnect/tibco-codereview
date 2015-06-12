@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:pfx="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent">
+    <import namespace="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" schemaLocation="/CodeReview/Resources/Shared Variables/Project Content.xsd"/>
+    <name>Project Content</name>
+    <resourceType>ae.shared.jobSharedVariable</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <initialValue>none</initialValue>
+        <xsdString ref="pfx:project"/>
+    </config>
+</BWSharedResource>

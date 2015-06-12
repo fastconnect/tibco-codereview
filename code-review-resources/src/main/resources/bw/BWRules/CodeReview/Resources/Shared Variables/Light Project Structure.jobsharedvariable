@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:pfx="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess">
+    <import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <name>Light Project Structure</name>
+    <resourceType>ae.shared.jobSharedVariable</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <initialValue>none</initialValue>
+        <xsdString ref="pfx:project"/>
+    </config>
+</BWSharedResource>

@@ -1,0 +1,119 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>code-review-parent</artifactId>
+		<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>code-review-plugin</artifactId>
+	<packaging>maven-plugin</packaging>
+
+	<name>Code Review Plugin for TIBCO BusinessWorks - Maven plugin</name>
+
+	<properties>
+		<maven.site.skip>false</maven.site.skip>
+		<maven.site.deploy.skip>false</maven.site.deploy.skip>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.rendersnake</groupId>
+			<artifactId>rendersnake</artifactId>
+			<version>1.8</version>
+		</dependency>
+ 		<dependency>
+			<groupId>com.github.goldin</groupId>
+			<artifactId>copy-maven-plugin</artifactId>
+			<version>0.2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rendersnake</groupId>
+			<artifactId>rendersnake</artifactId>
+			<version>1.8</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.fastconnect.factory.tibco.bw.maven</groupId>
+			<artifactId>bw-maven-plugin</artifactId>
+			<version>${bw.maven.plugin.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+		    <artifactId>code-review-resources</artifactId>
+		    <version>${project.version}</version>
+		    <classifier>bw</classifier>
+		    <type>zip</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<!-- Not needed for execution -->
+			<scope>provided</scope>
+		</dependency>
+		<!-- generated help mojo has a dependency to plexus-utils -->
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-utils</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<configuration>
+					<goalPrefix>code-review</goalPrefix>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>site</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<site>
+					<id>repo.site.fastconnect.org</id>
+					<url>${repositorySiteProtocol}:${repositorySiteURL}/${project.artifactId}</url>
+				</site>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>public-site</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<site>
+					<id>repo.public.site.fastconnect.org</id>
+					<url>${repositorySiteProtocol}:${repositorySiteURL}/${project.artifactId}</url>
+				</site>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
+</project>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:rpi="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd"
+	 targetNamespace="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element xmlns:xs="http://www.w3.org/2001/XMLSchema" name="root">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="disabled" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+</xs:schema>
+

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx3="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <pd:name>CodeReview/Processes/Review/REL-001 - Recursive Calls.process</pd:name>
+    <pd:description>
+!!! Ne supporte pas les appels dynamiques !!!</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Format-result/pfx5:review-result"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:review-result"/>
+    <pd:endX>698</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1357291677611</pd:targetNamespace>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>570</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="pfx5:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:review-result>
+                <xsl:for-each select="$_error">
+                    <pfx5:errors>
+                        <pfx5:error>
+                            <pfx5:error-name>
+                                <xsl:value-of select="if(ns1:ErrorReport/Class !='') then&#xA;ns1:ErrorReport/Class&#xA;else if(ns1:ErrorReport/FullClass !='') then&#xA;ns1:ErrorReport/FullClass&#xA;else if(ns1:ErrorReport/Msg !='') then&#xA;substring(ns1:ErrorReport/Msg, 1, 50)&#xA;else &#xA;substring(ns1:ErrorReport/StackTrace, 1, 50)"/>
+                            </pfx5:error-name>
+                            <pfx5:rule>
+                                <xsl:value-of select="'REL-001'"/>
+                            </pfx5:rule>
+                            <pfx5:context>
+                                <xsl:value-of select="''"/>
+                            </pfx5:context>
+                        </pfx5:error>
+                    </pfx5:errors>
+                </xsl:for-each>
+                <pfx5:recursive-calls>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'REL-001'"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="grade">
+                        <xsl:value-of select="if(exists($Parse-XML/root/pfx:process-call)) then 0 else 100"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:for-each select="$Parse-XML/root/pfx:process-call">
+                        <pfx5:recursive-call>
+                            <xsl:for-each select="pfx:process">
+                                <xsl:sort select="position()" order="descending" data-type="number"/>
+                                <pfx5:process>
+                                    <xsl:value-of select="."/>
+                                </pfx5:process>
+                            </xsl:for-each>
+                            <pfx5:checked-recursive>
+                                <xsl:value-of select="true()"/>
+                            </pfx5:checked-recursive>
+                        </pfx5:recursive-call>
+                    </xsl:for-each>
+                </pfx5:recursive-calls>
+            </pfx5:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Extract Project Structure">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>234</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Extract Project Structure - No Activities.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>570</pd:x>
+        <pd:y>418</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <pfx3:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($_error/ns1:ErrorReport)"/>
+                </message>
+            </pfx3:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Transform XML">
+        <pd:type>com.tibco.plugin.xml.XMLTransformActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLTransformActivity</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <engine>TibcoXML</engine>
+            <stylesheet>/CodeReview/Resources/XSLT/Recursive Call.xslt</stylesheet>
+        </config>
+        <pd:inputBindings>
+            <textInput>
+                <xmlString>
+                    <xsl:value-of select="tib:render-xml($Extract-Project-Structure/lp:project)"/>
+                </xmlString>
+            </textInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>484</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:process-call" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Project Structure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Transform XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Transform XML</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Transform XML</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

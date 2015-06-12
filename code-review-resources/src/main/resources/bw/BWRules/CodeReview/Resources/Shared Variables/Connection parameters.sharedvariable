@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource xmlns:pfx="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd">
+    <import namespace="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" schemaLocation="/CodeReview/Resources/Shared Variables/Connection parameter schema.xsd"/>
+    <name>Connection parameters</name>
+    <resourceType>ae.shared.sharedVariable</resourceType>
+    <config xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+        <persistent>false</persistent>
+        <multi-engine>false</multi-engine>
+        <initialValue>byRef</initialValue>
+        <initialValueRef>/CodeReview/Resources/Shared Variables/Connection parameter initial value.xml</initialValueRef>
+        <xsdString ref="pfx:root"/>
+    </config>
+</BWSharedResource>

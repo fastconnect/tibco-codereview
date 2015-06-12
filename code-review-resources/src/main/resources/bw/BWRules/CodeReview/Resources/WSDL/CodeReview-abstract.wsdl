@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx0="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:tns="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd">
+    <import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" location="../XSD/CodeReview.xsd"/>
+    <message name="code-review-msg">
+        <part name="code-review" element="pfx0:code-review"/>
+    </message>
+    <message name="null-msg"/>
+    <portType name="CodeReview">
+        <operation name="review">
+            <input message="tns:code-review-msg"/>
+            <output message="tns:null-msg"/>
+        </operation>
+        <operation name="isStarted">
+            <input message="tns:null-msg"/>
+            <output message="tns:null-msg"/>
+        </operation>
+        <operation name="stopEngine">
+            <input message="tns:null-msg"/>
+            <output message="tns:null-msg"/>
+        </operation>
+    </portType>
+</definitions>

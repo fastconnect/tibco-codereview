@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" schemaLocation="/CodeReview/Resources/XSD/Test result.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Review/MAI-002 - Dynamic Process Calls.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx5:review-result>
+            <pfx5:errors>
+                <xsl:copy-of select="$Find-Activity-Calls/root/pfx5:error"/>
+            </pfx5:errors>
+            <pfx5:activityRule>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                </xsl:attribute>
+                <xsl:attribute name="ruleId">
+                    <xsl:value-of select="'MAI-002'"/>
+                </xsl:attribute>
+                <xsl:variable name="tempGrade" select="100 - (count($Find-Activity-Calls/root) * 10)"/>
+                <xsl:attribute name="grade">
+                    <xsl:value-of select="if($tempGrade &lt; 0) then 0 else $tempGrade"/>
+                </xsl:attribute>
+                <xsl:attribute name="weight">
+                    <xsl:value-of select="10"/>
+                </xsl:attribute>
+                <xsl:copy-of select="$Find-Activity-Calls/root/pfx5:call"/>
+            </pfx5:activityRule>
+        </pfx5:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:review-result"/>
+    <pd:endX>314</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AuditProcess>
+            <xsd:element name="audit-process">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="activity-number" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </AuditProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1313588926421</pd:targetNamespace>
+    <pd:activity name="Find Activity Calls">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>199</pd:x>
+        <pd:y>189</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Find Activity Calls.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xpath>
+                    <xsl:value-of select="&quot;//pd:activity[pd:type='com.tibco.pe.core.CallProcessActivity' and exists(config/processNameXPath)]/@name&quot;"/>
+                </xpath>
+                <ruleName>
+                    <xsl:value-of select="BW:getCurrentProcessName($_processContext/ns3:ProcessContext/ProcessId)"/>
+                </ruleName>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Find Activity Calls</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Find Activity Calls</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>

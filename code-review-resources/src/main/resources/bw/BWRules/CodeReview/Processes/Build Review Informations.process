@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Build Review Informations.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="baseDir" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx2:review-result>
+            <xsl:attribute name="timestamp">
+                <xsl:value-of select="current-dateTime()"/>
+            </xsl:attribute>
+            <xsl:if test="$Get-Project-Name/results/result[1]">
+                <xsl:attribute name="project-name">
+                    <xsl:value-of select="$Get-Project-Name/results/result[1]"/>
+                </xsl:attribute>
+            </xsl:if>
+        </pfx2:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx2:review-result"/>
+    <pd:endX>442</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1362830480279</pd:targetNamespace>
+    <pd:activity name="Get Project Name">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>310</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Get XPath string value.process</processName>
+        </config>
+        <pd:inputBindings>
+            <EvaluateXpath>
+                <xpath>
+                    <xsl:value-of select="&quot;//property[@key='projectName']/@value&quot;"/>
+                </xpath>
+                <xml-data>
+                    <xsl:value-of select="$Read-.folder-file-of-project-to-review/ns1:ReadActivityOutputTextClass/fileContent/textContent"/>
+                </xml-data>
+            </EvaluateXpath>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Read .folder file of project to review">
+        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
+        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
+        <pd:x>177</pd:x>
+        <pd:y>113</pd:y>
+        <config>
+            <encoding>text</encoding>
+        </config>
+        <pd:inputBindings>
+            <ns:ReadActivityInputClass>
+                <fileName>
+                    <xsl:value-of select="concat($Start/root/baseDir, '/.folder')"/>
+                </fileName>
+            </ns:ReadActivityInputClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Read .folder file of project to review</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Read .folder file of project to review</pd:from>
+        <pd:to>Get Project Name</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Project Name</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

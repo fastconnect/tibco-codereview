@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:pc="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent"
+	 targetNamespace="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="project">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="pc:file" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="file">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="name" type="xs:string" use="required"/>
+					<xs:attribute name="fullName" type="xs:string" use="required"/>
+					<xs:attribute name="extension" type="xs:string" use="required"/>
+					<xs:attribute name="size" type="xs:unsignedLong" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

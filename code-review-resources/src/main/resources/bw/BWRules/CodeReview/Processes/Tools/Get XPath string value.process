@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:ns="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/FCFramework/LogManager/FCLogPrivatesExceptions.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/FCFramework/LogManager/Log.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/FCFramework/LogManager/Log.xsd" schemaLocation="/FCFramework/LogManager/SharedRessources/Schemas/XSD/FCLogPrivate.xsd"/>
+    <pd:name>CodeReview/Processes/Tools/Get XPath string value.process</pd:name>
+    <pd:description>
+</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="EvaluateXpath">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="xpath" type="xsd:string"/>
+                    <xsd:element name="xml-data" type="xsd:string"/>
+                    <xsd:element name="namespace-declaration" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <results>
+            <xsl:for-each select="$Parse-XML-1/results/result/text()">
+                <result>
+                    <xsl:value-of select="."/>
+                </result>
+            </xsl:for-each>
+            <xsl:for-each select="$Parse-XML/results/result/*">
+                <result>
+                    <xsl:value-of select="tib:render-xml(.,true())"/>
+                </result>
+            </xsl:for-each>
+            <xsl:for-each select="$Parse-XML/results/result/attribute::*">
+                <result>
+                    <xsl:value-of select="."/>
+                </result>
+            </xsl:for-each>
+        </results>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="results">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="result" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>506</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <TextResult>
+            <xsd:element name="texte" type="xsd:string"/>
+        </TextResult>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1304417328453</pd:targetNamespace>
+    <pd:activity name="Transform XML">
+        <pd:type>com.tibco.plugin.xml.XMLTransformActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLTransformActivity</pd:resourceType>
+        <pd:x>177</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <engine>TibcoXML</engine>
+            <stylesheet>/CodeReview/Resources/XSLT/Null XSLT.xslt</stylesheet>
+        </config>
+        <pd:inputBindings>
+            <textInput>
+                <xmlString>
+                    <xsl:value-of select="$Start/EvaluateXpath/xml-data"/>
+                </xmlString>
+                <stylesheet>
+                    <xsl:value-of select="concat('&lt;xsl:stylesheet version = &quot;1.0&quot; xmlns:xsl=&quot;http://www.w3.org/1999/XSL/Transform&quot; ',&#xA;&#x9;tib:concat-sequence-format($Start/EvaluateXpath/namespace-declaration,' '),&#xA;&#x9;' >&lt;xsl:template match=&quot;/&quot;>&lt;results>&lt;xsl:for-each select=&quot;',&#xA;&#x9;$Start/EvaluateXpath/xpath,&#xA;&#x9;'&quot;>&lt;result>&lt;xsl:copy-of select=&quot;.&quot;/>&lt;/result>&lt;/xsl:for-each>&lt;/results>&lt;/xsl:template>&lt;/xsl:stylesheet>')"/>
+                </stylesheet>
+            </textInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse XML">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>324</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:element name="results">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="result" minOccurs="0" maxOccurs="unbounded">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:any processContents="skip"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Parse-XML-1">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>330</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>false</validateOutput>
+            <term>
+                <xsd:element name="results">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="result" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </term>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$Transform-XML/xmlString"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Transform XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Transform XML</pd:from>
+        <pd:to>Parse XML</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Transform XML</pd:from>
+        <pd:to>Parse-XML-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse-XML-1</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

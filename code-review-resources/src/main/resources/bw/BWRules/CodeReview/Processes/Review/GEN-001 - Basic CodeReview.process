@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Review/GEN-001 - Basic CodeReview.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>66</pd:startY>
+    <pd:returnBindings>
+        <pfx3:review-result>
+            <xsl:copy-of select="$Format-result/pfx3:general"/>
+            <pfx3:errors>
+                <xsl:copy-of select="$Archives-Count/root/pfx3:errors/pfx3:error"/>
+                <xsl:copy-of select="$Activity-number/root/pfx3:errors/pfx3:error"/>
+            </pfx3:errors>
+        </pfx3:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:review-result"/>
+    <pd:endX>826</pd:endX>
+    <pd:endY>66</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1312984662250</pd:targetNamespace>
+    <pd:activity name="Activity number">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/Activities count.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Archives Count">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>482</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/Archives count.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="File number">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>386</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/File number.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>683</pd:x>
+        <pd:y>66</pd:y>
+        <config>
+            <element ref="pfx3:general"/>
+        </config>
+        <pd:inputBindings>
+            <pfx3:general>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/pfx2:root/pfx2:disabled"/>
+                </xsl:attribute>
+                <xsl:attribute name="ruleId">
+                    <xsl:value-of select="'GEN-001'"/>
+                </xsl:attribute>
+                <xsl:if test="exists($Archives-Count)">
+                    <pfx3:number-of-processes>
+                        <xsl:value-of select="$Process-number/process-number"/>
+                    </pfx3:number-of-processes>
+                    <pfx3:number-of-activities>
+                        <xsl:value-of select="$Activity-number/root/number-of-activities"/>
+                    </pfx3:number-of-activities>
+                    <pfx3:number-of-files>
+                        <xsl:value-of select="$File-number/file-number"/>
+                    </pfx3:number-of-files>
+                    <pfx3:number-of-libs>
+                        <xsl:value-of select="$Projlib-Count/nb"/>
+                    </pfx3:number-of-libs>
+                    <pfx3:number-of-ears>
+                        <xsl:value-of select="$Archives-Count/root/ear"/>
+                    </pfx3:number-of-ears>
+                    <pfx3:number-of-pars>
+                        <xsl:value-of select="$Archives-Count/root/par"/>
+                    </pfx3:number-of-pars>
+                    <pfx3:number-of-aars>
+                        <xsl:value-of select="$Archives-Count/root/aar"/>
+                    </pfx3:number-of-aars>
+                    <xsl:if test="$LibBuilders-Count/file-number">
+                        <pfx3:number-of-libbuilder>
+                            <xsl:value-of select="$LibBuilders-Count/file-number"/>
+                        </pfx3:number-of-libbuilder>
+                    </xsl:if>
+                </xsl:if>
+            </pfx3:general>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="LibBuilders Count">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>578</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/LibBuilder Count.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>58</pd:x>
+        <pd:y>322</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Process number">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/Process number.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Projlib Count">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>401</pd:x>
+        <pd:y>290</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Review/Basic CodeReview/Projlib Count.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Process number</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>File number</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Activity number</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Projlib Count</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Archives Count</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Process number</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Projlib Count</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Archives Count</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>File number</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Activity number</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx2:root/pfx2:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>LibBuilders Count</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>LibBuilders Count</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
