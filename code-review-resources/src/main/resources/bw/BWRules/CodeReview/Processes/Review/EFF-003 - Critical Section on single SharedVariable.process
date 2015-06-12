@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:gv="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Review/EFF-003 - Critical Section on single SharedVariable.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx3:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Format-result/pfx4:review-result"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx4:review-result"/>
+    <pd:endX>634</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AuditProcess>
+            <xsd:element name="audit-process">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="activity-number" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </AuditProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1313588926421</pd:targetNamespace>
+    <pd:activity name="Extract Project Structure">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Extract Project Structure.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="pfx4:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx4:review-result>
+                <pfx4:errors>
+                    <xsl:for-each select="$_error">
+                        <pfx4:error>
+                            <pfx4:error-name>
+                                <xsl:value-of select="if(exists($_error/ns4:ErrorReport/Class) and $_error/ns4:ErrorReport/Class !='') then&#xA;$_error/ns4:ErrorReport/Class&#xA;else if(exists($_error/ns4:ErrorReport/FullClass) and $_error/ns4:ErrorReport/FullClass !='') then&#xA;$_error/ns4:ErrorReport/FullClass&#xA;else if(exists($_error/ns4:ErrorReport/Msg) and $_error/ns4:ErrorReport/Msg !='') then&#xA;substring($_error/ns4:ErrorReport/Msg, 1, 50)&#xA;else &#xA;substring($_error/ns4:ErrorReport/StackTrace, 1, 50)"/>
+                            </pfx4:error-name>
+                            <pfx4:rule>
+                                <xsl:value-of select="'EFF-003'"/>
+                            </pfx4:rule>
+                            <pfx4:context>
+                                <xsl:value-of select="''"/>
+                            </pfx4:context>
+                        </pfx4:error>
+                    </xsl:for-each>
+                </pfx4:errors>
+                <pfx4:activityRule>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'EFF-003'"/>
+                    </xsl:attribute>
+                    <xsl:variable name="tempGrade" select="100 - count($Map-Data/root/pfx4:call) * 20"/>
+                    <xsl:attribute name="grade">
+                        <xsl:value-of select="if($tempGrade &lt; 0) then 0 else $tempGrade"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:copy-of select="$Map-Data/root/pfx4:call"/>
+                </pfx4:activityRule>
+            </pfx4:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map Data">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>346</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx4:call" minOccurs="0" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <xsl:for-each select="$Extract-Project-Structure/lp:project/descendant::lp:process&#xA;&#x9;[descendant::lp:group[@type = 'criticalSection'  and @more='single' and count(&#xA;&#x9;&#x9;descendant::lp:activity[&#xA;&#x9;&#x9;&#x9;(@type='com.tibco.pe.core.SetSharedVariableActivity' or  &#xA;&#x9;&#x9;&#x9;@type='com.tibco.pe.core.GetSharedVariableActivity')&#xA;&#x9;&#x9;&#x9;and lp:info[@name='SharedVariable' and not(contains(., '.jobsharedvariable'))]]&#xA;&#x9;&#x9;) = 1]&#xA;&#x9;]">
+                    <pfx4:call>
+                        <pfx4:process>
+                            <xsl:value-of select="@name"/>
+                        </pfx4:process>
+                        <pfx4:activity>
+                            <xsl:value-of select="descendant::lp:group[@type = 'criticalSection'  and @more='single' and count(&#xA;&#x9;&#x9;descendant::lp:activity[&#xA;&#x9;&#x9;&#x9;@type='com.tibco.pe.core.SetSharedVariableActivity' or  &#xA;&#x9;&#x9;&#x9;@type='com.tibco.pe.core.GetSharedVariableActivity']) = 1]/descendant::lp:activity[&#xA;&#x9;&#x9;&#x9;@type='com.tibco.pe.core.SetSharedVariableActivity' or  &#xA;&#x9;&#x9;&#x9;@type='com.tibco.pe.core.GetSharedVariableActivity'][1]/@name"/>
+                        </pfx4:activity>
+                    </pfx4:call>
+                </xsl:for-each>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Null">
+        <pd:type>com.tibco.plugin.timer.NullActivity</pd:type>
+        <pd:resourceType>ae.activities.null</pd:resourceType>
+        <pd:x>346</pd:x>
+        <pd:y>322</pd:y>
+        <config/>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Project Structure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Null</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx3:root/pfx3:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Map Data</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map Data</pd:from>
+        <pd:to>Null</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

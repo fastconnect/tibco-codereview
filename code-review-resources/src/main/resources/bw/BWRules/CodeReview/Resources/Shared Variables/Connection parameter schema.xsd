@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="connection-type" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="connection-type">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="xpath-global-variables" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="label" type="xs:string"/>
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="extention" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,44 @@
+
+Usage
+
+	We will give common use case to see how to use the plugin.
+
+* Using the Code Review plugin as an extension
+
+	To use the Code Review plugin directly in your projects, add these lines in
+the POM of a BusinessWorks project or in its parent POM:
+
+-------------------------------------------------------------------------------
+  <plugin>
+      <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+      <artifactId>code-review-plugin</artifactId>
+      <version>${code.review.plugin.version}</version>
+      <extensions>true</extensions>
+  </plugin>
+-------------------------------------------------------------------------------
+
+* Using the Code Review plugin with another extension (such as BWMaven)
+
+	When another plugin is defined as an extension (such as BWMaven), the
+lifecyles mappings of both will collide. To use the Code Review as a standard
+plugin, add these lines in the POM of a BusinessWorks project or in its parent
+POM:
+
+-------------------------------------------------------------------------------
+  <plugin>
+      <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+      <artifactId>code-review-plugin</artifactId>
+      <version>${code.review.plugin.version}</version>
+      <executions>
+          <execution>
+              <id>code-review</id>
+              <phase>package</phase>
+              <goals>
+                  <goal>copy-code-review-bw-project</goal>
+                  <goal>copy-display-resources</goal>
+                  <goal>code-review</goal>
+              </goals>
+          </execution>
+      </executions>
+  </plugin>
+-------------------------------------------------------------------------------

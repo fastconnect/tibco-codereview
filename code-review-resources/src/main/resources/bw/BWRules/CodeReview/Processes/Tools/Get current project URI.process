@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <pd:name>CodeReview/Processes/Tools/Get current project URI.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <current-project-uri>
+            <xsl:value-of select="translate($Get-Current-Project-URI/javaCodeActivityOutput/CurrentProjectUri, '\', '/')"/>
+        </current-project-uri>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="current-project-uri" type="xsd:string"/>
+    </pd:endType>
+    <pd:endX>282</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1308653107750</pd:targetNamespace>
+    <pd:activity name="Get Current Project URI">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>165</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <fileName>GetcurrentprojectURIGetCurrentProjectURI</fileName>
+            <packageName>CodeReview.Processes.Tools.GetcurrentprojectURI</packageName>
+            <fullsource>package CodeReview.Processes.Tools.GetcurrentprojectURI;
+import java.util.*;
+import java.io.*;
+public class GetcurrentprojectURIGetCurrentProjectURI{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String CurrentProjectUri = "";
+	public String getCurrentProjectUri() {
+		return CurrentProjectUri;
+	}
+	public void setCurrentProjectUri(String val) {
+		CurrentProjectUri = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public GetcurrentprojectURIGetCurrentProjectURI() {
+	}
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	Out : String CurrentProjectUri
+* Available Variables: DO NOT MODIFY *****/
+
+String Uri=com.tibco.pe.core.Engine.getRepoAgent().getAbsoluteURIFromProjectRelativeURI("");
+
+String as = new String ("\\"); 
+String das = new String("/");
+
+CurrentProjectUri=Uri.replace(das,as);}
+}
+</fullsource>
+            <outputData>
+                <row>
+                    <fieldName>CurrentProjectUri</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>GetcurrentprojectURIGetCurrentProjectURI</name>
+                    <byteCode>yv66vgAAADIAMwkACwAcCgAMAB0IAB4KAB8AIAsAIQAiBwAjCAAkCgAGACUIACYKAAYAJwcAKAcAKQEAEUN1cnJlbnRQcm9qZWN0VXJpAQASTGphdmEvbGFuZy9TdHJpbmc7AQAUZ2V0Q3VycmVudFByb2plY3RVcmkBABQoKUxqYXZhL2xhbmcvU3RyaW5nOwEABENvZGUBAA9MaW5lTnVtYmVyVGFibGUBABRzZXRDdXJyZW50UHJvamVjdFVyaQEAFShMamF2YS9sYW5nL1N0cmluZzspVgEABjxpbml0PgEAAygpVgEABmludm9rZQEACkV4Y2VwdGlvbnMHACoBAApTb3VyY2VGaWxlAQAtR2V0Y3VycmVudHByb2plY3RVUklHZXRDdXJyZW50UHJvamVjdFVSSS5qYXZhDAANAA4MABUAFgEAAAcAKwwALAAtBwAuDAAvADABABBqYXZhL2xhbmcvU3RyaW5nAQABXAwAFQAUAQABLwwAMQAyAQBYQ29kZVJldmlldy9Qcm9jZXNzZXMvVG9vbHMvR2V0Y3VycmVudHByb2plY3RVUkkvR2V0Y3VycmVudHByb2plY3RVUklHZXRDdXJyZW50UHJvamVjdFVSSQEAEGphdmEvbGFuZy9PYmplY3QBABNqYXZhL2xhbmcvRXhjZXB0aW9uAQAYY29tL3RpYmNvL3BlL2NvcmUvRW5naW5lAQAMZ2V0UmVwb0FnZW50AQAgKClMY29tL3RpYmNvL2J3L3N0b3JlL1JlcG9BZ2VudDsBABxjb20vdGliY28vYncvc3RvcmUvUmVwb0FnZW50AQAkZ2V0QWJzb2x1dGVVUklGcm9tUHJvamVjdFJlbGF0aXZlVVJJAQAmKExqYXZhL2xhbmcvU3RyaW5nOylMamF2YS9sYW5nL1N0cmluZzsBAAdyZXBsYWNlAQBEKExqYXZhL2xhbmcvQ2hhclNlcXVlbmNlO0xqYXZhL2xhbmcvQ2hhclNlcXVlbmNlOylMamF2YS9sYW5nL1N0cmluZzsAIQALAAwAAAABAAQADQAOAAAABAABAA8AEAABABEAAAAdAAEAAQAAAAUqtAABsAAAAAEAEgAAAAYAAQAAAAgAAQATABQAAQARAAAAIgACAAIAAAAGKiu1AAGxAAAAAQASAAAACgACAAAACwAFAAwAAQAVABYAAQARAAAAKwACAAEAAAALKrcAAioSA7UAAbEAAAABABIAAAAOAAMAAAAOAAQABgAKAA8AAQAXABYAAgARAAAATgAEAAQAAAAquAAEEgO5AAUCAEy7AAZZEge3AAhNuwAGWRIJtwAITiorLSy2AAq1AAGxAAAAAQASAAAAEgAEAAAAFQALABcAFQAYAB8AGgAYAAAABAABABkAAQAaAAAAAgAb</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get Current Project URI</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Current Project URI</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

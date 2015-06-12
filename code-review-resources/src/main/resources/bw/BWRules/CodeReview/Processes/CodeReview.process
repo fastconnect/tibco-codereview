@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
+    <pd:name>CodeReview/Processes/CodeReview.process</pd:name>
+    <pd:description>hh</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType wsMsgRef="pfx2:code-review-msg"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx2:null-msg/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType wsMsgRef="pfx2:null-msg"/>
+    <pd:endX>1050</pd:endX>
+    <pd:endY>226</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1313594167515</pd:targetNamespace>
+    <pd:activity name="All review process">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>441</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/All review process.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <start>
+                    <xsl:value-of select="$Generate-Start-Timestamp/root/start"/>
+                </start>
+                <xsl:copy-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review"/>
+                <xsl:if test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name">
+                    <project-name>
+                        <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name"/>
+                    </project-name>
+                </xsl:if>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Load project">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>296</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Project explorer/Load project.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <path>
+                    <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-path"/>
+                </path>
+                <xsl:choose>
+                    <xsl:when test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-encoding">
+                        <encoding>
+                            <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-encoding"/>
+                        </encoding>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <encoding>
+                            <xsl:value-of select="'UTF-8'"/>
+                        </encoding>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write html file">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>908</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <createMissingDirectories>true</createMissingDirectories>
+            <append>false</append>
+        </config>
+        <pd:inputBindings>
+            <ns:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$All-review-process/root/ns3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$All-review-process/root/ns3:review-result/@timestamp),&#xA;&#x9;'.html')"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="$HTML-output/html-string"/>
+                </textContent>
+                <encoding>
+                    <xsl:value-of select="'UTF-8'"/>
+                </encoding>
+            </ns:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="HTML output">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>744</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Format output/HTML output.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:for-each select="$All-review-process/root">
+                <root>
+                    <current-project-uri>
+                        <xsl:value-of select="current-project-uri"/>
+                    </current-project-uri>
+                    <lang>
+                        <xsl:value-of select="lang"/>
+                    </lang>
+                    <xsl:if test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name">
+                        <project-name>
+                            <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name"/>
+                        </project-name>
+                    </xsl:if>
+                    <xsl:copy-of select="ns3:review-result"/>
+                    <svg-filename>
+                        <xsl:value-of select="$SVG-output/root/svgFile"/>
+                    </svg-filename>
+                </root>
+            </xsl:for-each>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Write xml file">
+        <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+        <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+        <pd:x>746</pd:x>
+        <pd:y>322</pd:y>
+        <config>
+            <encoding>text</encoding>
+            <compressFile>None</compressFile>
+            <createMissingDirectories>true</createMissingDirectories>
+            <append>false</append>
+        </config>
+        <pd:inputBindings>
+            <ns:WriteActivityInputTextClass>
+                <fileName>
+                    <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$All-review-process/root/ns3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$All-review-process/root/ns3:review-result/@timestamp),&#xA;&#x9;'.xml')"/>
+                </fileName>
+                <textContent>
+                    <xsl:value-of select="tib:render-xml($All-review-process/root/ns3:review-result, false(), true())"/>
+                </textContent>
+            </ns:WriteActivityInputTextClass>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Load Projlibs">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>298</pd:x>
+        <pd:y>226</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Project explorer/Load Projlibs.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <fileAliases>
+                    <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:fileAliasesFile"/>
+                </fileAliases>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Start Timestamp">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>174</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="start" type="xsd:dateTime"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <start>
+                    <xsl:value-of select="current-dateTime()"/>
+                </start>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>571</pd:x>
+        <pd:y>424</pd:y>
+        <pd:width>319</pd:width>
+        <pd:height>163</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats/pfx:format[starts-with(text(), 'CUSTOM:')]</pd:over>
+            <pd:iterationElementSlot>customElement</pd:iterationElementSlot>
+            <pd:indexSlot>customIndex</pd:indexSlot>
+            <pd:activityOutputName/>
+            <pd:accumulateOutput>false</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>Custom output</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Write custom file</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Custom output</pd:from>
+            <pd:to>Write custom file</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="Custom output">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>654</pd:x>
+            <pd:y>514</pd:y>
+            <config>
+                <processName>/CodeReview/Processes/Format output/Custom output.process</processName>
+            </config>
+            <pd:inputBindings>
+                <xsl:for-each select="$All-review-process/root">
+                    <root>
+                        <current-project-uri>
+                            <xsl:value-of select="current-project-uri"/>
+                        </current-project-uri>
+                        <lang>
+                            <xsl:value-of select="lang"/>
+                        </lang>
+                        <xsl:if test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name">
+                            <project-name>
+                                <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name"/>
+                            </project-name>
+                        </xsl:if>
+                        <customXSLT>
+                            <xsl:value-of select="substring-after(substring-after($customElement/pfx:format, ':'), ':')"/>
+                        </customXSLT>
+                        <xsl:copy-of select="ns3:review-result"/>
+                    </root>
+                </xsl:for-each>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Write custom file">
+            <pd:type>com.tibco.plugin.file.FileWriteActivity</pd:type>
+            <pd:resourceType>ae.activities.FileWriteActivity</pd:resourceType>
+            <pd:x>789</pd:x>
+            <pd:y>514</pd:y>
+            <config>
+                <encoding>text</encoding>
+                <compressFile>None</compressFile>
+            </config>
+            <pd:inputBindings>
+                <ns:WriteActivityInputTextClass>
+                    <fileName>
+                        <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$All-review-process/root/ns3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$All-review-process/root/ns3:review-result/@timestamp),&#xA;&#x9;'_', tib:tokenize($customElement/pfx:format, ':')[2],&#xA;&#x9;'.html')"/>
+                    </fileName>
+                    <textContent>
+                        <xsl:value-of select="$Custom-output/html-string"/>
+                    </textContent>
+                    <encoding>
+                        <xsl:value-of select="'UTF-8'"/>
+                    </encoding>
+                </ns:WriteActivityInputTextClass>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="SVG output">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>612</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Format output/SVG output.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:for-each select="$All-review-process/root">
+                <root>
+                    <current-project-uri>
+                        <xsl:value-of select="current-project-uri"/>
+                    </current-project-uri>
+                    <lang>
+                        <xsl:value-of select="lang"/>
+                    </lang>
+                    <xsl:if test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name">
+                        <project-name>
+                            <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name"/>
+                        </project-name>
+                    </xsl:if>
+                    <xsl:copy-of select="ns3:review-result"/>
+                    <destination>
+                        <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination"/>
+                    </destination>
+                </root>
+            </xsl:for-each>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Write html file</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>All review process</pd:from>
+        <pd:to>SVG output</pd:to>
+        <pd:xpathDescription>HTML</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>if(exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats)) 
+then exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats/pfx:format[text()='HTML'])
+else $_globalVariables/pfx5:GlobalVariables/CodeReview/ResultType = 'HTML'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>HTML output</pd:from>
+        <pd:to>Write html file</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>All review process</pd:from>
+        <pd:to>Write xml file</pd:to>
+        <pd:xpathDescription>XML</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>if(exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats)) 
+then exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats/pfx:format[text()='XML'])
+else $_globalVariables/pfx5:GlobalVariables/CodeReview/ResultType = 'XML'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Write xml file</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>All review process</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Load project</pd:from>
+        <pd:to>Load Projlibs</pd:to>
+        <pd:xpathDescription>aliases file provided</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:fileAliasesFile)</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Load Projlibs</pd:from>
+        <pd:to>All review process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Load project</pd:from>
+        <pd:to>All review process</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Generate Start Timestamp</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Generate Start Timestamp</pd:from>
+        <pd:to>Load project</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>All review process</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:xpathDescription>Custom</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>if(exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats)) 
+then exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats/pfx:format[starts-with(text(), 'CUSTOM:')])
+else false()</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SVG output</pd:from>
+        <pd:to>HTML output</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

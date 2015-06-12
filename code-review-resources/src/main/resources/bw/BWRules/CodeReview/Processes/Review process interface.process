@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:BW="java://com.tibco.pe.core.JavaCustomXPATHFunctions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Review process interface.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx2:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx3:review-result/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx3:review-result"/>
+    <pd:endX>314</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1312981998171</pd:targetNamespace>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

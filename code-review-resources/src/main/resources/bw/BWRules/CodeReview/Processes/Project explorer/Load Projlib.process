@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <pd:name>CodeReview/Processes/Project explorer/Load Projlib.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="fileAliasesFile" type="xsd:string"/>
+                    <xsd:element name="alias" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings/>
+    <pd:endName>End</pd:endName>
+    <pd:endX>538</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1363078672669</pd:targetNamespace>
+    <pd:activity name="Extract Projlib">
+        <pd:type>com.tibco.plugin.java.JavaActivity</pd:type>
+        <pd:resourceType>ae.javapalette.javaActivity</pd:resourceType>
+        <pd:x>173</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <fileName>LoadProjlibExtractProjlib</fileName>
+            <packageName>CodeReview.Processes.Projectexplorer.LoadProjlib</packageName>
+            <fullsource>package CodeReview.Processes.Projectexplorer.LoadProjlib;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+public class LoadProjlibExtractProjlib{
+/****** START SET/GET METHOD, DO NOT MODIFY *****/
+	protected String fileAliases = "";
+	protected String alias = "";
+	protected String[] filesName = null;
+	protected String[] filesContent = null;
+	protected long[] filesSize = null;
+	protected String resolvedAlias = "";
+	public String getfileAliases() {
+		return fileAliases;
+	}
+	public void setfileAliases(String val) {
+		fileAliases = val;
+	}
+	public String getalias() {
+		return alias;
+	}
+	public void setalias(String val) {
+		alias = val;
+	}
+	public String[] getfilesName() {
+		return filesName;
+	}
+	public void setfilesName(String[] val) {
+		filesName = val;
+	}
+	public String[] getfilesContent() {
+		return filesContent;
+	}
+	public void setfilesContent(String[] val) {
+		filesContent = val;
+	}
+	public long[] getfilesSize() {
+		return filesSize;
+	}
+	public void setfilesSize(long[] val) {
+		filesSize = val;
+	}
+	public String getresolvedAlias() {
+		return resolvedAlias;
+	}
+	public void setresolvedAlias(String val) {
+		resolvedAlias = val;
+	}
+/****** END SET/GET METHOD, DO NOT MODIFY *****/
+	public LoadProjlibExtractProjlib() {
+	}
+
+	public void invoke() throws Exception {
+/* Available Variables: DO NOT MODIFY
+	In  : String fileAliases
+	In  : String alias
+	Out : String[] filesName
+	Out : String[] filesContent
+	Out : long[] filesSize
+	Out : String resolvedAlias
+* Available Variables: DO NOT MODIFY *****/
+		/*
+		 * Available Variables: DO NOT MODIFY In : String fileAliases In :
+		 * String alias Out : String[] filesName Out : String[] filesContent Out
+		 * : long[] filesSize Out : String resolvedAlias Available Variables: DO
+		 * NOT MODIFY ****
+		 */
+
+		final Properties props = new Properties();
+		final InputStream is = new FileInputStream(fileAliases);
+		props.load(is);
+		is.close();
+		final String realFileName = props.getProperty("tibco.alias." + alias);
+		if (realFileName == null) {
+			throw new RuntimeException("Unable to find alias: " + alias);
+		}
+		this.resolvedAlias = realFileName;
+		final File projlibFile = new File(realFileName);
+		if (projlibFile == null || !projlibFile.exists() || projlibFile.length() == 0) {
+			return;
+		}
+		final ZipFile projlib = new ZipFile(realFileName);
+		final Map&lt;String, String&gt; content = new HashMap&lt;String, String&gt;();
+		try {
+			Enumeration&lt;? extends ZipEntry&gt; entries = projlib.entries();
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				if (!entry.isDirectory()) {
+					byte[] bytes = new byte[(int) entry.getSize()];
+					projlib.getInputStream(entry).read(bytes);
+					content.put(entry.getName(), new String(bytes));
+				}
+			}
+		} finally {
+			projlib.close();
+		}
+		// Export to standard arrays, supported by BW
+		this.filesName = new String[content.size()];
+		this.filesContent = new String[content.size()];
+		this.filesSize = new long[content.size()];
+		int i = 0;
+		for (Entry&lt;String, String&gt; entry : content.entrySet()) {
+			this.filesName[i] = entry.getKey().trim();
+			this.filesContent[i] = entry.getValue().trim();
+			this.filesSize[i] = entry.getValue().length();
+			i++;
+		}
+	}
+}
+</fullsource>
+            <inputData>
+                <row>
+                    <fieldName>fileAliases</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>alias</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>required</fieldRequired>
+                </row>
+            </inputData>
+            <outputData>
+                <row>
+                    <fieldName>filesName</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>filesContent</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>filesSize</fieldName>
+                    <fieldType>long</fieldType>
+                    <fieldRequired>repeating</fieldRequired>
+                </row>
+                <row>
+                    <fieldName>resolvedAlias</fieldName>
+                    <fieldType>string</fieldType>
+                    <fieldRequired>optional</fieldRequired>
+                </row>
+            </outputData>
+            <byteCode>
+                <class>
+                    <name>LoadProjlibExtractProjlib</name>
+                    <byteCode>yv66vgAAADIAzAkANwBnCQA3AGgJADcAaQkANwBqCQA3AGsJADcAbAoAOABtCABuBwBvCgAJAG0HAHAKAAsAcQoACQByCgBzAHQHAHUKAA8AbQgAdgoADwB3CgAPAHgKAAkAeQcAeggAewoAFQBxBwB8CgAYAHEKABgAfQoAGAB+BwB/CgAcAHEHAIAKAB4AbQoAHACBCwCCAIMLAIIAhAcAhQoAIwCGCgAjAIcKABwAiAoAcwCJCgAjAIoHAIsKACkAjAsAjQCOCgAcAHQLAI0AjwsAjQCQCwCRAJILAJMAlAsAkwCVBwCWCwAyAJkKACkAmgsAMgCbCgApAJwHAJ0HAJ4BAAtmaWxlQWxpYXNlcwEAEkxqYXZhL2xhbmcvU3RyaW5nOwEABWFsaWFzAQAJZmlsZXNOYW1lAQATW0xqYXZhL2xhbmcvU3RyaW5nOwEADGZpbGVzQ29udGVudAEACWZpbGVzU2l6ZQEAAltKAQANcmVzb2x2ZWRBbGlhcwEADmdldGZpbGVBbGlhc2VzAQAUKClMamF2YS9sYW5nL1N0cmluZzsBAARDb2RlAQAPTGluZU51bWJlclRhYmxlAQAOc2V0ZmlsZUFsaWFzZXMBABUoTGphdmEvbGFuZy9TdHJpbmc7KVYBAAhnZXRhbGlhcwEACHNldGFsaWFzAQAMZ2V0ZmlsZXNOYW1lAQAVKClbTGphdmEvbGFuZy9TdHJpbmc7AQAMc2V0ZmlsZXNOYW1lAQAWKFtMamF2YS9sYW5nL1N0cmluZzspVgEAD2dldGZpbGVzQ29udGVudAEAD3NldGZpbGVzQ29udGVudAEADGdldGZpbGVzU2l6ZQEABCgpW0oBAAxzZXRmaWxlc1NpemUBAAUoW0opVgEAEGdldHJlc29sdmVkQWxpYXMBABBzZXRyZXNvbHZlZEFsaWFzAQAGPGluaXQ+AQADKClWAQAGaW52b2tlAQANU3RhY2tNYXBUYWJsZQcAbwcAnwcAiwcAfAcAfwcAoAcAoQcAogcAowEACkV4Y2VwdGlvbnMHAKQBAApTb3VyY2VGaWxlAQAeTG9hZFByb2psaWJFeHRyYWN0UHJvamxpYi5qYXZhDAA5ADoMADsAOgwAPAA9DAA+AD0MAD8AQAwAQQA6DABWAFcBAAABABRqYXZhL3V0aWwvUHJvcGVydGllcwEAF2phdmEvaW8vRmlsZUlucHV0U3RyZWFtDABWAEcMAKUApgcAnwwApwBXAQAXamF2YS9sYW5nL1N0cmluZ0J1aWxkZXIBAAx0aWJjby5hbGlhcy4MAKgAqQwAqgBDDACrAKwBABpqYXZhL2xhbmcvUnVudGltZUV4Y2VwdGlvbgEAFlVuYWJsZSB0byBmaW5kIGFsaWFzOiABAAxqYXZhL2lvL0ZpbGUMAK0ArgwArwCwAQAVamF2YS91dGlsL3ppcC9aaXBGaWxlAQARamF2YS91dGlsL0hhc2hNYXAMALEAsgcAoQwAswCuDAC0ALUBABZqYXZhL3V0aWwvemlwL1ppcEVudHJ5DAC2AK4MALcAsAwAuAC5DAC6ALsMALwAQwEAEGphdmEvbGFuZy9TdHJpbmcMAFYAvQcAoAwAvgC/DADAAMEMAMIAwwcAxAwAxQDGBwCjDADHAK4MAMgAtQEAE2phdmEvdXRpbC9NYXAkRW50cnkBAAVFbnRyeQEADElubmVyQ2xhc3NlcwwAyQC1DADKAEMMAMsAtQwArwDBAQBKQ29kZVJldmlldy9Qcm9jZXNzZXMvUHJvamVjdGV4cGxvcmVyL0xvYWRQcm9qbGliL0xvYWRQcm9qbGliRXh0cmFjdFByb2psaWIBABBqYXZhL2xhbmcvT2JqZWN0AQATamF2YS9pby9JbnB1dFN0cmVhbQEADWphdmEvdXRpbC9NYXABABVqYXZhL3V0aWwvRW51bWVyYXRpb24BABNqYXZhL2xhbmcvVGhyb3dhYmxlAQASamF2YS91dGlsL0l0ZXJhdG9yAQATamF2YS9sYW5nL0V4Y2VwdGlvbgEABGxvYWQBABgoTGphdmEvaW8vSW5wdXRTdHJlYW07KVYBAAVjbG9zZQEABmFwcGVuZAEALShMamF2YS9sYW5nL1N0cmluZzspTGphdmEvbGFuZy9TdHJpbmdCdWlsZGVyOwEACHRvU3RyaW5nAQALZ2V0UHJvcGVydHkBACYoTGphdmEvbGFuZy9TdHJpbmc7KUxqYXZhL2xhbmcvU3RyaW5nOwEABmV4aXN0cwEAAygpWgEABmxlbmd0aAEAAygpSgEAB2VudHJpZXMBABkoKUxqYXZhL3V0aWwvRW51bWVyYXRpb247AQAPaGFzTW9yZUVsZW1lbnRzAQALbmV4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</byteCode>
+                </class>
+            </byteCode>
+        </config>
+        <pd:inputBindings>
+            <javaCodeActivityInput>
+                <fileAliases>
+                    <xsl:value-of select="$Start/root/fileAliasesFile"/>
+                </fileAliases>
+                <alias>
+                    <xsl:value-of select="$Start/root/alias"/>
+                </alias>
+            </javaCodeActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="GetVariable">
+        <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
+        <pd:x>294</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <variableConfig>/CodeReview/Resources/Shared Variables/Project Content.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="SetVariable">
+        <pd:type>com.tibco.pe.core.SetSharedVariableActivity</pd:type>
+        <pd:resourceType>ae.activities.setSharedVariable</pd:resourceType>
+        <pd:x>422</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <variableConfig>/CodeReview/Resources/Shared Variables/Project Content.jobsharedvariable</variableConfig>
+        </config>
+        <pd:inputBindings>
+            <ns:project>
+                <xsl:copy-of select="$GetVariable/ns:project/ns:file"/>
+                <xsl:for-each select="$Extract-Projlib/javaCodeActivityOutput/filesName">
+                    <xsl:variable name="index" select="position()"/>
+                    <xsl:variable name="localName" select="if(starts-with($Extract-Projlib/javaCodeActivityOutput/filesName[$index], '/')) then&#xA;$Extract-Projlib/javaCodeActivityOutput/filesName[$index]&#xA;else concat('/', $Extract-Projlib/javaCodeActivityOutput/filesName[$index])"/>
+                    <xsl:if test="not(exists($GetVariable/ns:project/ns:file[@name = $localName]))">
+                        <ns:file>
+                            <xsl:attribute name="name">
+                                <xsl:value-of select="$localName"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="fullName">
+                                <xsl:value-of select="concat(../resolvedAlias, $localName)"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="extension">
+                                <xsl:value-of select="tib:substring-after-last($localName, '.')"/>
+                            </xsl:attribute>
+                            <xsl:attribute name="size">
+                                <xsl:value-of select="$Extract-Projlib/javaCodeActivityOutput/filesSize[$index]"/>
+                            </xsl:attribute>
+                            <xsl:value-of select="$Extract-Projlib/javaCodeActivityOutput/filesContent[$index]"/>
+                        </ns:file>
+                    </xsl:if>
+                </xsl:for-each>
+            </ns:project>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Projlib</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>SetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Projlib</pd:from>
+        <pd:to>GetVariable</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetVariable</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

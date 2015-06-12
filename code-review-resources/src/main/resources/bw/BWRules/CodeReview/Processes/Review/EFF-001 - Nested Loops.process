@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <pd:name>CodeReview/Processes/Review/EFF-001 - Nested Loops.process</pd:name>
+    <pd:description>Vérifie le nombre de boucle imbriquées dans les appels de process.
+Le nombre maximum est défini par la GV CodeReview/Criteria/MaxNestedLoops.
+Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les autres groupes sont ignorés.
+
+!!! Ne supporte pas les appels dynamiques !!!</pd:description>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Format-result/res:review-result"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="res:review-result"/>
+    <pd:endX>634</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1357291677611</pd:targetNamespace>
+    <pd:activity name="Catch All">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>322</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Extract Project Structure">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Extract Project Structure - No Activities.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="res:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <res:review-result>
+                <res:errors>
+                    <xsl:for-each select="$_error/ns1:ErrorReport">
+                        <res:error>
+                            <res:error-name>
+                                <xsl:value-of select="if(Class!='') then&#xA;Class else if(FullClass!='') then&#xA;FullClass else if(Msg!='') then&#xA;substring(Msg, 1, 50)&#xA;else &#xA;substring(StackTrace, 1, 50)"/>
+                            </res:error-name>
+                            <res:rule>
+                                <xsl:value-of select="'EFF-001'"/>
+                            </res:rule>
+                            <res:context>
+                                <xsl:value-of select="''"/>
+                            </res:context>
+                        </res:error>
+                    </xsl:for-each>
+                </res:errors>
+                <res:nested-loops>
+                    <xsl:attribute name="max-depth">
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'EFF-001'"/>
+                    </xsl:attribute>
+                    <xsl:variable name="var" select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                    <xsl:variable name="tempGrade" select="100 - count($Map-Data-1/pfx5:root/descendant::pfx5:layer[@depth = $var]) * 30"/>
+                    <xsl:attribute name="grade">
+                        <xsl:value-of select="if($tempGrade > 0) then $tempGrade else 0"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:variable name="var2" select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                    <xsl:for-each select="$Map-Data-1/pfx5:root/descendant::pfx5:layer[@depth = $var2]">
+                        <res:nested-loop>
+                            <xsl:for-each select="parent::pfx5:layer">
+                                <xsl:for-each select="parent::pfx5:layer">
+                                    <xsl:for-each select="parent::pfx5:layer">
+                                        <res:process>
+                                            <xsl:value-of select="pfx5:process"/>
+                                        </res:process>
+                                        <res:group>
+                                            <xsl:value-of select="pfx5:group"/>
+                                        </res:group>
+                                    </xsl:for-each>
+                                    <res:process>
+                                        <xsl:value-of select="pfx5:process"/>
+                                    </res:process>
+                                    <res:group>
+                                        <xsl:value-of select="pfx5:group"/>
+                                    </res:group>
+                                </xsl:for-each>
+                                <res:process>
+                                    <xsl:value-of select="pfx5:process"/>
+                                </res:process>
+                                <res:group>
+                                    <xsl:value-of select="pfx5:group"/>
+                                </res:group>
+                            </xsl:for-each>
+                            <res:process>
+                                <xsl:value-of select="pfx5:process"/>
+                            </res:process>
+                            <res:group>
+                                <xsl:value-of select="pfx5:group"/>
+                            </res:group>
+                        </res:nested-loop>
+                    </xsl:for-each>
+                </res:nested-loops>
+            </res:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>322</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <log:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($Catch-All/exceptiondata)"/>
+                </message>
+            </log:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Map-Data-1">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>357</pd:x>
+        <pd:y>194</pd:y>
+        <config>
+            <element ref="pfx5:root"/>
+        </config>
+        <pd:inputBindings>
+            <xsl:for-each select="$Extract-Project-Structure/lp:project">
+                <xsl:variable name="process" select="lp:process/@name"/>
+                <pfx5:root>
+                    <xsl:for-each select="descendant::lp:group[@type='inputLoop' or @type='repeat' or @type='while']">
+                        <pfx5:layer>
+                            <xsl:variable name="process1" select="if(exists(parent::lp:process)) then parent::lp:process/@name else $process"/>
+                            <xsl:attribute name="depth">
+                                <xsl:value-of select="1"/>
+                            </xsl:attribute>
+                            <pfx5:process>
+                                <xsl:value-of select="$process1"/>
+                            </pfx5:process>
+                            <pfx5:group>
+                                <xsl:value-of select="@name"/>
+                            </pfx5:group>
+                            <xsl:for-each select="descendant::lp:group[@type='inputLoop' or @type='repeat' or @type='while']">
+                                <pfx5:layer>
+                                    <xsl:variable name="process2" select="if(exists(parent::lp:process)) then parent::lp:process/@name else $process1"/>
+                                    <xsl:attribute name="depth">
+                                        <xsl:value-of select="2"/>
+                                    </xsl:attribute>
+                                    <pfx5:process>
+                                        <xsl:value-of select="$process2"/>
+                                    </pfx5:process>
+                                    <pfx5:group>
+                                        <xsl:value-of select="@name"/>
+                                    </pfx5:group>
+                                    <xsl:for-each select="descendant::lp:group[@type='inputLoop' or @type='repeat' or @type='while']">
+                                        <pfx5:layer>
+                                            <xsl:variable name="process3" select="if(exists(parent::lp:process)) then parent::lp:process/@name else $process2"/>
+                                            <xsl:attribute name="depth">
+                                                <xsl:value-of select="3"/>
+                                            </xsl:attribute>
+                                            <pfx5:process>
+                                                <xsl:value-of select="$process3"/>
+                                            </pfx5:process>
+                                            <pfx5:group>
+                                                <xsl:value-of select="@name"/>
+                                            </pfx5:group>
+                                            <xsl:for-each select="descendant::lp:group[@type='inputLoop' or @type='repeat' or @type='while']">
+                                                <pfx5:layer>
+                                                    <xsl:variable name="process4" select="if(exists(parent::lp:process)) then parent::lp:process/@name else $process3"/>
+                                                    <xsl:attribute name="depth">
+                                                        <xsl:value-of select="$process4"/>
+                                                    </xsl:attribute>
+                                                    <pfx5:process>
+                                                        <xsl:value-of select="parent::lp:process/@name"/>
+                                                    </pfx5:process>
+                                                    <pfx5:group>
+                                                        <xsl:value-of select="@name"/>
+                                                    </pfx5:group>
+                                                    <xsl:for-each select="descendant::lp:group[@type='inputLoop' or @type='repeat' or @type='while']">
+                                                        <pfx5:layer>
+                                                            <xsl:variable name="process5" select="if(exists(parent::lp:process)) then parent::lp:process/@name else $process4"/>
+                                                            <xsl:attribute name="depth">
+                                                                <xsl:value-of select="5"/>
+                                                            </xsl:attribute>
+                                                            <pfx5:process>
+                                                                <xsl:value-of select="$process5"/>
+                                                            </pfx5:process>
+                                                            <pfx5:group>
+                                                                <xsl:value-of select="@name"/>
+                                                            </pfx5:group>
+                                                        </pfx5:layer>
+                                                    </xsl:for-each>
+                                                </pfx5:layer>
+                                            </xsl:for-each>
+                                        </pfx5:layer>
+                                    </xsl:for-each>
+                                </pfx5:layer>
+                            </xsl:for-each>
+                        </pfx5:layer>
+                    </xsl:for-each>
+                </pfx5:root>
+            </xsl:for-each>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Project Structure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch All</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Map-Data-1</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Map-Data-1</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>fr</pd:name>
+        <pd:description>
+Boucles imbriquées
+
+*-------------------+------------------------+
+| &lt;&lt;Code&gt;&gt;          | GEN-001                |
+*-------------------+------------------------+
+| &lt;&lt;Rubrique HTML&gt;&gt; | Informations Générales |
+*-------------------+------------------------+
+| &lt;&lt;Structure XML&gt;&gt; | review-result/general  |
+*-------------------+------------------------+
+| &lt;&lt;Notation&gt;&gt;      | -                      |
+*-------------------+------------------------+
+| &lt;&lt;Pondération&gt;&gt;   | -                      |
+*-------------------+------------------------+
+| &lt;&lt;Depuis&gt;&gt;        | 1.0                    |
+*-------------------+------------------------+
+
+
+ * Cette règle vérifie le nombre de boucle imbriquées dans les appels de process.
+
+ * Le nombre maximum à ne pas dépasser est défini par la Global Variable "CodeReview/Criteria/MaxNestedLoops".
+
+ * Seules les boucles &lt;Iterate&gt;, &lt;Repeat Until True&gt; et &lt;While&gt; sont prises en compte.
+Les autres groupes sont ignorés.
+
+[]
+
+ &lt;&lt;Ne supporte pas les appels dynamiques&gt;&gt;</pd:description>
+        <pd:x>764</pd:x>
+        <pd:y>54</pd:y>
+        <pd:width>120</pd:width>
+        <pd:height>44</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>en</pd:name>
+        <pd:description>English description</pd:description>
+        <pd:x>767</pd:x>
+        <pd:y>112</pd:y>
+        <pd:width>127</pd:width>
+        <pd:height>33</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

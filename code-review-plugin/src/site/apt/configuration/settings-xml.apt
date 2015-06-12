@@ -1,0 +1,172 @@
+
+Maven settings.xml file
+
+	It is important to have a good settings.xml file to declare properties used
+	in every projects.
+	
+	These properties include:
+	
+	* the configuration of the TIBCO stack
+	
+	* the description of client-specific and project-specific information such
+	as the root POM of the client project
+	
+	* technical configuration such as proxy (if needed)
+	
+	Please keep in mind that the following sample file is almost ready-to-use
+	because it contains all the required properties. It is just required to
+	review the default values and to change the client profile to meet your
+	standards.
+	
+	However if your Maven installation already have a settings.xml file, this
+	sample must be merged with the existing file.
+	
+	The management of a "settings.xml" is out of the scope of this
+	documentation. Please refer to the
+	{{{http://maven.apache.org/settings.html}Maven documentation}}.
+			
+* Default "settings.xml" sample file
+
++------------------------------------------------------------------------------+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" 
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+          http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+	<localRepository>C:\.m2\repo</localRepository>
+	
+	<proxies>
+		<proxy>
+			<active>true</active>
+			<protocol>http</protocol>
+			<host>proxyhost</host>
+			<port>proxyport</port>
+			<username>proxyusername</username>
+			<password>proxypassword</password>
+			<nonProxyHosts>127.0.0.1</nonProxyHosts>
+		</proxy>
+		<proxy>
+			<active>true</active>
+			<protocol>https</protocol>
+			<host>proxyhost</host>
+			<port>proxyport</port>
+			<username>proxyusername</username>
+			<password>proxypassword</password>
+			<nonProxyHosts>127.0.0.1</nonProxyHosts>
+		</proxy>
+	</proxies>
+
+	<mirrors>
+		<mirror>
+			<id>fc-central</id>
+			<mirrorOf>central</mirrorOf>
+			<name>Maven Central</name>
+			<url>http://opensource.fastconnect.org/maven/content/repositories/central</url>
+		</mirror>
+		<mirror>
+			<id>fc-java.net</id>
+			<mirrorOf>java.net</mirrorOf>
+			<name>Java.net</name>
+			<url>https://opensource.fastconnect.org/maven/content/repositories/repo.java.net</url>
+		</mirror>
+		<mirror>
+			<id>repo.jenkins-ci.org</id>
+			<url>http://repo.jenkins-ci.org/public/</url>
+			<mirrorOf>m.g.o-public</mirrorOf>
+		</mirror>
+	</mirrors>
+	
+	<pluginGroups>
+		<pluginGroup>org.jenkins-ci.tools</pluginGroup>
+		<pluginGroup>fr.fastconnect.factory.tibco.bw.maven</pluginGroup>
+	</pluginGroups>
+
+	<profiles>
+		<profile>
+			<id>fc</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<tibco.home>C:/tibco</tibco.home>
+				<executables.extension>.exe</executables.extension>
+				<tibco.bw.version>5.9</tibco.bw.version>
+				<tibco.designer.version>5.7</tibco.designer.version>
+				<tibco.ems.version>6.3</tibco.ems.version>
+				<tibco.tra.version>5.7</tibco.tra.version>
+				<tibco.rv.version>8.3</tibco.rv.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>client</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<rootProjectGroupId>com.company.project</rootProjectGroupId>
+				<rootProjectArtifactId>project-root</rootProjectArtifactId>
+			</properties>
+		</profile>
+		<profile>
+			<id>jenkins</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>repo.jenkins-ci.org</id>
+					<url>http://repo.jenkins-ci.org/public/</url>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>repo.jenkins-ci.org</id>
+					<url>http://repo.jenkins-ci.org/public/</url>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+	
+</settings>
++------------------------------------------------------------------------------+
+
+* Manage different projects (or different versions of a project)
+
+	In the case you have several projects (or several versions of a same
+	project) you can create different profiles to define different values of a
+	same property. For instance: 
+
++------------------------------------------------------------------------------+
+<profile>
+	<id>client</id>
+	<properties>
+		<rootProjectGroupId>com.company.project</rootProjectGroupId>
+		<rootProjectArtifactId>project-root</rootProjectArtifactId>
+	</properties>
+</profile>
+
+<profile>
+	<id>project-3.2.0</id>
+	<activation>
+		<activeByDefault>false</activeByDefault>
+	</activation>
+	<properties>
+		<rootProjectVersion>3.2.5</rootProjectVersion>
+	</properties>
+</profile>
+
+<profile>
+	<id>project-4.0.0</id>
+	<activation>
+		<activeByDefault>false</activeByDefault>
+	</activation>
+	<properties>
+		<rootProjectVersion>4.0.0</rootProjectVersion>
+	</properties>
+</profile>
++------------------------------------------------------------------------------+
+
+	When using Maven you simply have to add the "-P project-3.2.0" in the
+	command-line arguments to enable the 3.2.0 version.

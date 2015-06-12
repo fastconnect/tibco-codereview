@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd">
+    <xsd:import namespace="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" schemaLocation="/CodeReview/Resources/Shared Variables/Connection parameter schema.xsd"/>
+    <pd:name>CodeReview/Processes/Review/Test global variables in connection definitions/Check variables.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="body" type="xsd:string"/>
+                    <xsd:element name="xpath" type="xsd:string"/>
+                    <xsd:element name="label" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <root>
+            <xsl:variable name="result" select="$Get-XPath-string-value/results/result[1]"/>
+            <xsl:variable name="is-global-var" select="contains ($result, '%%' )"/>
+            <xsl:variable name="global-var-label" select="if (contains( $result, '/' )) then  tib:substring-after-last ( $result, '/' ) else substring-after($result, &quot;%%&quot;)"/>
+            <valide>
+                <xsl:value-of select="count ( $result ) = 0 or ($is-global-var)"/>
+            </valide>
+            <label>
+                <xsl:value-of select="$Start/root/label"/>
+            </label>
+        </root>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="root">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="valide" type="xsd:boolean"/>
+                    <xsd:element name="label" type="xsd:string"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>314</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1313597658828</pd:targetNamespace>
+    <pd:activity name="Get XPath string value">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>179</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Get XPath string value.process</processName>
+        </config>
+        <pd:inputBindings>
+            <EvaluateXpath>
+                <xpath>
+                    <xsl:value-of select="$Start/root/xpath"/>
+                </xpath>
+                <xml-data>
+                    <xsl:value-of select="$Start/root/body"/>
+                </xml-data>
+            </EvaluateXpath>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get XPath string value</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get XPath string value</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

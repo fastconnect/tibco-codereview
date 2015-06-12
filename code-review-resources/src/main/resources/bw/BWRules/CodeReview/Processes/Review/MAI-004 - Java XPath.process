@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Review/MAI-004 - Java XPath.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>42</pd:startX>
+    <pd:startY>53</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Format-result/pfx5:review-result"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:review-result"/>
+    <pd:endX>426</pd:endX>
+    <pd:endY>53</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AuditProcess>
+            <xsd:element name="audit-process">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="activity-number" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </AuditProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1313588926421</pd:targetNamespace>
+    <pd:activity name="Get Resources">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>159</pd:x>
+        <pd:y>149</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Project explorer/Get file by type.process</processName>
+        </config>
+        <pd:inputBindings>
+            <type>
+                <xsl:value-of select="'javaxpath'"/>
+            </type>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>283</pd:x>
+        <pd:y>53</pd:y>
+        <config>
+            <element ref="pfx5:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:review-result>
+                <pfx5:resourceRule>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'MAI-004'"/>
+                    </xsl:attribute>
+                    <xsl:variable name="tempGrade" select="100 - count($Get-Resources/pfx3:project/pfx3:file) * 30"/>
+                    <xsl:attribute name="grade">
+                        <xsl:value-of select="if($tempGrade &lt; 0) then 0 else $tempGrade"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:for-each select="$Get-Resources/pfx3:project/pfx3:file/@name">
+                        <pfx5:resource>
+                            <xsl:value-of select="."/>
+                        </pfx5:resource>
+                    </xsl:for-each>
+                </pfx5:resourceRule>
+            </pfx5:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get Resources</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get Resources</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+</pd:ProcessDefinition>
