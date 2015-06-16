@@ -1,85 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.codehaus.sonar.examples</groupId>
-  <artifactId>sonar-reference-plugin</artifactId>
-  <packaging>sonar-plugin</packaging>
-  <version>0.1-SNAPSHOT</version>
+	<parent>
+		<artifactId>code-review-parent</artifactId>
+		<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
 
-  <name>Sonar Examples :: Reference Plugin</name>
-  <description>Plugin description will be displayed in SonarQube</description>
+	<artifactId>code-review-sonar-plugin</artifactId>
+	<packaging>sonar-plugin</packaging>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<name>Code Review Plugin for TIBCO BusinessWorks - Sonar plugin</name>
+	<description>Code Review for TIBCO BusinessWorks projects.</description>
 
-    <sonar.buildVersion>4.5.2</sonar.buildVersion>
-    <jdk.min.version>1.7</jdk.min.version>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.buildVersion}</version>
-      <scope>provided</scope>
-    </dependency>
+		<sonar.buildVersion>4.5.2</sonar.buildVersion>
+		<jdk.min.version>1.7</jdk.min.version>
+	</properties>
 
-    <!-- unit tests -->
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.buildVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-assert</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.sonar</groupId>
+			<artifactId>sonar-plugin-api</artifactId>
+			<version>${sonar.buildVersion}</version>
+			<scope>provided</scope>
+		</dependency>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.sonar</groupId>
-        <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <version>1.12.1</version>
-        <extensions>true</extensions>
-        <configuration>
-          <pluginClass>com.mycompany.sonar.reference.ExamplePlugin</pluginClass>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
-        <configuration>
-          <source>${jdk.min.version}</source>
-          <target>${jdk.min.version}</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <!-- UTF-8 bundles are not supported by Java, so they must be converted during build -->
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>native2ascii-maven-plugin</artifactId>
-        <version>1.0-beta-1</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>native2ascii</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+		<!-- unit tests -->
+		<dependency>
+			<groupId>org.codehaus.sonar</groupId>
+			<artifactId>sonar-testing-harness</artifactId>
+			<version>${sonar.buildVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert</artifactId>
+			<version>1.4</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>xjc-code-review-result</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${project.basedir}/../code-review-resources/src/main/resources/bw/BWRules/CodeReview/Resources/XSD</schemaDirectory>
+							<schemaFiles>ReviewResult.xsd</schemaFiles>
+							<packageName>fr.fastconnect.factory.tibco.bw.codereview.jaxb</packageName>
+							<clearOutputDir>false</clearOutputDir>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.sonar</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.12.1</version>
+				<extensions>true</extensions>
+				<configuration>
+					<pluginClass>fr.fastconnect.factory.tibco.bw.codereview.BWCodeReviewPlugin</pluginClass>
+					<pluginKey>BWCodeReview</pluginKey>
+					<pluginName>FC Code Review</pluginName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${jdk.min.version}</source>
+					<target>${jdk.min.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- UTF-8 bundles are not supported by Java, so they must be converted
+					during build -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native2ascii-maven-plugin</artifactId>
+				<version>1.0-beta-1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>native2ascii</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+				<artifactId>code-review-plugin</artifactId>
+				<version>${project.version}</version>
+				<executions>
+					<execution>
+						<id>default-convert-rules-to-sonar</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>convert-rules-to-sonar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-copy-sonar-rules</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/src/main/resources/rules</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target</directory>
+									<includes>
+										<include>rules.xml</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

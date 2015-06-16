@@ -20,19 +20,19 @@
             <property key="ae.palette.FTPpalette.version" value="5.9.0"/>
             <property key="wsdlresource.palette.version" value="5.9.0"/>
             <property key="ae.process.palette.version" value="5.9.0"/>
-            <property key="httppalette.httpplugins.version" value="5.9.0"/>
             <property key="ae.palette.JDBCpalette.version" value="5.9.0"/>
+            <property key="httppalette.httpplugins.version" value="5.9.0"/>
             <property key="adswift.palette.swiftcheck.version" value="5.9.0.7"/>
             <property key="ae.palette.parsepalette.version" value="5.9.0"/>
             <property key="ae.designerapp.version" value="5.7.3.3"/>
             <property key="ae.repo.palette.version" value="5.3.0"/>
-            <property key="ae.aepalette.ae.palette.version" value="5.9.0"/>
             <property key="turbo.palette.version" value="5.6.1"/>
+            <property key="ae.aepalette.ae.palette.version" value="5.9.0"/>
             <property key="ae.palette.Policy.version" value="5.9.0"/>
             <property key="ae.palette.java.palette.version" value="5.9.0"/>
-            <property key="ae.palette.transaction.palette.version" value="5.9.0"/>
-            <property key="palette.ae.metadata.version" value="5.3.0"/>
             <property key="ae.palette.GeneralPalette.version" value="5.9.0"/>
+            <property key="palette.ae.metadata.version" value="5.3.0"/>
+            <property key="ae.palette.transaction.palette.version" value="5.9.0"/>
             <property key="ae.palette.xml.palette.version" value="5.9.0"/>
         </projectProperties>
     </folder>

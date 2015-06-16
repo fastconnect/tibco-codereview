@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<rules>
+    <rule>
+        <key>EFF-001</key>
+        <name>Nested loop</name>
+        <description>Nested loop are not good!</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>EFF-002</key>
+        <name>Critical Section on JobSharedVariable</name>
+        <description>Performance issue</description>
+        <severity>MAJOR</severity>
+    </rule>
+</rules>

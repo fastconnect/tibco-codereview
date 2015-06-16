@@ -7,14 +7,12 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.project.MavenProject;
 import org.rendersnake.HtmlCanvas;
 import org.rendersnake.Renderable;
-import org.apache.commons.io.comparator.LastModifiedFileComparator;
-import org.apache.commons.io.filefilter.WildcardFileFilter;
-
-import fr.fastconnect.factory.tibco.bw.maven.AbstractBWMojo;
 
 /**
  * <p>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema">
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
     <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
     <pd:name>CodeReview/Processes/Review/EFF-001 - Nested Loops.process</pd:name>
     <pd:description>Vérifie le nombre de boucle imbriquées dans les appels de process.
 Le nombre maximum est défini par la GV CodeReview/Criteria/MaxNestedLoops.
@@ -19,7 +20,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="res:review-result"/>
-    <pd:endX>634</pd:endX>
+    <pd:endX>730</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -229,6 +230,31 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
             </xsl:for-each>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>608</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="pfx:rule"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:rule>
+                <pfx:key>
+                    <xsl:value-of select="&quot;EFF-001&quot;"/>
+                </pfx:key>
+                <pfx:name>
+                    <xsl:value-of select="&quot;Nested loop&quot;"/>
+                </pfx:name>
+                <pfx:severity>
+                    <xsl:value-of select="&quot;MAJOR&quot;"/>
+                </pfx:severity>
+                <pfx:description>
+                    <xsl:value-of select="&quot;Nested loop are not good!&quot;"/>
+                </pfx:description>
+            </pfx:rule>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Extract Project Structure</pd:to>
@@ -238,7 +264,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -280,6 +306,13 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
     <pd:label>
         <pd:name>fr</pd:name>
         <pd:description>
@@ -310,8 +343,8 @@ Les autres groupes sont ignorés.
 []
 
  &lt;&lt;Ne supporte pas les appels dynamiques&gt;&gt;</pd:description>
-        <pd:x>764</pd:x>
-        <pd:y>54</pd:y>
+        <pd:x>92</pd:x>
+        <pd:y>278</pd:y>
         <pd:width>120</pd:width>
         <pd:height>44</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>
@@ -323,8 +356,8 @@ Les autres groupes sont ignorés.
     <pd:label>
         <pd:name>en</pd:name>
         <pd:description>English description</pd:description>
-        <pd:x>767</pd:x>
-        <pd:y>112</pd:y>
+        <pd:x>95</pd:x>
+        <pd:y>336</pd:y>
         <pd:width>127</pd:width>
         <pd:height>33</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>

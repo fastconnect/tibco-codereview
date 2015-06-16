@@ -66,6 +66,7 @@
  				<module>code-review-resources</module>
 				<module>code-review-plugin</module>
 				<module>code-review-assemblies</module>
+				<module>code-review-sonar-plugin</module>
 			</modules>
 		</profile>
 	</profiles>
