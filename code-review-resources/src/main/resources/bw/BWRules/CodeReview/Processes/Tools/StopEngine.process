@@ -3,16 +3,16 @@
     <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
     <pd:name>CodeReview/Processes/Tools/StopEngine.process</pd:name>
     <pd:startName>Start</pd:startName>
-    <pd:startType wsMsgRef="pfx:null-msg"/>
+    <pd:startType wsMsgRef="pfx:stop-in"/>
     <pd:startX>58</pd:startX>
     <pd:startY>98</pd:startY>
     <pd:returnBindings>
-        <xsl:for-each select="$Start/pfx:null-msg">
-            <pfx:null-msg/>
+        <xsl:for-each select="$Start/pfx:stop-in">
+            <pfx:stop-out/>
         </xsl:for-each>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType wsMsgRef="pfx:null-msg"/>
+    <pd:endType wsMsgRef="pfx:stop-out"/>
     <pd:endX>314</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>

@@ -3,13 +3,175 @@
     <rule>
         <key>EFF-001</key>
         <name>Nested loop</name>
-        <description>Nested loop are not good!</description>
+        <description>Nested loop</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
         <key>EFF-002</key>
         <name>Critical Section on JobSharedVariable</name>
         <description>Performance issue</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>EFF-003</key>
+        <name>Critical Section on single SharedVariable</name>
+        <description>Critical Section on single SharedVariable</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>EFF-004</key>
+        <name>Get JMS Queue Message Uses</name>
+        <description>Get JMS Queue Message Uses</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>EFF-005</key>
+        <name>JMS Selector</name>
+        <description>JMS Selector</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>EFF-006</key>
+        <name>JMS Synchronous activities</name>
+        <description>JMS Synchronous activities</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>GEN-001</key>
+        <name>Basic CodeReview</name>
+        <description>Basic CodeReview</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>GEN-002</key>
+        <name>GVs in connections configuration</name>
+        <description>GVs in connections configuration</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>GEN-003</key>
+        <name>XSD namespace defined</name>
+        <description>XSD namespace defined</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>GEN-004</key>
+        <name>Namespace Collisions</name>
+        <description>Namespace Collisions</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-001</key>
+        <name>Collect Transition Colors</name>
+        <description>Collect Transition Colors</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-002</key>
+        <name>Dynamic Process Calls</name>
+        <description>Dynamic Process Calls</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-003</key>
+        <name>Process Call Depth</name>
+        <description>Process Call Depth</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-004</key>
+        <name>Java XPath</name>
+        <description>Java XPath</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-005</key>
+        <name>Projlib Import</name>
+        <description>Projlib Import</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-006</key>
+        <name>Complex Input</name>
+        <description>Complex Input</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-007</key>
+        <name>Number of activity by process</name>
+        <description>Number of activity by process</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-008</key>
+        <name>Uncommented processes</name>
+        <description>Uncommented processes</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-009</key>
+        <name>Oversized Processes</name>
+        <description>Oversized Processes</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-010</key>
+        <name>Unlabelled Transitions</name>
+        <description>Unlabelled Transitions</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>MAI-011</key>
+        <name>Starter Process with output</name>
+        <description>Starter Process with output</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>POR-001</key>
+        <name>External Command Uses</name>
+        <description>External Command Uses</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>POR-002</key>
+        <name>Java Activities Uses</name>
+        <description>Java Activities Uses</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-001</key>
+        <name>Recursive Calls</name>
+        <description>Recursive Calls</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-002</key>
+        <name>Nested Transactions</name>
+        <description>Nested Transactions</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-003</key>
+        <name>JDBC SQLDirect Uses</name>
+        <description>JDBC SQLDirect Uses</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-004</key>
+        <name>Unknown JMS Properties</name>
+        <description>Unknown JMS Properties</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-005</key>
+        <name>No out Transition</name>
+        <description>No out Transition</description>
+        <severity>MAJOR</severity>
+    </rule>
+    <rule>
+        <key>REL-006</key>
+        <name>No otherwise Transition</name>
+        <description>No otherwise Transition</description>
         <severity>MAJOR</severity>
     </rule>
 </rules>

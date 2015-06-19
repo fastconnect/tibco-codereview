@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
@@ -71,10 +89,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                         </res:error>
                     </xsl:for-each>
                 </res:errors>
-                <res:nested-loops>
-                    <xsl:attribute name="max-depth">
-                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
-                    </xsl:attribute>
+                <res:rule>
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
                     </xsl:attribute>
@@ -90,41 +105,93 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                         <xsl:value-of select="10"/>
                     </xsl:attribute>
                     <xsl:variable name="var2" select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                    <res:param>
+                        <res:key>
+                            <xsl:value-of select="&quot;MaxNestedLoops&quot;"/>
+                        </res:key>
+                        <res:value>
+                            <xsl:value-of select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                        </res:value>
+                    </res:param>
                     <xsl:for-each select="$Map-Data-1/pfx5:root/descendant::pfx5:layer[@depth = $var2]">
-                        <res:nested-loop>
-                            <xsl:for-each select="parent::pfx5:layer">
-                                <xsl:for-each select="parent::pfx5:layer">
-                                    <xsl:for-each select="parent::pfx5:layer">
-                                        <res:process>
-                                            <xsl:value-of select="pfx5:process"/>
-                                        </res:process>
-                                        <res:group>
-                                            <xsl:value-of select="pfx5:group"/>
-                                        </res:group>
-                                    </xsl:for-each>
-                                    <res:process>
-                                        <xsl:value-of select="pfx5:process"/>
-                                    </res:process>
-                                    <res:group>
-                                        <xsl:value-of select="pfx5:group"/>
-                                    </res:group>
-                                </xsl:for-each>
-                                <res:process>
-                                    <xsl:value-of select="pfx5:process"/>
-                                </res:process>
-                                <res:group>
-                                    <xsl:value-of select="pfx5:group"/>
-                                </res:group>
-                            </xsl:for-each>
-                            <res:process>
+                        <res:result>
+                            <res:resource>
                                 <xsl:value-of select="pfx5:process"/>
-                            </res:process>
-                            <res:group>
+                            </res:resource>
+                            <res:key>
+                                <xsl:value-of select="local-name(pfx5:process)"/>
+                            </res:key>
+                            <res:value>
+                                <xsl:value-of select="pfx5:process"/>
+                            </res:value>
+                            <xsl:for-each select="parent::pfx5:layer">
+                                <res:child>
+                                    <res:key>
+                                        <xsl:value-of select="local-name(pfx5:process)"/>
+                                    </res:key>
+                                    <res:value>
+                                        <xsl:value-of select="pfx5:process"/>
+                                    </res:value>
+                                    <xsl:for-each select="parent::pfx5:layer">
+                                        <res:child>
+                                            <res:key>
+                                                <xsl:value-of select="local-name(pfx5:process)"/>
+                                            </res:key>
+                                            <res:value>
+                                                <xsl:value-of select="pfx5:process"/>
+                                            </res:value>
+                                            <xsl:for-each select="parent::pfx5:layer">
+                                                <res:child>
+                                                    <res:key>
+                                                        <xsl:value-of select="local-name(pfx5:process)"/>
+                                                    </res:key>
+                                                    <res:value>
+                                                        <xsl:value-of select="pfx5:process"/>
+                                                    </res:value>
+                                                </res:child>
+                                                <res:child>
+                                                    <res:key>
+                                                        <xsl:value-of select="local-name(pfx5:group)"/>
+                                                    </res:key>
+                                                    <res:value>
+                                                        <xsl:value-of select="pfx5:group"/>
+                                                    </res:value>
+                                                </res:child>
+                                            </xsl:for-each>
+                                        </res:child>
+                                        <res:child>
+                                            <res:key>
+                                                <xsl:value-of select="local-name(pfx5:group)"/>
+                                            </res:key>
+                                            <res:value>
+                                                <xsl:value-of select="pfx5:group"/>
+                                            </res:value>
+                                        </res:child>
+                                    </xsl:for-each>
+                                </res:child>
+                                <res:child>
+                                    <res:key>
+                                        <xsl:value-of select="pfx5:group"/>
+                                    </res:key>
+                                    <res:value>
+                                        <xsl:value-of select="pfx5:group"/>
+                                    </res:value>
+                                </res:child>
+                            </xsl:for-each>
+                        </res:result>
+                        <res:result>
+                            <res:resource>
+                                <xsl:value-of select="pfx5:process"/>
+                            </res:resource>
+                            <res:key>
+                                <xsl:value-of select="local-name(pfx5:group)"/>
+                            </res:key>
+                            <res:value>
                                 <xsl:value-of select="pfx5:group"/>
-                            </res:group>
-                        </res:nested-loop>
+                            </res:value>
+                        </res:result>
                     </xsl:for-each>
-                </res:nested-loops>
+                </res:rule>
             </res:review-result>
         </pd:inputBindings>
     </pd:activity>
@@ -236,23 +303,33 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
         <pd:x>608</pd:x>
         <pd:y>98</pd:y>
         <config>
-            <element ref="pfx:rule"/>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
         </config>
         <pd:inputBindings>
-            <pfx:rule>
-                <pfx:key>
-                    <xsl:value-of select="&quot;EFF-001&quot;"/>
-                </pfx:key>
-                <pfx:name>
-                    <xsl:value-of select="&quot;Nested loop&quot;"/>
-                </pfx:name>
-                <pfx:severity>
-                    <xsl:value-of select="&quot;MAJOR&quot;"/>
-                </pfx:severity>
-                <pfx:description>
-                    <xsl:value-of select="&quot;Nested loop are not good!&quot;"/>
-                </pfx:description>
-            </pfx:rule>
+            <cards>
+                <pfx:rule>
+                    <pfx:key>
+                        <xsl:value-of select="&quot;EFF-001&quot;"/>
+                    </pfx:key>
+                    <pfx:name>
+                        <xsl:value-of select="&quot;Nested loop&quot;"/>
+                    </pfx:name>
+                    <pfx:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx:severity>
+                    <pfx:description>
+                        <xsl:value-of select="&quot;Nested loop&quot;"/>
+                    </pfx:description>
+                </pfx:rule>
+            </cards>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>

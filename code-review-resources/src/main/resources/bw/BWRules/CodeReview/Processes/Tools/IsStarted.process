@@ -4,16 +4,16 @@
     <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
     <pd:name>CodeReview/Processes/Tools/IsStarted.process</pd:name>
     <pd:startName>Start</pd:startName>
-    <pd:startType wsMsgRef="pfx2:null-msg"/>
+    <pd:startType wsMsgRef="pfx2:start-in"/>
     <pd:startX>58</pd:startX>
     <pd:startY>98</pd:startY>
     <pd:returnBindings>
-        <xsl:for-each select="$Start/pfx2:null-msg">
-            <pfx2:null-msg/>
+        <xsl:for-each select="$Start/pfx2:start-in">
+            <pfx2:start-out/>
         </xsl:for-each>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
-    <pd:endType wsMsgRef="pfx2:null-msg"/>
+    <pd:endType wsMsgRef="pfx2:start-out"/>
     <pd:endX>314</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>

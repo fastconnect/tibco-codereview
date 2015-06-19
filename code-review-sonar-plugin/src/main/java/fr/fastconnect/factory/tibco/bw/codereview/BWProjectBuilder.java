@@ -1,3 +1,19 @@
+/**
+ * (C) Copyright 2011-2015 FastConnect SAS
+ * (http://www.fastconnect.fr/) and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
 import java.io.File;
@@ -15,6 +31,11 @@ import org.sonar.api.batch.bootstrap.ProjectBuilder;
 import org.sonar.api.batch.bootstrap.ProjectDefinition;
 import org.sonar.api.config.Settings;
 
+/**
+ *
+ * @author Mathieu Debove
+ *
+ */
 public class BWProjectBuilder extends ProjectBuilder {
 
 	private static final Logger logger = LoggerFactory.getLogger(BWProjectBuilder.class);
@@ -23,14 +44,16 @@ public class BWProjectBuilder extends ProjectBuilder {
 
 	public BWProjectBuilder(Settings settings) {
 		this.settings = settings;
+		this.settings.toString(); // could be used later
 	}
 
 	private void addSources(ProjectDefinition project) {
 		final File basedir = project.getBaseDir();
 
+		logger.debug(basedir.getAbsolutePath());
+
 		// TODO: ignore child modules folders more properly
 		IOFileFilter custom = new IOFileFilter() {
-
 			@Override
 			public boolean accept(File file) {
 				return file.isDirectory()

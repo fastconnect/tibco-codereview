@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns42="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns42="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
     <pd:name>CodeReview/Processes/Review/MAI-010 - Unlabelled Transitions.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx3:root"/>
@@ -11,8 +12,8 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx4:review-result"/>
-    <pd:endX>827</pd:endX>
-    <pd:endY>99</pd:endY>
+    <pd:endX>922</pd:endX>
+    <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
         <AuditProcess>
@@ -189,7 +190,7 @@
                             </pfx4:error>
                         </xsl:if>
                     </pfx4:errors>
-                    <pfx4:unlabelled-transitions>
+                    <pfx4:rule>
                         <xsl:attribute name="disabled">
                             <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
                         </xsl:attribute>
@@ -197,22 +198,43 @@
                             <xsl:value-of select="'MAI-010'"/>
                         </xsl:attribute>
                         <xsl:for-each select="$Parse-XML/results/result">
-                            <pfx4:transition>
-                                <pfx4:process>
+                            <pfx4:result>
+                                <pfx4:resource>
+                                    <xsl:value-of select="$act/ns3:file/@fullName"/>
+                                </pfx4:resource>
+                                <pfx4:key>
+                                    <xsl:value-of select="&quot;process&quot;"/>
+                                </pfx4:key>
+                                <pfx4:value>
                                     <xsl:value-of select="$act/ns3:file/@name"/>
-                                </pfx4:process>
-                                <pfx4:from>
-                                    <xsl:value-of select="from"/>
-                                </pfx4:from>
-                                <pfx4:to>
-                                    <xsl:value-of select="to"/>
-                                </pfx4:to>
-                                <pfx4:condition>
-                                    <xsl:value-of select="condition"/>
-                                </pfx4:condition>
-                            </pfx4:transition>
+                                </pfx4:value>
+                                <pfx4:child>
+                                    <pfx4:key>
+                                        <xsl:value-of select="local-name(from)"/>
+                                    </pfx4:key>
+                                    <pfx4:value>
+                                        <xsl:value-of select="from"/>
+                                    </pfx4:value>
+                                </pfx4:child>
+                                <pfx4:child>
+                                    <pfx4:key>
+                                        <xsl:value-of select="local-name(to)"/>
+                                    </pfx4:key>
+                                    <pfx4:value>
+                                        <xsl:value-of select="to"/>
+                                    </pfx4:value>
+                                </pfx4:child>
+                                <pfx4:child>
+                                    <pfx4:key>
+                                        <xsl:value-of select="local-name(condition)"/>
+                                    </pfx4:key>
+                                    <pfx4:value>
+                                        <xsl:value-of select="condition"/>
+                                    </pfx4:value>
+                                </pfx4:child>
+                            </pfx4:result>
                         </xsl:for-each>
-                    </pfx4:unlabelled-transitions>
+                    </pfx4:rule>
                 </pfx4:review-result>
             </pd:inputBindings>
         </pd:activity>
@@ -257,21 +279,30 @@
                 <pfx4:errors>
                     <xsl:copy-of select="$Cumul/AccumulatedOutput/pfx4:review-result/pfx4:errors/pfx4:error"/>
                 </pfx4:errors>
-                <pfx4:unlabelled-transitions>
+                <pfx4:rule>
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
                     </xsl:attribute>
                     <xsl:attribute name="ruleId">
                         <xsl:value-of select="'MAI-010'"/>
                     </xsl:attribute>
-                    <xsl:attribute name="grade">
-                        <xsl:value-of select="round(100 * (count($Get-file-by-type/ns3:project/ns3:file) - count($Cumul/AccumulatedOutput/pfx4:review-result/pfx4:unlabelled-transitions/pfx4:transition)) div count($Get-file-by-type/ns3:project/ns3:file))"/>
-                    </xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="count($Get-file-by-type/ns3:project/ns3:file) > 0">
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="round(100 * (count($Get-file-by-type/ns3:project/ns3:file) - count($Cumul/AccumulatedOutput/pfx4:review-result/pfx4:rule/pfx4:result)) div count($Get-file-by-type/ns3:project/ns3:file))"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="100"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:attribute name="weight">
                         <xsl:value-of select="20"/>
                     </xsl:attribute>
-                    <xsl:copy-of select="$Cumul/AccumulatedOutput/pfx4:review-result/pfx4:unlabelled-transitions/pfx4:transition"/>
-                </pfx4:unlabelled-transitions>
+                    <xsl:copy-of select="$Cumul/AccumulatedOutput/pfx4:review-result/pfx4:rule/pfx4:result"/>
+                </pfx4:rule>
             </pfx4:review-result>
         </pd:inputBindings>
     </pd:activity>
@@ -289,6 +320,41 @@
             </type>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>800</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <cards>
+                <pfx5:rule>
+                    <pfx5:key>
+                        <xsl:value-of select="&quot;MAI-010&quot;"/>
+                    </pfx5:key>
+                    <pfx5:name>
+                        <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                    </pfx5:name>
+                    <pfx5:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx5:severity>
+                    <pfx5:description>
+                        <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                    </pfx5:description>
+                </pfx5:rule>
+            </cards>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Get file by type</pd:to>
@@ -298,7 +364,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -325,5 +391,12 @@
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>$Start/pfx3:root/pfx3:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>

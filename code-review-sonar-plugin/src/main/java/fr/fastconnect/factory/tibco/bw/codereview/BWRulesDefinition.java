@@ -1,10 +1,34 @@
+/**
+ * (C) Copyright 2011-2015 FastConnect SAS
+ * (http://www.fastconnect.fr/) and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
-import org.sonar.api.rule.RuleStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 
+/**
+ *
+ * @author Mathieu Debove
+ *
+ */
 public class BWRulesDefinition implements RulesDefinition {
+
+	private static final Logger logger = LoggerFactory.getLogger(BWRulesDefinition.class);
 
 	public static final String FC_CODEREVIEW_REPOSITORY_KEY = "FCCodeReviewRepository";
 
@@ -16,25 +40,12 @@ public class BWRulesDefinition implements RulesDefinition {
 
 	@Override
 	public void define(Context context) {
-
+		logger.debug("Creating " + FC_CODEREVIEW_REPOSITORY_KEY + " repository...");
 		NewRepository repository = context.createRepository(FC_CODEREVIEW_REPOSITORY_KEY, BW.KEY);
 		repository.setName("FCCodeReviewRepository");
 
 		// TODO: add custom XML from runtime
 		xmlLoader.load(repository, getClass().getResourceAsStream("/rules/rules.xml"), "UTF-8");
-
-		NewRule rule = repository.createRule("MyRule");
-		rule.setName("MyRule");
-		rule.setHtmlDescription("<p>This is <em>my rule</em>");
-		rule.setStatus(RuleStatus.READY);
-		rule.setInternalKey("MyRule");
-
-		NewRule rule2 = repository.createRule("MyRule2");
-		rule2.setName("MyRule2");
-		rule2.setHtmlDescription("<p>This is <em>my rule 2</em>");
-		rule2.setStatus(RuleStatus.READY);
-		rule2.setInternalKey("MyRule2");
-
 		repository.done();
 	}
 }

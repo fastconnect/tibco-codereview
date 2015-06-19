@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" xmlns:pfx="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd">
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" xmlns:pfx="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewProcessInput.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
     <pd:name>CodeReview/Processes/Review/GEN-002 - GVs in connections configuration.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx:root"/>
@@ -9,12 +28,12 @@
     <pd:startY>98</pd:startY>
     <pd:returnBindings>
         <pfx4:review-result>
-            <xsl:copy-of select="$Format-result/pfx4:global-variable-in-connection-definition-error"/>
+            <xsl:copy-of select="$Format-result/pfx4:review-result/pfx4:rule"/>
         </pfx4:review-result>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx4:review-result"/>
-    <pd:endX>922</pd:endX>
+    <pd:endX>986</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -77,33 +96,57 @@
         <pd:x>747</pd:x>
         <pd:y>98</pd:y>
         <config>
-            <element ref="pfx4:global-variable-in-connection-definition-error"/>
+            <element ref="pfx4:review-result"/>
         </config>
         <pd:inputBindings>
-            <pfx4:global-variable-in-connection-definition-error>
-                <xsl:attribute name="disabled">
-                    <xsl:value-of select="$Start/pfx:root/pfx:disabled"/>
-                </xsl:attribute>
-                <xsl:attribute name="ruleId">
-                    <xsl:value-of select="'GEN-002'"/>
-                </xsl:attribute>
-                <xsl:choose>
-                    <xsl:when test="(count($Get-file-by-type-JDBC/ns:project/ns:file) + count($Get-file-by-type-JMS/ns:project/ns:file))>0">
-                        <xsl:attribute name="grade">
-                            <xsl:value-of select="round(100 - (count($accu/AccumulatedOutput/pfx4:global-variable-in-connection-definition-error/pfx4:connection) * 100) div &#xA;(count($Get-file-by-type-JDBC/ns:project/ns:file) + count($Get-file-by-type-JMS/ns:project/ns:file)))"/>
-                        </xsl:attribute>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:attribute name="grade">
-                            <xsl:value-of select="100"/>
-                        </xsl:attribute>
-                    </xsl:otherwise>
-                </xsl:choose>
-                <xsl:attribute name="weight">
-                    <xsl:value-of select="10"/>
-                </xsl:attribute>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx4:global-variable-in-connection-definition-error/pfx4:connection"/>
-            </pfx4:global-variable-in-connection-definition-error>
+            <pfx4:review-result>
+                <pfx4:rule>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx:root/pfx:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'GEN-002'"/>
+                    </xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="(count($Get-file-by-type-JDBC/ns:project/ns:file) + count($Get-file-by-type-JMS/ns:project/ns:file))>0">
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="round(100 - (count($accu/AccumulatedOutput/pfx4:global-variable-in-connection-definition-error/pfx4:connection) * 100) div &#xA;(count($Get-file-by-type-JDBC/ns:project/ns:file) + count($Get-file-by-type-JMS/ns:project/ns:file)))"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="100"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                    <xsl:for-each select="$accu/AccumulatedOutput/pfx4:global-variable-in-connection-definition-error/pfx4:connection">
+                        <pfx4:result>
+                            <pfx4:resource>
+                                <xsl:value-of select="pfx4:dir"/>
+                            </pfx4:resource>
+                            <pfx4:key>
+                                <xsl:value-of select="local-name(pfx4:dir)"/>
+                            </pfx4:key>
+                            <pfx4:value>
+                                <xsl:value-of select="pfx4:dir"/>
+                            </pfx4:value>
+                            <xsl:for-each select="pfx4:xpath">
+                                <pfx4:child>
+                                    <pfx4:key>
+                                        <xsl:value-of select="local-name(.)"/>
+                                    </pfx4:key>
+                                    <pfx4:value>
+                                        <xsl:value-of select="."/>
+                                    </pfx4:value>
+                                </pfx4:child>
+                            </xsl:for-each>
+                        </pfx4:result>
+                    </xsl:for-each>
+                </pfx4:rule>
+            </pfx4:review-result>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Get configuration">
@@ -144,6 +187,41 @@
             </type>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>864</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx5:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <cards>
+                <pfx5:rule>
+                    <pfx5:key>
+                        <xsl:value-of select="&quot;GEN-002&quot;"/>
+                    </pfx5:key>
+                    <pfx5:name>
+                        <xsl:value-of select="&quot;GVs in connections configuration&quot;"/>
+                    </pfx5:name>
+                    <pfx5:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx5:severity>
+                    <pfx5:description>
+                        <xsl:value-of select="&quot;GVs in connections configuration&quot;"/>
+                    </pfx5:description>
+                </pfx5:rule>
+            </cards>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Get configuration</pd:to>
@@ -167,7 +245,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -205,6 +283,13 @@
     <pd:transition>
         <pd:from>Get file by type (JMS)</pd:from>
         <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

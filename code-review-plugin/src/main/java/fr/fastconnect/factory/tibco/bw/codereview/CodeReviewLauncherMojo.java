@@ -1,14 +1,30 @@
+/**
+ * (C) Copyright 2011-2015 FastConnect SAS
+ * (http://www.fastconnect.fr/) and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.xml.rpc.ServiceException;
 
-import org.apache.axis.types.Token;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -17,11 +33,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import fr.fastconnect.factory.tibco.bw.codereview.ws.xsd.CodeReview;
-import fr.fastconnect.factory.tibco.bw.codereview.ws.xsd.DisabledRules;
-import fr.fastconnect.factory.tibco.bw.codereview.ws.xsd.Format;
-import fr.fastconnect.factory.tibco.bw.codereview.ws.xsd.Formats;
-import fr.fastconnect.factory.tibco.bw.codereview.ws.xsd.Language;
+import fr.fastconnect.factory.tibco.bw.codereview.jaxws.CodeReview_Type;
+import fr.fastconnect.factory.tibco.bw.codereview.jaxws.DisabledRules;
+import fr.fastconnect.factory.tibco.bw.codereview.jaxws.Formats;
 import fr.fastconnect.factory.tibco.bw.maven.bwengine.AbstractServiceEngineMojo;
 
 /**
@@ -169,8 +183,11 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 	@Override
 	public void initServiceAgent() throws MojoExecutionException {
 		try {
-			serviceAgent = new FCCodeReviewService(bwEnginePort);
+			serviceAgent2 = new FCCodeReviewService(bwEnginePort);
 		} catch (ServiceException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -181,20 +198,14 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 			outputFormats = new ArrayList<String>();
 			outputFormats.add("html"); // default output format is HTML
 		}
-		
-		List<Format> __formats = new ArrayList<Format>();
 
+		Formats formats = new Formats();
 		if (outputFormats.contains("html")) {
-			__formats.add(Format.HTML);
+			formats.getFormat().add("HTML");
 		}
 		if (outputFormats.contains("xml")) {
-			__formats.add(Format.XML);
+			formats.getFormat().add("XML");
 		}
-		
-		Format[] _formats = new Format[__formats.size()];
-		__formats.toArray(_formats);
-
-		Formats formats = new Formats(_formats);
 
 		String aliasesFileName = null;
 		File aliasesFile = getAliasesFile();
@@ -206,9 +217,8 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 			aliasesFileName = aliasesFile.getAbsolutePath();
 		}
 
-		// Token[] _disabledRules = {new Token("EFF-001")};
-		Token[] _disabledRules = {};
-		DisabledRules disabledRules = new DisabledRules(_disabledRules);
+		DisabledRules disabledRules = new DisabledRules();
+		//disabledRules.getDisabledRule().add("EFF-001")
 
 		File actualSrcDirectory;
 		if (buildSrcDirectory != null && buildSrcDirectory.exists()) {
@@ -217,16 +227,19 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 			actualSrcDirectory = projectDirectory;
 		}
 
-		CodeReview settings = new CodeReview(actualSrcDirectory.getAbsolutePath(),
-											 outputDirectory.getAbsolutePath(),
-											 sourceEncoding,
-											 getProject().getName(),
-											 formats,
-											 aliasesFileName,
-											 Language.fromString(lang), disabledRules);
+		CodeReview_Type settings = new CodeReview_Type();
+		settings.setProjectPath(actualSrcDirectory.getAbsolutePath());
+		settings.setSrcProjectPath(projectDirectory.getAbsolutePath());
+		settings.setDestination(outputDirectory.getAbsolutePath());
+		settings.setProjectEncoding(sourceEncoding);
+		settings.setProjectName(getProject().getName());
+		settings.setFormats(formats);
+		settings.setFileAliasesFile(aliasesFileName);
+		settings.setLanguage(lang);
+		settings.setDisabledRules(disabledRules);
 
 		// exécution des tests en appelant la méthode "review" du Service Agent de CodeReview
-		if (((FCCodeReviewService) serviceAgent).review(settings)) {
+		if (((FCCodeReviewService) serviceAgent2).review(settings)) {
 			getLog().info(CODE_REVIEW_SUCCESSFUL);
 			getLog().info(CODE_REVIEW_RESULTS + "\"" + outputDirectory.getAbsolutePath() + "\"");
 		}
@@ -264,8 +277,7 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 
 	@Override
 	protected File getProjectToRunPath() {
-		return new File(codeReviewProjectDirectory + File.separator
-				+ codeReviewProjectName);
+		return new File(codeReviewProjectDirectory + File.separator	+ codeReviewProjectName);
 	}
 
 }

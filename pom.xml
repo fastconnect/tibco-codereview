@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.fastconnect.factory.tibco</groupId>
 		<artifactId>fc-tibco-factory</artifactId>
-		<version>2.2.1</version>
+		<version>2.3.2</version>
 	</parent>
 	
 	<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
@@ -48,6 +48,20 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>force-headers</id>
+						<inherited>true</inherited>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -70,5 +84,16 @@
 			</modules>
 		</profile>
 	</profiles>
+
+			<distributionManagement>
+				<repository>
+					<id>repo.tec</id>
+					<url>http://s00vl9937470.fr.net.intra:8081/nexus/content/repositories/fc</url>
+				</repository>
+				<snapshotRepository>
+					<id>repo.tec.snapshot</id>
+					<url>http://s00vl9937470.fr.net.intra:8081/nexus/content/repositories/fc-snapshot</url>
+				</snapshotRepository>
+			</distributionManagement>
 
 </project>

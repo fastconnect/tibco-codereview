@@ -5,18 +5,22 @@
         <part name="code-review" element="pfx0:code-review"/>
     </message>
     <message name="null-msg"/>
+    <message name="start-in"/>
+    <message name="stop-in"/>
+    <message name="stop-out"/>
+    <message name="start-out"/>
     <portType name="CodeReview">
         <operation name="review">
             <input message="tns:code-review-msg"/>
             <output message="tns:null-msg"/>
         </operation>
-        <operation name="isStarted">
-            <input message="tns:null-msg"/>
-            <output message="tns:null-msg"/>
-        </operation>
         <operation name="stopEngine">
-            <input message="tns:null-msg"/>
-            <output message="tns:null-msg"/>
+            <input message="tns:stop-in"/>
+            <output message="tns:stop-out"/>
+        </operation>
+        <operation name="isStarted">
+            <input message="tns:start-in"/>
+            <output message="tns:start-out"/>
         </operation>
     </portType>
 </definitions>

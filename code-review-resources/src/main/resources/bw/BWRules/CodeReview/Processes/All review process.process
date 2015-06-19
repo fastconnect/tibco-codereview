@@ -11,6 +11,7 @@
                     <xsd:element name="start" type="xsd:dateTime"/>
                     <xsd:element ref="pfx2:code-review"/>
                     <xsd:element name="project-name" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="reviewed-project-basedir" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -219,6 +220,9 @@
                 <xsl:attribute name="duration">
                     <xsl:value-of select="tib:round-fraction(&#xA;(&#xA;tib:get-year-from-dateTime($now) * 365 * 24 * 60 * 60 +&#xA;tib:get-month-from-dateTime($now) * 12 * 24 * 60 * 60 + &#xA;tib:get-day-from-dateTime($now) * 24 * 60 * 60 +&#xA;tib:get-hours-from-dateTime($now) * 60 * 60 +&#xA;tib:get-minutes-from-dateTime($now) * 60 +&#xA;tib:get-seconds-from-dateTime($now)&#xA;)&#xA;-&#xA;(&#xA;tib:get-year-from-dateTime($Start/root/start) * 365 * 24 * 60 * 60 +&#xA;tib:get-month-from-dateTime($Start/root/start) * 12 * 24 * 60 * 60 + &#xA;tib:get-day-from-dateTime($Start/root/start) * 24 * 60 * 60 +&#xA;tib:get-hours-from-dateTime($Start/root/start) * 60 * 60 +&#xA;tib:get-minutes-from-dateTime($Start/root/start) * 60 +&#xA;tib:get-seconds-from-dateTime($Start/root/start)&#xA;), 3)"/>
                 </xsl:attribute>
+                <xsl:attribute name="project-basedir">
+                    <xsl:value-of select="$Start/root/reviewed-project-basedir"/>
+                </xsl:attribute>
                 <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:general"/>
                 <pfx3:errors>
                     <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:errors/pfx3:error"/>
@@ -276,21 +280,7 @@
                         <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'REL') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'REL')]/@weight))"/>
                     </pfx3:aggregated-grade>
                 </pfx3:aggregated-grades>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:processRule"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:activityRule"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:xsdRule"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:resourceRule"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:number-of-activity-by-process-error"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:global-variable-in-connection-definition-error"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:nested-loops"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:invalid-imports"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:transition-colors"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:process-call-depth"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:unlabelled-transitions"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:nested-transactions"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:recursive-calls"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:namespace-collisions"/>
-                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:unknown-jms-properties"/>
+                <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:rule"/>
             </pfx3:review-result>
         </pd:inputBindings>
     </pd:activity>

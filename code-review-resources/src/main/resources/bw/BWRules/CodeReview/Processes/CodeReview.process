@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd">
-    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
-    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+<pd:ProcessDefinition xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
     <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
     <pd:name>CodeReview/Processes/CodeReview.process</pd:name>
-    <pd:description>hh</pd:description>
+    <pd:description/>
     <pd:startName>Start</pd:startName>
     <pd:startType wsMsgRef="pfx2:code-review-msg"/>
     <pd:startX>58</pd:startX>
@@ -38,6 +36,9 @@
                         <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name"/>
                     </project-name>
                 </xsl:if>
+                <reviewed-project-basedir>
+                    <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:src-project-path"/>
+                </reviewed-project-basedir>
             </root>
         </pd:inputBindings>
     </pd:activity>

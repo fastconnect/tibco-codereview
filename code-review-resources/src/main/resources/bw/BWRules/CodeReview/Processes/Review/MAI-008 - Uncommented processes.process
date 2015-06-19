@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/BWRules/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx6="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
     <pd:name>CodeReview/Processes/Review/MAI-008 - Uncommented processes.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType ref="pfx4:root"/>
@@ -9,31 +28,26 @@
     <pd:returnBindings>
         <pfx5:review-result>
             <xsl:copy-of select="$Format-result/pfx5:review-result/pfx5:errors"/>
-            <xsl:for-each select="$Format-result/pfx5:review-result/pfx5:processRule">
-                <pfx5:processRule>
-                    <xsl:attribute name="disabled">
-                        <xsl:value-of select="@disabled"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="@ruleId"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="grade">
-                        <xsl:value-of select="round(100 * (1 - (count($Format-result/pfx5:review-result/pfx5:processRule/pfx5:process) div count($Get-file-by-type/pfx3:project/pfx3:file))))"/>
-                    </xsl:attribute>
-                    <xsl:if test="@weight">
-                        <xsl:attribute name="weight">
-                            <xsl:value-of select="@weight"/>
-                        </xsl:attribute>
-                    </xsl:if>
-                    <xsl:copy-of select="pfx5:data"/>
-                    <xsl:copy-of select="pfx5:process"/>
-                </pfx5:processRule>
-            </xsl:for-each>
+            <pfx5:rule>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                </xsl:attribute>
+                <xsl:attribute name="ruleId">
+                    <xsl:value-of select="&quot;MAI-008&quot;"/>
+                </xsl:attribute>
+                <xsl:attribute name="weight">
+                    <xsl:value-of select="20"/>
+                </xsl:attribute>
+                <xsl:attribute name="grade">
+                    <xsl:value-of select="round(100)"/>
+                </xsl:attribute>
+                <xsl:copy-of select="$Format-result/pfx5:review-result/pfx5:rule/pfx5:result"/>
+            </pfx5:rule>
         </pfx5:review-result>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx5:review-result"/>
-    <pd:endX>794</pd:endX>
+    <pd:endX>922</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
@@ -232,29 +246,34 @@
                 <pfx5:errors>
                     <xsl:copy-of select="$Accum/AccumulatedOutput/root/pfx5:error"/>
                 </pfx5:errors>
-                <pfx5:processRule>
+                <pfx5:rule>
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
                     </xsl:attribute>
                     <xsl:attribute name="ruleId">
                         <xsl:value-of select="'MAI-008'"/>
                     </xsl:attribute>
-                    <xsl:variable name="tempProcess">
-                        <xsl:for-each select="$Get-file-by-type/pfx3:project/pfx3:file">
-                            <xsl:variable name="position" select="position()"/>
-                            <xsl:variable name="item" select="$Accum/AccumulatedOutput/root[$position]/accepted"/>
-                            <xsl:if test="$item = 'false'">
-                                <pfx5:process>
-                                    <xsl:value-of select="@name"/>
-                                </pfx5:process>
-                            </xsl:if>
-                        </xsl:for-each>
-                    </xsl:variable>
                     <xsl:attribute name="weight">
                         <xsl:value-of select="20"/>
                     </xsl:attribute>
-                    <xsl:copy-of select="$tempProcess"/>
-                </pfx5:processRule>
+                    <xsl:for-each select="$Get-file-by-type/pfx3:project/pfx3:file">
+                        <xsl:variable name="position" select="position()"/>
+                        <xsl:variable name="item" select="$Accum/AccumulatedOutput/root[$position]/accepted"/>
+                        <xsl:if test="$item = 'false'">
+                            <pfx5:result>
+                                <pfx5:resource>
+                                    <xsl:value-of select="@name"/>
+                                </pfx5:resource>
+                                <pfx5:key>
+                                    <xsl:value-of select="&quot;process&quot;"/>
+                                </pfx5:key>
+                                <pfx5:value>
+                                    <xsl:value-of select="@name"/>
+                                </pfx5:value>
+                            </pfx5:result>
+                        </xsl:if>
+                    </xsl:for-each>
+                </pfx5:rule>
             </pfx5:review-result>
         </pd:inputBindings>
     </pd:activity>
@@ -272,6 +291,41 @@
             </type>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>800</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx6:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <cards>
+                <pfx6:rule>
+                    <pfx6:key>
+                        <xsl:value-of select="&quot;MAI-008&quot;"/>
+                    </pfx6:key>
+                    <pfx6:name>
+                        <xsl:value-of select="&quot;Uncommented processes&quot;"/>
+                    </pfx6:name>
+                    <pfx6:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx6:severity>
+                    <pfx6:description>
+                        <xsl:value-of select="&quot;Uncommented processes&quot;"/>
+                    </pfx6:description>
+                </pfx6:rule>
+            </cards>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Group</pd:from>
         <pd:to>Format result</pd:to>
@@ -281,7 +335,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -308,5 +362,12 @@
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
         <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>
