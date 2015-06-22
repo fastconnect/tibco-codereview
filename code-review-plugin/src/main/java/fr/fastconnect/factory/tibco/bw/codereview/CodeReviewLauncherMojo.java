@@ -18,12 +18,9 @@ package fr.fastconnect.factory.tibco.bw.codereview;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.xml.rpc.ServiceException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
@@ -183,12 +180,9 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 	@Override
 	public void initServiceAgent() throws MojoExecutionException {
 		try {
-			serviceAgent2 = new FCCodeReviewService(bwEnginePort);
-		} catch (ServiceException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			serviceAgent = new FCCodeReviewService(bwEnginePort);
+		} catch (Exception e) {
+			throw new MojoExecutionException(CODE_REVIEW_FAILURE, e);
 		}
 	}
 
@@ -239,7 +233,7 @@ public class CodeReviewLauncherMojo extends AbstractServiceEngineMojo {
 		settings.setDisabledRules(disabledRules);
 
 		// exécution des tests en appelant la méthode "review" du Service Agent de CodeReview
-		if (((FCCodeReviewService) serviceAgent2).review(settings)) {
+		if (((FCCodeReviewService) serviceAgent).review(settings)) {
 			getLog().info(CODE_REVIEW_SUCCESSFUL);
 			getLog().info(CODE_REVIEW_RESULTS + "\"" + outputDirectory.getAbsolutePath() + "\"");
 		}
