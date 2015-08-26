@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:pfx="http://www.tibco.com/schemas/CodeReview/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.tibco.com/pe/EngineTypes" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx6="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
+    <pd:name>CodeReview/Processes/Review/MAI-008 - Uncommented processes.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <pfx5:review-result>
+            <xsl:copy-of select="$Format-result/pfx5:review-result/pfx5:errors"/>
+            <pfx5:rule>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                </xsl:attribute>
+                <xsl:attribute name="ruleId">
+                    <xsl:value-of select="&quot;MAI-008&quot;"/>
+                </xsl:attribute>
+                <xsl:attribute name="weight">
+                    <xsl:value-of select="20"/>
+                </xsl:attribute>
+                <xsl:attribute name="grade">
+                    <xsl:value-of select="round(100)"/>
+                </xsl:attribute>
+                <xsl:copy-of select="$Format-result/pfx5:review-result/pfx5:rule/pfx5:result"/>
+            </pfx5:rule>
+        </pfx5:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx5:review-result"/>
+    <pd:endX>922</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <AuditProcess>
+            <xsd:element name="audit-process">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="activity-number" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </AuditProcess>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1313588926421</pd:targetNamespace>
+    <pd:group name="Group">
+        <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
+        <pd:resourceType>ae.process.group</pd:resourceType>
+        <pd:x>231</pd:x>
+        <pd:y>117</pd:y>
+        <pd:width>397</pd:width>
+        <pd:height>268</pd:height>
+        <pd:collapsedWidth>57</pd:collapsedWidth>
+        <pd:collapsedHeight>70</pd:collapsedHeight>
+        <pd:groupVariables/>
+        <pd:joinToggle>inherit</pd:joinToggle>
+        <config>
+            <pd:groupType>inputLoop</pd:groupType>
+            <pd:serializable>false</pd:serializable>
+            <pd:over>$Get-file-by-type/pfx3:project/pfx3:file</pd:over>
+            <pd:iterationElementSlot>act</pd:iterationElementSlot>
+            <pd:indexSlot>pos</pd:indexSlot>
+            <pd:outSlot>Accum</pd:outSlot>
+            <pd:activityOutputName>Accepted</pd:activityOutputName>
+            <pd:accumulateOutput>true</pd:accumulateOutput>
+        </config>
+        <pd:inputBindings/>
+        <pd:expanded>true</pd:expanded>
+        <pd:transition>
+            <pd:from>start</pd:from>
+            <pd:to>GetXPathStringValue</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Accepted</pd:from>
+            <pd:to>end</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetXPathStringValue-1</pd:from>
+            <pd:to>Accepted</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetXPathStringValue</pd:from>
+            <pd:to>GetXPathStringValue-1</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetXPathStringValue</pd:from>
+            <pd:to>Log</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>GetXPathStringValue-1</pd:from>
+            <pd:to>Log</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>error</pd:conditionType>
+        </pd:transition>
+        <pd:transition>
+            <pd:from>Log</pd:from>
+            <pd:to>Accepted</pd:to>
+            <pd:lineType>Default</pd:lineType>
+            <pd:lineColor>-16777216</pd:lineColor>
+            <pd:conditionType>always</pd:conditionType>
+        </pd:transition>
+        <pd:activity name="GetXPathStringValue">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>313</pd:x>
+            <pd:y>194</pd:y>
+            <config>
+                <processName>/CodeReview/Processes/Tools/Get XPath string value.process</processName>
+            </config>
+            <pd:inputBindings>
+                <EvaluateXpath>
+                    <xpath>
+                        <xsl:value-of select="&quot;pd:ProcessDefinition/pd:description/text()&quot;"/>
+                    </xpath>
+                    <xml-data>
+                        <xsl:value-of select="$act/pfx3:file"/>
+                    </xml-data>
+                    <namespace-declaration>
+                        <xsl:value-of select="&quot;xmlns:pd='http://xmlns.tibco.com/bw/process/2003'&quot;"/>
+                    </namespace-declaration>
+                </EvaluateXpath>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Accepted">
+            <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+            <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+            <pd:x>544</pd:x>
+            <pd:y>194</pd:y>
+            <config>
+                <element>
+                    <xsd:element name="root">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="accepted" type="xsd:boolean" minOccurs="0"/>
+                                <xsd:element ref="pfx5:error" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                </element>
+            </config>
+            <pd:inputBindings>
+                <root>
+                    <accepted>
+                        <xsl:value-of select="(count($GetXPathStringValue/results/result) = 1 and $GetXPathStringValue/results/result[1] !=&quot;&quot;)&#xA;or count($GetXPathStringValue-1/results/result) >= 1"/>
+                    </accepted>
+                    <xsl:for-each select="$_error">
+                        <pfx5:error>
+                            <pfx5:error-name>
+                                <xsl:value-of select="if(ns3:ErrorReport/Class !='') then&#xA;ns3:ErrorReport/Class&#xA;else if(ns3:ErrorReport/FullClass !='') then&#xA;ns3:ErrorReport/FullClass&#xA;else if(ns3:ErrorReport/Msg !='') then&#xA;substring(ns3:ErrorReport/Msg, 1, 50)&#xA;else &#xA;substring(ns3:ErrorReport/StackTrace, 1, 50)"/>
+                            </pfx5:error-name>
+                            <pfx5:rule>
+                                <xsl:value-of select="'MAI-008'"/>
+                            </pfx5:rule>
+                            <pfx5:context>
+                                <xsl:value-of select="$act/pfx3:file/@fullName"/>
+                            </pfx5:context>
+                        </pfx5:error>
+                    </xsl:for-each>
+                </root>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="GetXPathStringValue-1">
+            <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+            <pd:resourceType>ae.process.subprocess</pd:resourceType>
+            <pd:x>441</pd:x>
+            <pd:y>194</pd:y>
+            <config>
+                <processName>/CodeReview/Processes/Tools/Get XPath string value.process</processName>
+            </config>
+            <pd:inputBindings>
+                <EvaluateXpath>
+                    <xpath>
+                        <xsl:value-of select="&quot;pd:ProcessDefinition//pd:label&quot;"/>
+                    </xpath>
+                    <xml-data>
+                        <xsl:value-of select="$act/pfx3:file"/>
+                    </xml-data>
+                    <namespace-declaration>
+                        <xsl:value-of select="&quot;xmlns:pd='http://xmlns.tibco.com/bw/process/2003'&quot;"/>
+                    </namespace-declaration>
+                </EvaluateXpath>
+            </pd:inputBindings>
+        </pd:activity>
+        <pd:activity name="Log">
+            <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+            <pd:resourceType>ae.activities.log</pd:resourceType>
+            <pd:x>410</pd:x>
+            <pd:y>322</pd:y>
+            <config>
+                <role>User</role>
+            </config>
+            <pd:inputBindings>
+                <ns4:ActivityInput>
+                    <message>
+                        <xsl:value-of select="tib:render-xml($_error/ns3:ErrorReport)"/>
+                    </message>
+                </ns4:ActivityInput>
+            </pd:inputBindings>
+        </pd:activity>
+    </pd:group>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>683</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="pfx5:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx5:review-result>
+                <pfx5:errors>
+                    <xsl:copy-of select="$Accum/AccumulatedOutput/root/pfx5:error"/>
+                </pfx5:errors>
+                <pfx5:rule>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'MAI-008'"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="20"/>
+                    </xsl:attribute>
+                    <xsl:for-each select="$Get-file-by-type/pfx3:project/pfx3:file">
+                        <xsl:variable name="position" select="position()"/>
+                        <xsl:variable name="item" select="$Accum/AccumulatedOutput/root[$position]/accepted"/>
+                        <xsl:if test="$item = 'false'">
+                            <pfx5:result>
+                                <pfx5:resource>
+                                    <xsl:value-of select="@name"/>
+                                </pfx5:resource>
+                                <pfx5:key>
+                                    <xsl:value-of select="&quot;process&quot;"/>
+                                </pfx5:key>
+                                <pfx5:value>
+                                    <xsl:value-of select="@name"/>
+                                </pfx5:value>
+                            </pfx5:result>
+                        </xsl:if>
+                    </xsl:for-each>
+                </pfx5:rule>
+            </pfx5:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Get file by type">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>174</pd:x>
+        <pd:y>258</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Project explorer/Get file by type.process</processName>
+        </config>
+        <pd:inputBindings>
+            <type>
+                <xsl:value-of select="'process'"/>
+            </type>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>800</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx6:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <cards>
+                <pfx6:rule>
+                    <pfx6:key>
+                        <xsl:value-of select="&quot;MAI-008&quot;"/>
+                    </pfx6:key>
+                    <pfx6:name>
+                        <xsl:value-of select="&quot;Uncommented processes&quot;"/>
+                    </pfx6:name>
+                    <pfx6:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx6:severity>
+                    <pfx6:description>
+                        <xsl:value-of select="&quot;Uncommented processes&quot;"/>
+                    </pfx6:description>
+                </pfx6:rule>
+            </cards>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Group</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>Rule Card</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Get file by type</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Get file by type</pd:from>
+        <pd:to>Group</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

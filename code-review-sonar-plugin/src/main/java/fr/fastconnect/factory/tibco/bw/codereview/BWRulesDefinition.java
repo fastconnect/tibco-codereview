@@ -44,8 +44,7 @@ public class BWRulesDefinition implements RulesDefinition {
 		NewRepository repository = context.createRepository(FC_CODEREVIEW_REPOSITORY_KEY, BW.KEY);
 		repository.setName("FCCodeReviewRepository");
 
-		// TODO: add custom XML from runtime
-		xmlLoader.load(repository, getClass().getResourceAsStream("/rules/rules.xml"), "UTF-8");
+		xmlLoader.load(repository, BWCodeReviewPlugin.getRulesStream(logger), "UTF-8");
 		repository.done();
 	}
 }

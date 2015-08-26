@@ -13,11 +13,64 @@
 	<name>Code Review Plugin for TIBCO BusinessWorks - Resources</name>
 
 	<modules>
-		<module>src/main/resources/bw</module>
+		<module>src/main/resources/bw-core</module>
+		<module>src/main/resources/bw-rules-basic</module>
 	</modules>
 
+	<properties>
+		<bw.project.path>${basedir}/src/main/resources/bw-core</bw.project.path>
+		<bw.project.location>CodeReview</bw.project.location>
+		<bw.project.library.builder>/CodeReview/CodeReview.libbuilder</bw.project.library.builder>
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>skip</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<bw.package.skip>true</bw.package.skip>
+				<bw.package.skip.deploy.pom.touch>true</bw.package.skip.deploy.pom.touch>
+				<bw.package.skip.deploy.descriptor.final.touch>true</bw.package.skip.deploy.descriptor.final.touch>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+<!-- 					<configuration>
+						<appendAssemblyId>false</appendAssemblyId>
+					</configuration>
+ -->					<executions>
+						<execution>
+							<id>zip-bw-project</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<descriptors>
+									<descriptor>src/main/resources/assembly/bw.xml</descriptor>
+								</descriptors>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>fr.fastconnect.factory.tibco.bw.maven</groupId>
+				<artifactId>bw-maven-plugin</artifactId>
+				<version>${bw.maven.plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
@@ -49,7 +102,7 @@
 							<outputDirectory>${basedir}/src/site/apt/rules</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/resources/bw/target/doc/apt/Code Review/Processes/Review</directory>
+									<directory>src/main/resources/bw-core/target/doc/apt/Code Review/Processes/Review</directory>
 									<filtering>true</filtering>
 									<includes>
 										<include>*</include>
@@ -65,18 +118,12 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<inherited>false</inherited>
 				<executions>
-					<execution>
+<!-- 					<execution>
 						<id>zip-bw-project</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
 						<configuration>
-							<descriptors>
-								<descriptor>src/main/resources/assembly/bw.xml</descriptor>
-							</descriptors>
+							<skipAssembly>true</skipAssembly>
 						</configuration>
-					</execution>
+					</execution> -->
 					<execution>
 						<id>zip-display-resources</id>
 						<phase>package</phase>

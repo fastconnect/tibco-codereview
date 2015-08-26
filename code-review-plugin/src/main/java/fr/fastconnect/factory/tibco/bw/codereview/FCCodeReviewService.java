@@ -22,6 +22,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import com.sun.xml.ws.client.ClientTransportException;
+import com.sun.xml.ws.fault.ServerSOAPFaultException;
 
 import fr.fastconnect.factory.tibco.bw.codereview.jaxws.CodeReview;
 import fr.fastconnect.factory.tibco.bw.codereview.jaxws.CodeReview_Service;
@@ -81,6 +82,16 @@ public class FCCodeReviewService extends ServiceAgentInEngine<CodeReview_Proxy> 
 	@Override
 	public CodeReview_Proxy getService() {
 		return codeReviewProxy;
+	}
+
+	// this method should be removed when bw-maven-plugin > 2.3.1 is released
+	@Override
+	public void stopEngine() {
+		try {
+			super.stopEngine();
+		} catch (ServerSOAPFaultException e) {
+			// nothing
+		}
 	}
 
 	public boolean review(CodeReview_Type config) {

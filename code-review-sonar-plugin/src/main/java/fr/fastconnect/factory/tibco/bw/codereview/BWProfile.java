@@ -16,12 +16,15 @@
  */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
+import java.io.File;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.ProfileDefinition;
@@ -67,7 +70,9 @@ public class BWProfile extends ProfileDefinition {
 		RulesProfile profile = RulesProfile.create("BW profile", BW.KEY);
 		profile.setLanguage(BW.KEY);
 
-		Rules rules = loadRules(getClass().getResourceAsStream("/rules/rules.xml"));
+		InputStream rulesStream = BWCodeReviewPlugin.getRulesStream(logger);
+		Rules rules = loadRules(rulesStream);
+
 		for (fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules.Rule r : rules.getRule()) {
 			org.sonar.api.rules.Rule rule = ruleFinder.find(RuleQuery.create().withRepositoryKey(BWRulesDefinition.FC_CODEREVIEW_REPOSITORY_KEY).withKey(r.getKey()));
 			logger.info("activating : " + rule.getKey());

@@ -16,9 +16,14 @@
  */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
+import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.plexus.classworlds.realm.ClassRealm;
+import org.slf4j.Logger;
 import org.sonar.api.Properties;
 import org.sonar.api.Property;
 import org.sonar.api.SonarPlugin;
@@ -33,7 +38,11 @@ import fr.fastconnect.factory.tibco.bw.codereview.ui.ExampleRubyWidget;
  * @author Mathieu Debove
  *
  */
-@Properties({ @Property(key = BWCodeReviewPlugin.FC_CODE_REVIEW_RESULTS_RELATIVE_PATH, name = "Code Review results relative path", description = "Path to the Code Review results relatively to the project path", defaultValue = "target/review") })
+@Properties(
+	{
+		@Property(key = BWCodeReviewPlugin.FC_CODE_REVIEW_RESULTS_RELATIVE_PATH, name = "Code Review results relative path", description = "Path to the Code Review results relatively to the project path", defaultValue = "target/review")
+	}
+)
 public final class BWCodeReviewPlugin extends SonarPlugin {
 
 	public static final String FC_CODE_REVIEW_RESULTS_RELATIVE_PATH = "fc.codereview.relativePath";
@@ -56,5 +65,38 @@ public final class BWCodeReviewPlugin extends SonarPlugin {
 			// UI
 			CodeReviewFooter.class, ExampleRubyWidget.class
 			);
+	}
+
+	private static ClassRealm addConfDirectoryInClasspath(Logger logger) {
+		logger.debug("ClassLoader is : " + BWCodeReviewPlugin.class.getClassLoader().getClass().getCanonicalName());
+		ClassRealm cr = (ClassRealm) BWCodeReviewPlugin.class.getClassLoader();
+		File pluginJar = new File(cr.getURLs()[0].getFile());
+
+		File confDirectory = new File(pluginJar.getParentFile().getAbsolutePath() + "/../../../../conf");
+		try {
+			cr.addURL(confDirectory.toURI().toURL());
+		} catch (java.net.MalformedURLException e) {
+			//
+		}
+		for (URL url : cr.getURLs()) {
+			logger.debug("URL : " + url.toString());
+		}
+
+		return cr;
+	}
+
+	public static InputStream getRulesStream(Logger logger) {
+		ClassRealm classRealm = addConfDirectoryInClasspath(logger);
+		if (classRealm != null) {
+
+			InputStream customRulesStream = addConfDirectoryInClasspath(logger).getResourceAsStream("rules_custom.xml");
+			if (customRulesStream != null) {
+				logger.info("Custom rules found");
+				return customRulesStream;
+			}
+		}
+
+		logger.info("Custom rules not found. Using default.");
+		return BWCodeReviewPlugin.class.getResourceAsStream("/rules/rules.xml");
 	}
 }

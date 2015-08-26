@@ -54,6 +54,13 @@
 			<version>1.4</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.plexus</groupId>
+			<artifactId>plexus-classworlds</artifactId>
+			<version>2.5.1</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -69,7 +76,7 @@
 							<goal>xjc</goal>
 						</goals>
 						<configuration>
-							<schemaDirectory>${project.basedir}/../code-review-resources/src/main/resources/bw/BWRules/CodeReview/Resources/XSD</schemaDirectory>
+							<schemaDirectory>${project.basedir}/../code-review-resources/src/main/resources/bw-core/CodeReview/CodeReview/Resources/XSD</schemaDirectory>
 							<schemaFiles>ReviewResult.xsd</schemaFiles>
 							<packageName>fr.fastconnect.factory.tibco.bw.codereview.jaxb</packageName>
 							<clearOutputDir>false</clearOutputDir>
@@ -77,7 +84,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.codehaus.sonar</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -111,17 +117,21 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<plugin>
 				<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
 				<artifactId>code-review-plugin</artifactId>
 				<version>${project.version}</version>
 				<executions>
 					<execution>
-						<id>default-convert-rules-to-sonar</id>
+						<id>default-code-review-sonar</id>
 						<phase>generate-resources</phase>
 						<goals>
-							<goal>convert-rules-to-sonar</goal>
+							<goal>code-review-sonar-no-fork</goal>
 						</goals>
+						<configuration>
+							<codeReviewProjectDirectory>${basedir}/../code-review-resources/src/main/resources/bw-rules-basic/CodeReview</codeReviewProjectDirectory>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -139,7 +149,7 @@
 							<outputDirectory>${basedir}/src/main/resources/rules</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/target</directory>
+									<directory>${basedir}/target/review</directory>
 									<includes>
 										<include>rules.xml</include>
 									</includes>

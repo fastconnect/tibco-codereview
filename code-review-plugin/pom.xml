@@ -99,7 +99,7 @@
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/../code-review-resources/src/main/resources/bw/BWRules/CodeReview/Resources/WSDL</directory>
+									<directory>${basedir}/../code-review-resources/src/main/resources/bw-core/CodeReview/CodeReview/Resources/WSDL</directory>
 									<includes>
 										<include>CodeReview-concrete.wsdl</include>
 									</includes>
