@@ -48,14 +48,7 @@
 			<artifactId>bw-maven-plugin</artifactId>
 			<version>${bw.maven.plugin.version}</version>
 		</dependency>
-		<dependency>
-		    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
-		    <artifactId>code-review-rules-basic</artifactId>
-		    <version>${project.version}</version>
-		    <classifier>bw</classifier>
-		    <type>zip</type>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.maven.plugin-tools</groupId>
 			<artifactId>maven-plugin-annotations</artifactId>
@@ -185,6 +178,21 @@
 	</build>
 
 	<profiles>
+		<profile>
+			<id>skip</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+				    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+				    <artifactId>code-review-rules-basic</artifactId>
+				    <version>${project.version}</version>
+				    <classifier>bw</classifier>
+				    <type>zip</type>
+				</dependency>
+			</dependencies>
+		</profile>
 		<profile>
 			<id>site</id>
 			<activation>
