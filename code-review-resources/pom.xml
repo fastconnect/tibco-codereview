@@ -43,10 +43,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
-<!-- 					<configuration>
-						<appendAssemblyId>false</appendAssemblyId>
-					</configuration>
- -->					<executions>
+					<executions>
 						<execution>
 							<id>zip-bw-project</id>
 							<phase>package</phase>
@@ -118,12 +115,12 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<inherited>false</inherited>
 				<executions>
-<!-- 					<execution>
+					<execution>
 						<id>zip-bw-project</id>
 						<configuration>
 							<skipAssembly>true</skipAssembly>
 						</configuration>
-					</execution> -->
+					</execution>
 					<execution>
 						<id>zip-display-resources</id>
 						<phase>package</phase>

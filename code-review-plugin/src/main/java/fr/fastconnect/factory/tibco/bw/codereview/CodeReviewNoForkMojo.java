@@ -17,8 +17,12 @@
 package fr.fastconnect.factory.tibco.bw.codereview;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -39,12 +43,14 @@ import fr.fastconnect.factory.tibco.bw.maven.bwengine.AbstractServiceEngineMojo;
 @Mojo(name = "code-review-no-fork", defaultPhase = LifecyclePhase.TEST)
 public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 
-	/**
-	 * Port of the Code Review WebService in the TIBCO BWEngine running the
-	 * tests.
-	 */
-	@Parameter(property = "codereview.engine.port", required = true, defaultValue = "9099")
-	protected String bwEnginePort;
+//	/**
+//	 * Port of the Code Review WebService in the TIBCO BWEngine running the
+//	 * tests.
+//	 */
+//	@Parameter(property = "codereview.engine.port", required = true, defaultValue = "9099")
+//	protected Integer bwEnginePort;
+
+//	protected static Integer uniqueEnginePort = null;
 
 	@Parameter(property = "codereview.timeout", defaultValue = "100")
 	private int timeOut; // in seconds
@@ -95,6 +101,8 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 	@Parameter(property = "bw.review.skip", defaultValue = "false", required = false)
 	protected boolean skipReview;
 
+	private String bwEnginePort;
+
 	public static boolean skip(MavenProject mavenProject) {
 		return !BWEAR_TYPE.equals(mavenProject.getPackaging()) &&
 			   !PROJLIB_TYPE.equals(mavenProject.getPackaging());
@@ -123,10 +131,54 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 		super.execute();
 	}
 
+	public static boolean available(int port) {
+	    if (port < 49152 || port > 65535) {
+	        throw new IllegalArgumentException("Invalid start port: " + port);
+	    }
+
+	    ServerSocket ss = null;
+	    DatagramSocket ds = null;
+	    try {
+	        ss = new ServerSocket(port);
+	        ss.setReuseAddress(true);
+	        ds = new DatagramSocket(port);
+	        ds.setReuseAddress(true);
+	        return true;
+	    } catch (IOException e) {
+	    } finally {
+	        if (ds != null) {
+	            ds.close();
+	        }
+
+	        if (ss != null) {
+	            try {
+	                ss.close();
+	            } catch (IOException e) {
+	                /* should not be thrown */
+	            }
+	        }
+	    }
+
+	    return false;
+	}
+
+	public static Integer getFreePort() {
+		Random rand = new Random();
+		int port = -1;
+		do {
+			port = rand.nextInt((65535 - 49152) + 1) + 49152;
+		} while (!available(port));
+
+	    return port;
+	}
+
 	@Override
 	public void initServiceAgent() throws MojoExecutionException {
+		bwEnginePort = getFreePort().toString();
+
+		getLog().debug("engine port : " + bwEnginePort);
 		try {
-			serviceAgent = new FCCodeReviewService(bwEnginePort);
+			serviceAgent = new FCCodeReviewService(bwEnginePort.toString());
 		} catch (Exception e) {
 			throw new MojoExecutionException(CODE_REVIEW_FAILURE, e);
 		}
@@ -187,7 +239,7 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 
 	@Override
 	public String getBWEnginePort() {
-		return bwEnginePort;
+		return bwEnginePort.toString();
 	}
 
 	@Override

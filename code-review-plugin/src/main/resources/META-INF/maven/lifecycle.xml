@@ -23,52 +23,12 @@
 		<id>review</id>
 		<phases>
 			<phase>
-				<id>initialize</id>
-				<executions>
-					<execution>
-						<goals>
-							<goal>disable-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration />
-			</phase>
-			<phase>
 				<id>test</id>
 				<executions>
 					<execution>
 						<goals>
 							<goal>prepare-code-review</goal>
 							<goal>code-review</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration />
-			</phase>
-		</phases>
-	</lifecycle>
-	<lifecycle>
-		<id>review-sonar</id>
-		<phases>
-			<phase>
-				<id>initialize</id>
-				<executions>
-					<execution>
-						<goals>
-							<goal>disable-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration />
-			</phase>
-			<phase>
-				<id>test</id>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-code-review</goal>
-							<goal>code-review-no-fork</goal>
-							<goal>code-review-sonar</goal>
 						</goals>
 					</execution>
 				</executions>

@@ -50,7 +50,7 @@
 		</dependency>
 		<dependency>
 		    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
-		    <artifactId>code-review-resources</artifactId>
+		    <artifactId>code-review-rules-basic</artifactId>
 		    <version>${project.version}</version>
 		    <classifier>bw</classifier>
 		    <type>zip</type>
