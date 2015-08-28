@@ -198,25 +198,32 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<properties>
+				<repositorySiteURL>git@github.com/fastconnect/tibco-factory.git</repositorySiteURL>
+				<repositorySiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.path}</repositorySiteDisplayURL>
+				<rootSiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.prefix}</rootSiteDisplayURL>
+				<github.site.suffix>/${project.artifactId}</github.site.suffix>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-site-plugin</artifactId>
+						<configuration>
+							<skipDeploy>false</skipDeploy>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 			<distributionManagement>
 				<site>
-					<id>repo.site.fastconnect.org</id>
-					<url>${repositorySiteProtocol}:${repositorySiteURL}/${project.artifactId}</url>
-				</site>
-			</distributionManagement>
-		</profile>
-		<profile>
-			<id>public-site</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<site>
-					<id>repo.public.site.fastconnect.org</id>
-					<url>${repositorySiteProtocol}:${repositorySiteURL}/${project.artifactId}</url>
+					<id>fc.github</id>
+					<url>gitsite:${repositorySiteURL}/${github.site.path}</url>
 				</site>
 			</distributionManagement>
 		</profile>
 	</profiles>
+
+	<url>${repositorySiteDisplayURL}</url>
 
 </project>

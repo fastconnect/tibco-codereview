@@ -85,15 +85,6 @@
 		</profile>
 	</profiles>
 
-			<distributionManagement>
-				<repository>
-					<id>repo.tec</id>
-					<url>http://s00vl9937470.fr.net.intra:8081/nexus/content/repositories/fc</url>
-				</repository>
-				<snapshotRepository>
-					<id>repo.tec.snapshot</id>
-					<url>http://s00vl9937470.fr.net.intra:8081/nexus/content/repositories/fc-snapshot</url>
-				</snapshotRepository>
-			</distributionManagement>
+	<url>https://fastconnect.github.io/tibco-factory/code-review-plugin</url>
 
 </project>
