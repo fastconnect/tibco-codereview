@@ -12,11 +12,6 @@
 
 	<name>Code Review Plugin for TIBCO BusinessWorks - Resources</name>
 
-	<modules>
-		<module>src/main/resources/bw-core</module>
-		<module>src/main/resources/bw-rules-basic</module>
-	</modules>
-
 	<properties>
 		<bw.project.path>${basedir}/src/main/resources/bw-core</bw.project.path>
 		<bw.project.location>CodeReview</bw.project.location>
@@ -29,6 +24,10 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<modules>
+				<module>src/main/resources/bw-core</module>
+				<module>src/main/resources/bw-rules-basic</module>
+			</modules>
 			<properties>
 				<bw.package.skip>true</bw.package.skip>
 				<bw.package.skip.deploy.pom.touch>true</bw.package.skip.deploy.pom.touch>
