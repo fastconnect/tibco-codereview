@@ -224,6 +224,13 @@
 		</profile>
 	</profiles>
 
+	<scm>
+		<url>https://github.com/fastconnect/tibco-codereview</url>
+		<connection>scm:git:git://github.com/fastconnect/tibco-codereview.git</connection>
+		<developerConnection>scm:git:git@github.com:fastconnect/tibco-codereview.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
 	<url>${repositorySiteDisplayURL}</url>
 
 </project>

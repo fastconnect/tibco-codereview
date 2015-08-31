@@ -20,7 +20,10 @@
 	</description>
 	
 	<scm>
-		<developerConnection>scm:svn:https://fastconnect.org/svn/FastConnect/rd/products/FCTIBCOFactory2/FCCodeReview/trunk/project/</developerConnection>
+		<url>https://github.com/fastconnect/tibco-codereview</url>
+		<connection>scm:git:git://github.com/fastconnect/tibco-codereview.git</connection>
+		<developerConnection>scm:git:git@github.com:fastconnect/tibco-codereview.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 
 	<inceptionYear>2013</inceptionYear>
