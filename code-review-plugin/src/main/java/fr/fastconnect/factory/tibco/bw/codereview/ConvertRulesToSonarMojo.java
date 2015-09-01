@@ -39,6 +39,11 @@ import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.ObjectFactory;
 import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules;
 import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules.Rule;
 
+/**
+ *
+ * @author Mathieu Debove
+ *
+ */
 @Mojo (name = "code-review-sonar-no-fork", requiresProject = false)
 public class ConvertRulesToSonarMojo extends CodeReviewNoForkMojo {
 

@@ -39,6 +39,9 @@ import fr.fastconnect.factory.tibco.bw.maven.bwengine.AbstractServiceEngineMojo;
  * <p>
  * This goal will execute the Code Review on the target project.
  * </p>
+ *
+ * @author Mathieu Debove
+ *
  */
 @Mojo(name = "code-review-no-fork", defaultPhase = LifecyclePhase.TEST)
 public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {

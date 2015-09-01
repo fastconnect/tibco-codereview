@@ -24,6 +24,9 @@ import org.apache.maven.plugins.annotations.Mojo;
  * <p>
  * This goal will execute the Code Review on the target project.
  * </p>
+ *
+ * @author Mathieu Debove
+ *
  */
 @Mojo(name = "code-review", defaultPhase = LifecyclePhase.TEST)
 @Execute(goal = "code-review", lifecycle = "review", phase = LifecyclePhase.TEST)

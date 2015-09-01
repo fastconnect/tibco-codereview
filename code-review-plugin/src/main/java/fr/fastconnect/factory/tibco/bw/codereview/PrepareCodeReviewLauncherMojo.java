@@ -45,6 +45,9 @@ import de.schlichtherle.truezip.socket.sl.IOPoolLocator;
  * <p>
  * This goal will execute the Code Review on the target project.
  * </p>
+ *
+ * @author Mathieu Debove
+ *
  */
 @Mojo(name = "prepare-code-review", defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
 public class PrepareCodeReviewLauncherMojo extends CodeReviewNoForkMojo {
