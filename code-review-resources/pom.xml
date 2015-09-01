@@ -13,7 +13,6 @@
 	<name>Code Review Plugin for TIBCO BusinessWorks - Resources</name>
 
 	<properties>
-		<bw.project.path>${basedir}/src/main/resources/bw-core</bw.project.path>
 		<bw.project.location>CodeReview</bw.project.location>
 		<bw.project.library.builder>/CodeReview/CodeReview.libbuilder</bw.project.library.builder>
 	</properties>

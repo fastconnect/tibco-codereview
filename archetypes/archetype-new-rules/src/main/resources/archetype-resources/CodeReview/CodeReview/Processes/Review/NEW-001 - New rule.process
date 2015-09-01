@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
+    <pd:name>CodeReview/Processes/Review/NEW-001 - New rule.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx4:root"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <xsl:copy-of select="$Format-result/res:review-result"/>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="res:review-result"/>
+    <pd:endX>730</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1357291677611</pd:targetNamespace>
+    <pd:activity name="Catch All">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>382</pd:x>
+        <pd:y>322</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Extract Project Structure">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>175</pd:x>
+        <pd:y>202</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Extract Project Structure - No Activities.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="Format result">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element ref="res:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <res:review-result>
+                <res:errors>
+                    <xsl:for-each select="$_error/ns1:ErrorReport">
+                        <res:error>
+                            <res:error-name>
+                                <xsl:value-of select="if(Class!='') then&#xA;Class else if(FullClass!='') then&#xA;FullClass else if(Msg!='') then&#xA;substring(Msg, 1, 50)&#xA;else &#xA;substring(StackTrace, 1, 50)"/>
+                            </res:error-name>
+                            <res:rule>
+                                <xsl:value-of select="'NEW-001'"/>
+                            </res:rule>
+                            <res:context>
+                                <xsl:value-of select="''"/>
+                            </res:context>
+                        </res:error>
+                    </xsl:for-each>
+                </res:errors>
+                <res:rule>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="ruleId">
+                        <xsl:value-of select="'NEW-001'"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="grade">
+                        <xsl:value-of select="100"/>
+                    </xsl:attribute>
+                    <xsl:attribute name="weight">
+                        <xsl:value-of select="10"/>
+                    </xsl:attribute>
+                </res:rule>
+            </res:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Log">
+        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
+        <pd:resourceType>ae.activities.log</pd:resourceType>
+        <pd:x>491</pd:x>
+        <pd:y>322</pd:y>
+        <config>
+            <role>User</role>
+        </config>
+        <pd:inputBindings>
+            <log:ActivityInput>
+                <message>
+                    <xsl:value-of select="tib:render-xml($Catch-All/exceptiondata)"/>
+                </message>
+            </log:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Rule Card">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>608</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <element>
+                <xsd:element name="cards">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx:rule" maxOccurs="unbounded"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <cards>
+                <pfx:rule>
+                    <pfx:key>
+                        <xsl:value-of select="&quot;NEW-001&quot;"/>
+                    </pfx:key>
+                    <pfx:name>
+                        <xsl:value-of select="&quot;New custom rule&quot;"/>
+                    </pfx:name>
+                    <pfx:severity>
+                        <xsl:value-of select="&quot;MAJOR&quot;"/>
+                    </pfx:severity>
+                    <pfx:description>
+                        <xsl:value-of select="&quot;New custom rule description&quot;"/>
+                    </pfx:description>
+                </pfx:rule>
+            </cards>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Project Structure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Format result</pd:from>
+        <pd:to>Rule Card</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Catch All</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Log</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:xpathDescription>Disabled</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/pfx4:root/pfx4:disabled = 'true'</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>Format result</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

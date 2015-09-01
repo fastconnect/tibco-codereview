@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     (C) Copyright 2011-2015 FastConnect SAS
@@ -16,38 +17,56 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
 		<artifactId>code-review-resources</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
-		<relativePath>../../../..</relativePath>
+		<version>${codeReviewVersion}</version>
 	</parent>
 
-	<artifactId>code-review-rules-basic</artifactId>
+	<groupId>${groupId}</groupId>
+ 	<artifactId>code-review-${artifactId}</artifactId>
+ 	<version>${version}</version>
 	<packaging>projlib</packaging>
 
-	<name>Code Review Plugin for TIBCO BusinessWorks - Resources - Basic rules</name>
-	<description>This is the basic rules included by default in Code Reviews</description>
+	<name>Custom rules Projlib for FC Code Review</name>
 
 	<properties>
 		<bw.project.path>${basedir}/CodeReview</bw.project.path>
+		<bw.project.name>CodeReview</bw.project.name>
+		<bw.project.location>./${bw.project.name}</bw.project.location>
+		<!-- here you can override the default TIBCO stack configuration and
+		     default project configuration found in 'fc-tibco-factory' -->
 	</properties>
 
+	<!-- If this POM inherits from a client root POM, this <build> section
+		 might be removed -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>fr.fastconnect.factory.tibco.bw.maven</groupId>
+				<artifactId>bw-maven-plugin</artifactId>
+				<version>${bw.maven.plugin.version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+	
 	<dependencies>
 		<dependency>
 			<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
 			<artifactId>code-review-reviewer-project</artifactId>
-			<version>${project.version}</version>
+			<version>${codeReviewVersion}</version>
 			<type>projlib</type>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
 			<artifactId>code-review-reviewer-project</artifactId>
-			<version>${project.version}</version>
+			<version>${codeReviewVersion}</version>
 			<type>zip</type>
 			<classifier>bw</classifier>
 		</dependency>

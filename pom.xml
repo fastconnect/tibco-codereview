@@ -62,6 +62,11 @@
 						<goals>
 							<goal>format</goal>
 						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/goal.txt</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -84,6 +89,7 @@
 				<module>code-review-plugin</module>
 				<module>code-review-assemblies</module>
 				<module>code-review-sonar-plugin</module>
+				<module>archetypes/archetype-new-rules</module>
 			</modules>
 		</profile>
 	</profiles>
