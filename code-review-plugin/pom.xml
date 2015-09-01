@@ -216,6 +216,7 @@
 			<properties>
 				<repositorySiteURL>git@github.com/fastconnect/tibco-factory.git</repositorySiteURL>
 				<repositorySiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.path}</repositorySiteDisplayURL>
+				<rootSiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.prefix}</rootSiteDisplayURL>
 				<github.site.suffix>/${project.artifactId}</github.site.suffix>
 			</properties>
 			<distributionManagement>
