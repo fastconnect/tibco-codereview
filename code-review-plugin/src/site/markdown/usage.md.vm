@@ -108,7 +108,7 @@ mvn dependency:copy \
 -DoutputDirectory=$SONARQUBE_HOME/sonarqube/extensions/plugins
 ```
 
-$h3 Launching a Code Review
+$h3 Launching a Code Review (with Sonar)
 
 Then, launch this command:
 
