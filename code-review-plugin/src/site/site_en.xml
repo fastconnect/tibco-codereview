@@ -86,6 +86,7 @@
 			</bottomDescription>
 
 			<endContent>
+				<script type="text/javascript" src="$resourcePath/js/highlight.min.js"></script>
 				<script type="text/javascript" src="$resourcePath/js/custom.js"></script>
 				<script type="text/javascript">
 					$("h3[id='Adding_the_plugin_in_Sonarqube']").parent().removeClass("span6").addClass("span8");
