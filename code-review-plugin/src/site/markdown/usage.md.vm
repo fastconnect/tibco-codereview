@@ -1,0 +1,176 @@
+#*
+ * (C) Copyright 2011-2015 FastConnect SAS
+ * (http://www.fastconnect.fr/) and others.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *#
+#set($h1 = '#')
+#set($h2 = '##')
+#set($h3 = '###')
+#set($h4 = '####')
+
+$h1 Usage
+
+${notaBene} the TIBCO BusinessWorks projects to review are considered to be
+mavenized by [BWMaven](../bw-maven-plugin/index.html). They must have a
+<i>bw-ear</i> or <i>projlib</i>
+[Maven packaging](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Packaging).
+
+---
+
+$h2 Simple Code Review
+
+A simple code review outputs in HTML format in <i>"target/review"</i> directory.
+
+---
+
+$h3 Adding Code Review Dependencies
+
+To enable the Code Review on a TIBCO BusinessWorks project, simply add this
+snippet in the POM of the project:
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+    <artifactId>code-review-resources</artifactId>
+    <version>${project.version}</version>
+    <type>zip</type>
+    <classifier>display</classifier>
+    <scope>test</scope>
+  </dependency>
+  <dependency>
+    <groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+    <artifactId>code-review-rules-basic</artifactId>
+    <version>2.0.0</version>
+    <type>zip</type>
+    <classifier>bw</classifier>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+```
+
+${notaBene} these dependencies are added in the <i>test</i> scope which means
+they won't be processed for compilation of EAR and Projlib nor be included in
+any final build. They are only used to perform the Code Reviews.
+
+$h3 Launching a Code Review
+
+Then, launch this command:
+
+```bash
+mvn clean code-review:code-review
+```
+
+<br /><br />
+
+The ```code-review-resources``` artifact is used to copy display resources such
+as CSS or JavaScript files.
+
+<br /><br /><br /><br />
+
+The ```code-review-rules-basic``` artifact contains the rules to execute in the
+review.
+
+---
+
+$h2 Code Review in Sonarqube
+
+The Code Review results can be imported directly into
+[Sonarqube](http://www.sonarqube.org/).
+The <i>5.1</i> version is known to be compatible and is the recommended version.
+
+The import is done by the Code Review Sonar plugin which is a standard Sonarqube
+plugin. This plugin will parse the XML output (make sure to
+[enable XML format](./code-review-mojo.html#outputFormats)) and convert Code
+Review results into Sonarqube issues.
+
+---
+
+$h3 Adding the plugin in Sonarqube
+
+First the Code Review Sonar plugin must be copied in the Sonarqube plugins
+directory:
+
+```bash
+mvn dependency:copy \
+-Dartifact=fr.fastconnect.factory.tibco.bw.codereview:code-review-sonar-plugin:${project.version}:jar \
+-DoutputDirectory=$SONARQUBE_HOME/sonarqube/extensions/plugins
+```
+
+$h3 Launching a Code Review
+
+Then, launch this command:
+
+```bash
+mvn clean code-review:code-review sonar:sonar
+```
+
+---
+
+$h2 Code Review with custom rules
+
+It is possible to use several set of rules including the built-in one and custom
+ones.
+
+---
+
+$h3 Creating the custom rules
+
+The custom rules project is a TIBCO BusinessWorks project created with a Maven
+archetype (<i>artifactId</i> will be automatically prefixed by mandatory
+<i>"code-review-"</i> prefix):
+
+```bash
+mvn archetype:generate
+    -DarchetypeGroupId=fr.fastconnect.factory.tibco.bw.codereview \
+    -DarchetypeArtifactId=archetype-new-rules \
+    -DgroupId=com.company.rules \
+    -DartifactId=rules-custom
+    -DcodeReviewVersion=${project.version}
+```
+
+This will create a TIBCO BusinessWorks Projlib project which can be edited to
+add custom rules following the provided model:
+
+```bash
+mvn bw:launch-designer
+```
+
+When rules are ready, the project has to be installed or deployed:
+
+```bash
+mvn clean install
+```
+
+Then, it can be added as a Code Review rules dependency:
+
+```xml
+  <dependency>
+    <groupId>com.company.rules</groupId>
+    <artifactId>code-review-rules-custom</artifactId>
+    <version>1.0.0</version>
+    <type>zip</type>
+    <classifier>bw</classifier>
+    <scope>test</scope>
+  </dependency>
+```
+
+$h3 Updating Sonarqube configuration
+
+When using custom rules along with Sonarqube, it is mandatory to update
+Sonarqube configuration.
+
+```bash
+mvn clean code-review:generate-sonar-rules
+```

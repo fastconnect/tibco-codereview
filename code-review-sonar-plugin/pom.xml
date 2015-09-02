@@ -127,7 +127,7 @@
 						<id>default-code-review-sonar</id>
 						<phase>generate-resources</phase>
 						<goals>
-							<goal>code-review-sonar-no-fork</goal>
+							<goal>generate-sonar-rules</goal>
 						</goals>
 						<configuration>
 							<codeReviewProjectDirectory>${basedir}/../code-review-resources/src/main/resources/bw-rules-basic/CodeReview</codeReviewProjectDirectory>

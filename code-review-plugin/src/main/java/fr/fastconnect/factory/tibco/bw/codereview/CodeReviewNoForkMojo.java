@@ -192,6 +192,7 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 		if (outputFormats == null || outputFormats.isEmpty()) {
 			outputFormats = new ArrayList<String>();
 			outputFormats.add("html"); // default output format is HTML
+			outputFormats.add("xml"); // generates also XML in case "sonar:sonar" is used after
 		}
 
 		Formats formats = new Formats();

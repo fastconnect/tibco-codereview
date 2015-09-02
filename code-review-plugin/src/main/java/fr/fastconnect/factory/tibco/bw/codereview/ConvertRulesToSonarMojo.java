@@ -40,11 +40,18 @@ import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules;
 import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules.Rule;
 
 /**
+ * <p>
+ * This goal generates a "rules.xml" file which can be put in "$SONAR_HOME/conf"
+ * directory of Sonarqube.
+ * </p>
+ * <p>
+ * This will enable the import of custom rules in Sonarqube.
+ * </p>
  *
  * @author Mathieu Debove
  *
  */
-@Mojo (name = "code-review-sonar-no-fork", requiresProject = false)
+@Mojo (name = "generate-sonar-rules", requiresProject = false)
 public class ConvertRulesToSonarMojo extends CodeReviewNoForkMojo {
 
 	@Parameter(property="bw.review.rules.path", defaultValue="/CodeReview/Processes/Review")

@@ -228,6 +228,11 @@
 		</profile>
 	</profiles>
 
+	<issueManagement>
+		<url>https://github.com/fastconnect/tibco-codereview/issues</url>
+		<system>Github Issues</system>
+	</issueManagement>
+
 	<scm>
 		<url>https://github.com/fastconnect/tibco-codereview</url>
 		<connection>scm:git:git://github.com/fastconnect/tibco-codereview.git</connection>

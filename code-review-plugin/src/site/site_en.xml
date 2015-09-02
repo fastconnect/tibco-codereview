@@ -33,7 +33,7 @@
 	</bannerLeft>
 
 	<!-- COMMON start -->
- 	<skin>
+	<skin>
 		<groupId>lt.velykis.maven.skins</groupId>
 		<artifactId>reflow-maven-skin</artifactId>
 		<version>1.1.1</version>
@@ -68,7 +68,7 @@
 			<skinAttribution>false</skinAttribution>
 			<!-- COMMON end -->
 			<slogan>Automatic TIBCO BusinessWorks code review</slogan>
-			<!-- Include the documentation and tools in the top navigation (in addition 
+			<!-- Include the documentation and tools in the top navigation (in addition
 				to links) -->
 			<!-- <topNav>Documentation|Tools|Contribute</topNav> -->
 			<!-- Split menus in the bottom navigation -->
@@ -84,6 +84,15 @@
 		          is an automatic code review generator for TIBCO BusinessWorks.
 		        ]]>
 			</bottomDescription>
+
+			<endContent>
+				<script type="text/javascript" src="$resourcePath/js/custom.js"></script>
+				<script type="text/javascript">
+					$("h3[id='Adding_the_plugin_in_Sonarqube']").parent().removeClass("span6").addClass("span8");
+					$("h3[id='Launching_a_Code_Review']").parent().removeClass("span6").addClass("span4");
+				</script>
+			</endContent>
+
 			<pages>
 				<index>
 					<!-- Override the title -->
@@ -94,12 +103,22 @@
 					<toc>false</toc>
 					<markPageHeader>false</markPageHeader>
 					<sections>
-						<carousel />
-						<columns>2</columns>
-						<sidebar />
 						<body />
+						<thumbs>2</thumbs>
+						<!-- <sidebar /> -->
 					</sections>
 				</index>
+		        <usage>
+					<sections>
+						<body />
+						<columns>1</columns>
+						<columns>2</columns>
+						<columns>1</columns>
+						<columns>2</columns>
+						<columns>1</columns>
+						<columns>2</columns>
+					</sections>
+				</usage>
 				<contribute>
 					<breadcrumbs>false</breadcrumbs>
 				</contribute>
@@ -125,7 +144,7 @@
 			</pages>
 		</reflowSkin>
 	</custom>
-	
+
 	<body>
 		<!-- COMMON start -->
 		<head>
