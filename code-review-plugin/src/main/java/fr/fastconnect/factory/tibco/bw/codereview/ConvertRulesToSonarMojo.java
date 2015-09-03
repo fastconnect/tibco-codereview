@@ -29,6 +29,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.RegexFileFilter;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.Execute;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.joox.JOOX;
@@ -52,6 +54,7 @@ import fr.fastconnect.factory.tibco.bw.codereview.sonar.jaxb.Rules.Rule;
  *
  */
 @Mojo (name = "generate-sonar-rules", requiresProject = false)
+@Execute(goal = "generate-sonar-rules", lifecycle = "sonar", phase = LifecyclePhase.TEST)
 public class ConvertRulesToSonarMojo extends CodeReviewNoForkMojo {
 
 	@Parameter(property="bw.review.rules.path", defaultValue="/CodeReview/Processes/Review")

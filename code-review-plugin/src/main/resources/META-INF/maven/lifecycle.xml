@@ -36,4 +36,21 @@
 			</phase>
 		</phases>
 	</lifecycle>
+	<lifecycle>
+		<id>sonar</id>
+		<phases>
+			<phase>
+				<id>test</id>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-code-review</goal>
+							<goal>generate-sonar-rules</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration />
+			</phase>
+		</phases>
+	</lifecycle>
 </lifecycles>

@@ -105,7 +105,7 @@ directory:
 ```bash
 mvn dependency:copy \
 -Dartifact=fr.fastconnect.factory.tibco.bw.codereview:code-review-sonar-plugin:${project.version}:jar \
--DoutputDirectory=$SONARQUBE_HOME/sonarqube/extensions/plugins
+-DoutputDirectory=$SONARQUBE_HOME/extensions/plugins
 ```
 
 $h3 Launching a Code Review (with Sonar)
@@ -169,8 +169,18 @@ Then, it can be added as a Code Review rules dependency:
 $h3 Updating Sonarqube configuration
 
 When using custom rules along with Sonarqube, it is mandatory to update
-Sonarqube configuration.
+Sonarqube configuration with this command run on a project with the custom
+rules:
 
 ```bash
 mvn clean code-review:generate-sonar-rules
 ```
+This will output a <i>"rules.xml"</i> file:
+
+```bash
+[INFO] --- code-review-plugin:${project.version}:generate-sonar-rules (default-cli) @ c ---
+[INFO] Sonar rules saved to .../target/review/rules.xml
+```
+
+This <i>"rules.xml"</i> file must be copied in $SONARQUBE_HOME/conf before
+restarting Sonarqube to take the custom rules into account.

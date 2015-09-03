@@ -89,7 +89,7 @@ public final class BWCodeReviewPlugin extends SonarPlugin {
 		ClassRealm classRealm = addConfDirectoryInClasspath(logger);
 		if (classRealm != null) {
 
-			InputStream customRulesStream = addConfDirectoryInClasspath(logger).getResourceAsStream("rules_custom.xml");
+			InputStream customRulesStream = addConfDirectoryInClasspath(logger).getResourceAsStream("rules.xml");
 			if (customRulesStream != null) {
 				logger.info("Custom rules found");
 				return customRulesStream;
