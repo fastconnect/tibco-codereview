@@ -29,8 +29,8 @@
 			</modules>
 			<properties>
 				<bw.package.skip>true</bw.package.skip>
-				<bw.package.skip.deploy.pom.touch>true</bw.package.skip.deploy.pom.touch>
-				<bw.package.skip.deploy.descriptor.final.touch>true</bw.package.skip.deploy.descriptor.final.touch>
+				<bw.package.skip.deploy.pom.touch>false</bw.package.skip.deploy.pom.touch>
+				<bw.package.skip.deploy.descriptor.final.touch>false</bw.package.skip.deploy.descriptor.final.touch>
 			</properties>
 		</profile>
 	</profiles>

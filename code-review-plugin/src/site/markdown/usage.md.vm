@@ -178,9 +178,12 @@ mvn clean code-review:generate-sonar-rules
 This will output a <i>"rules.xml"</i> file:
 
 ```bash
-[INFO] --- code-review-plugin:${project.version}:generate-sonar-rules (default-cli) @ c ---
+[INFO] --- code-review-plugin:${project.version}:generate-sonar-rules (default-cli) ---
 [INFO] Sonar rules saved to .../target/review/rules.xml
 ```
 
-This <i>"rules.xml"</i> file must be copied in $SONARQUBE_HOME/conf before
-restarting Sonarqube to take the custom rules into account.
+This <i>"rules.xml"</i> file must be copied in <i>$SONARQUBE_HOME/conf</i>
+before restarting Sonarqube to take the custom rules into account.
+
+It might be useful to <i>"Restore Built-in Profiles"</i> of <i>"BW profile"</i>
+in the Sonarqube administration interface.
