@@ -71,6 +71,18 @@
 				<version>1.6</version>
 				<executions>
 					<execution>
+						<id>xjc-rule-card</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${project.basedir}/../code-review-resources/src/main/resources/bw-core/CodeReview/CodeReview/Resources/XSD</schemaDirectory>
+							<schemaFiles>RuleCard.xsd</schemaFiles>
+							<packageName>fr.fastconnect.factory.tibco.bw.codereview.jaxb</packageName>
+							<clearOutputDir>false</clearOutputDir>
+						</configuration>
+					</execution>
+					<execution>
 						<id>xjc-code-review-result</id>
 						<goals>
 							<goal>xjc</goal>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
 
     (C) Copyright 2011-2015 FastConnect SAS
@@ -17,7 +18,6 @@
     limitations under the License.
 
 -->
-
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	 xmlns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd"
 	 targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd"
@@ -26,10 +26,38 @@
 	<xs:element name="rule">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="locale" type="xs:string" minOccurs="0"/>
+				<xs:element name="category" type="xs:string"/>
 				<xs:element name="key" type="xs:string"/>
+				<xs:element name="severity">
+					<xs:simpleType>
+						<xs:restriction base="xs:token">
+							<xs:enumeration value="BLOCKER"/>
+							<xs:enumeration value="CRITICAL"/>
+							<xs:enumeration value="MAJOR"/>
+							<xs:enumeration value="MINOR"/>
+							<xs:enumeration value="INFO"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="weight" type="xs:unsignedShort"/>
+				<xs:element name="infos" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="locale" type="xs:string" minOccurs="0"/>
+							<xs:element name="name" type="xs:string"/>
+							<xs:element name="description" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="category">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="locale" type="xs:string" minOccurs="0"/>
+				<xs:element name="category" type="xs:string"/>
 				<xs:element name="name" type="xs:string"/>
-				<xs:element name="severity" type="xs:string"/>
 				<xs:element name="description" type="xs:string"/>
 			</xs:sequence>
 		</xs:complexType>

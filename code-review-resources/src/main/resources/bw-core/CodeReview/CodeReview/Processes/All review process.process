@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:ns0="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
-    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:ns3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:ns0="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xs" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <pd:name>CodeReview/Processes/All review process.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startType>
@@ -41,7 +41,7 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>1082</pd:endX>
+    <pd:endX>1146</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -188,7 +188,7 @@
     <pd:activity name="Format results">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>974</pd:x>
+        <pd:x>1038</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="pfx3:review-result"/>
@@ -248,38 +248,10 @@
                         </xsl:for-each>
                     </pfx3:files>
                 </pfx3:additional-data>
-                <pfx3:aggregated-grades>
-                    <pfx3:aggregated-grade>
-                        <xsl:attribute name="category">
-                            <xsl:value-of select="'EFF'"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'EFF') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'EFF')]/@weight))"/>
-                    </pfx3:aggregated-grade>
-                    <pfx3:aggregated-grade>
-                        <xsl:attribute name="category">
-                            <xsl:value-of select="'GEN'"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'GEN') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'GEN')]/@weight))"/>
-                    </pfx3:aggregated-grade>
-                    <pfx3:aggregated-grade>
-                        <xsl:attribute name="category">
-                            <xsl:value-of select="'MAI'"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'MAI') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'MAI')]/@weight))"/>
-                    </pfx3:aggregated-grade>
-                    <pfx3:aggregated-grade>
-                        <xsl:attribute name="category">
-                            <xsl:value-of select="'POR'"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'POR') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'POR')]/@weight))"/>
-                    </pfx3:aggregated-grade>
-                    <pfx3:aggregated-grade>
-                        <xsl:attribute name="category">
-                            <xsl:value-of select="'REL'"/>
-                        </xsl:attribute>
-                        <xsl:value-of select="round(sum(&#xA;for $test &#xA;in $accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'REL') and exists(@weight) and @weight !='' and @weight > 0]&#xA;return ($test/@grade * $test/@weight)&#xA;)&#xA;div &#xA;sum($accu/AccumulatedOutput/pfx3:review-result/pfx3:*[@disabled = 'false' and starts-with(@ruleId, 'REL')]/@weight))"/>
-                    </pfx3:aggregated-grade>
-                </pfx3:aggregated-grades>
+                <pfx3:aggregated-grades/>
+                <pfx3:categories>
+                    <xsl:copy-of select="$Categories/categories/ns5:category"/>
+                </pfx3:categories>
                 <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:rule"/>
             </pfx3:review-result>
         </pd:inputBindings>
@@ -341,6 +313,16 @@
             </ns4:ActivityInput>
         </pd:inputBindings>
     </pd:activity>
+    <pd:activity name="Categories">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>932</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Categories.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
         <pd:to>Get current project URI</pd:to>
@@ -379,13 +361,6 @@
     <pd:transition>
         <pd:from>Build Review Informations</pd:from>
         <pd:to>Iterate over Review Rules</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>GetVariable</pd:from>
-        <pd:to>Format results</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -435,6 +410,20 @@
     <pd:transition>
         <pd:from>Log review processes</pd:from>
         <pd:to>Build Review Informations</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>GetVariable</pd:from>
+        <pd:to>Categories</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Categories</pd:from>
+        <pd:to>Format results</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    (C) Copyright 2011-2015 FastConnect SAS
-    (http://www.fastconnect.fr/) and others.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
@@ -38,7 +20,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="res:review-result"/>
-    <pd:endX>730</pd:endX>
+    <pd:endX>762</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -67,7 +49,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>491</pd:x>
+        <pd:x>619</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="res:review-result"/>
@@ -93,18 +75,13 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
                     </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="'EFF-001'"/>
-                    </xsl:attribute>
                     <xsl:variable name="var" select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
                     <xsl:variable name="tempGrade" select="100 - count($Map-Data-1/pfx5:root/descendant::pfx5:layer[@depth = $var]) * 30"/>
                     <xsl:attribute name="grade">
                         <xsl:value-of select="if($tempGrade > 0) then $tempGrade else 0"/>
                     </xsl:attribute>
-                    <xsl:attribute name="weight">
-                        <xsl:value-of select="10"/>
-                    </xsl:attribute>
                     <xsl:variable name="var2" select="$_globalVariables/ns:GlobalVariables/CodeReview/Criteria/MaxNestedLoops"/>
+                    <xsl:copy-of select="$Rule-Card/cards/pfx:rule"/>
                     <res:param>
                         <res:key>
                             <xsl:value-of select="&quot;MaxNestedLoops&quot;"/>
@@ -300,7 +277,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>608</pd:x>
+        <pd:x>491</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element>
@@ -316,18 +293,26 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
         <pd:inputBindings>
             <cards>
                 <pfx:rule>
+                    <pfx:category>
+                        <xsl:value-of select="&quot;EFF&quot;"/>
+                    </pfx:category>
                     <pfx:key>
                         <xsl:value-of select="&quot;EFF-001&quot;"/>
                     </pfx:key>
-                    <pfx:name>
-                        <xsl:value-of select="&quot;Nested loop&quot;"/>
-                    </pfx:name>
                     <pfx:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx:severity>
-                    <pfx:description>
-                        <xsl:value-of select="&quot;Nested loop&quot;"/>
-                    </pfx:description>
+                    <pfx:weight>
+                        <xsl:value-of select="10"/>
+                    </pfx:weight>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                        </pfx:description>
+                    </pfx:infos>
                 </pfx:rule>
             </cards>
         </pd:inputBindings>
@@ -341,7 +326,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -355,14 +340,14 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:transition>
     <pd:transition>
         <pd:from>Log</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -378,18 +363,31 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
     </pd:transition>
     <pd:transition>
         <pd:from>Map-Data-1</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
+    <pd:label>
+        <pd:name>en</pd:name>
+        <pd:description>English description</pd:description>
+        <pd:x>95</pd:x>
+        <pd:y>336</pd:y>
+        <pd:width>127</pd:width>
+        <pd:height>33</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-1</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
     <pd:label>
         <pd:name>fr</pd:name>
         <pd:description>
@@ -424,19 +422,6 @@ Les autres groupes sont ignorés.
         <pd:y>278</pd:y>
         <pd:width>120</pd:width>
         <pd:height>44</pd:height>
-        <pd:fontColor>-16777216</pd:fontColor>
-        <pd:color>-1</pd:color>
-        <pd:type>solid</pd:type>
-        <pd:thickness>0</pd:thickness>
-        <pd:fade>true</pd:fade>
-    </pd:label>
-    <pd:label>
-        <pd:name>en</pd:name>
-        <pd:description>English description</pd:description>
-        <pd:x>95</pd:x>
-        <pd:y>336</pd:y>
-        <pd:width>127</pd:width>
-        <pd:height>33</pd:height>
         <pd:fontColor>-16777216</pd:fontColor>
         <pd:color>-1</pd:color>
         <pd:type>solid</pd:type>

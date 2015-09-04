@@ -12,7 +12,7 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx4:review-result"/>
-    <pd:endX>922</pd:endX>
+    <pd:endX>954</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
@@ -194,9 +194,28 @@
                         <xsl:attribute name="disabled">
                             <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
                         </xsl:attribute>
-                        <xsl:attribute name="ruleId">
-                            <xsl:value-of select="'MAI-010'"/>
-                        </xsl:attribute>
+                        <pfx5:rule>
+                            <pfx5:category>
+                                <xsl:value-of select="'MAI'"/>
+                            </pfx5:category>
+                            <pfx5:key>
+                                <xsl:value-of select="'MAI-010'"/>
+                            </pfx5:key>
+                            <pfx5:severity>
+                                <xsl:value-of select="&quot;MAJOR&quot;"/>
+                            </pfx5:severity>
+                            <pfx5:weight>
+                                <xsl:value-of select="20"/>
+                            </pfx5:weight>
+                            <pfx5:infos>
+                                <pfx5:name>
+                                    <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                                </pfx5:name>
+                                <pfx5:description>
+                                    <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                                </pfx5:description>
+                            </pfx5:infos>
+                        </pfx5:rule>
                         <xsl:for-each select="$Parse-XML/results/result">
                             <pfx4:result>
                                 <pfx4:resource>
@@ -269,7 +288,7 @@
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>683</pd:x>
+        <pd:x>843</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="pfx4:review-result"/>
@@ -283,9 +302,6 @@
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
                     </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="'MAI-010'"/>
-                    </xsl:attribute>
                     <xsl:choose>
                         <xsl:when test="count($Get-file-by-type/ns3:project/ns3:file) > 0">
                             <xsl:attribute name="grade">
@@ -298,9 +314,7 @@
                             </xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:attribute name="weight">
-                        <xsl:value-of select="20"/>
-                    </xsl:attribute>
+                    <xsl:copy-of select="$Rule-Card/cards/pfx5:rule"/>
                     <xsl:copy-of select="$Cumul/AccumulatedOutput/pfx4:review-result/pfx4:rule/pfx4:result"/>
                 </pfx4:rule>
             </pfx4:review-result>
@@ -323,7 +337,7 @@
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>800</pd:x>
+        <pd:x>704</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element>
@@ -339,18 +353,26 @@
         <pd:inputBindings>
             <cards>
                 <pfx5:rule>
+                    <pfx5:category>
+                        <xsl:value-of select="&quot;MAI&quot;"/>
+                    </pfx5:category>
                     <pfx5:key>
                         <xsl:value-of select="&quot;MAI-010&quot;"/>
                     </pfx5:key>
-                    <pfx5:name>
-                        <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
-                    </pfx5:name>
                     <pfx5:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx5:severity>
-                    <pfx5:description>
-                        <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
-                    </pfx5:description>
+                    <pfx5:weight>
+                        <xsl:value-of select="20"/>
+                    </pfx5:weight>
+                    <pfx5:infos>
+                        <pfx5:name>
+                            <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                        </pfx5:name>
+                        <pfx5:description>
+                            <xsl:value-of select="&quot;Unlabelled Transitions&quot;"/>
+                        </pfx5:description>
+                    </pfx5:infos>
                 </pfx5:rule>
             </cards>
         </pd:inputBindings>
@@ -364,14 +386,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Group</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -385,7 +407,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -394,7 +416,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

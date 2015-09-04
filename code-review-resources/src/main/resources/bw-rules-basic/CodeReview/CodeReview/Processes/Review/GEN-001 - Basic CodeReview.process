@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    (C) Copyright 2011-2015 FastConnect SAS
-    (http://www.fastconnect.fr/) and others.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
@@ -74,7 +56,7 @@
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>683</pd:x>
+        <pd:x>811</pd:x>
         <pd:y>66</pd:y>
         <config>
             <element ref="pfx3:general"/>
@@ -84,9 +66,7 @@
                 <xsl:attribute name="disabled">
                     <xsl:value-of select="$Start/pfx2:root/pfx2:disabled"/>
                 </xsl:attribute>
-                <xsl:attribute name="ruleId">
-                    <xsl:value-of select="'GEN-001'"/>
-                </xsl:attribute>
+                <xsl:copy-of select="$Rule-Card/cards/pfx4:rule"/>
                 <xsl:if test="exists($Archives-Count)">
                     <pfx3:number-of-processes>
                         <xsl:value-of select="$Process-number/process-number"/>
@@ -159,7 +139,7 @@
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>800</pd:x>
+        <pd:x>672</pd:x>
         <pd:y>66</pd:y>
         <config>
             <element>
@@ -175,60 +155,68 @@
         <pd:inputBindings>
             <cards>
                 <pfx4:rule>
+                    <pfx4:category>
+                        <xsl:value-of select="&quot;GEN&quot;"/>
+                    </pfx4:category>
                     <pfx4:key>
                         <xsl:value-of select="&quot;GEN-001&quot;"/>
                     </pfx4:key>
-                    <pfx4:name>
-                        <xsl:value-of select="&quot;Basic CodeReview&quot;"/>
-                    </pfx4:name>
                     <pfx4:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx4:severity>
-                    <pfx4:description>
-                        <xsl:value-of select="&quot;Basic CodeReview&quot;"/>
-                    </pfx4:description>
+                    <pfx4:weight>
+                        <xsl:value-of select="0"/>
+                    </pfx4:weight>
+                    <pfx4:infos>
+                        <pfx4:name>
+                            <xsl:value-of select="&quot;Basic CodeReview&quot;"/>
+                        </pfx4:name>
+                        <pfx4:description>
+                            <xsl:value-of select="&quot;Basic CodeReview&quot;"/>
+                        </pfx4:description>
+                    </pfx4:infos>
                 </pfx4:rule>
             </cards>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Process number</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>File number</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Activity number</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Projlib Count</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Archives Count</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -277,7 +265,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -293,14 +281,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>LibBuilders Count</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

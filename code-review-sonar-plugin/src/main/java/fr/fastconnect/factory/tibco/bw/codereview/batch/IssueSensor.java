@@ -66,8 +66,8 @@ public class IssueSensor implements Sensor {
 		File projectBasedir = new File(CodeReviewInitialize.reviewResult.getProjectBasedir());
 		for (RuleType rule : CodeReviewInitialize.reviewResult.getRule()) {
 			if (rule.getResult().size() > 0) {
-				logger.debug("Found one non conformity : " + rule.getRuleId());
-				RuleKey ruleKey = RuleKey.of("FCCodeReviewRepository", rule.getRuleId());
+				logger.debug("Found one non conformity : " + rule.getRule().get(0).getKey());
+				RuleKey ruleKey = RuleKey.of("FCCodeReviewRepository", rule.getRule().get(0).getKey());
 				for (Result result : rule.getResult()) {
 					File resourceToFind = new File(projectBasedir.getAbsolutePath() + result.getResource());
 					InputFile resource = fs.inputFile(fs.predicates().hasPath(projectBasedir.getAbsolutePath() + result.getResource()));

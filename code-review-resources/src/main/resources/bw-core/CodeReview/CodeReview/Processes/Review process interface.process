@@ -7,7 +7,9 @@
     <pd:startX>58</pd:startX>
     <pd:startY>98</pd:startY>
     <pd:returnBindings>
-        <pfx3:review-result/>
+        <pfx3:review-result>
+            <pfx3:categories/>
+        </pfx3:review-result>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx3:review-result"/>

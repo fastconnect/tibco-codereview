@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    (C) Copyright 2011-2015 FastConnect SAS
-    (http://www.fastconnect.fr/) and others.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <pd:ProcessDefinition xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="com/tibco/pe/commands" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:ns5="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.tibco.com/schemas/CodeReview/CodeReview/SharedRessources/Schemas/Schema.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns0="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xs" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xs" schemaLocation="/CodeReview/Resources/XSD/ReviewProcessInput.xsd"/>
@@ -31,7 +13,7 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="res:review-result"/>
-    <pd:endX>730</pd:endX>
+    <pd:endX>762</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
@@ -59,7 +41,7 @@
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>491</pd:x>
+        <pd:x>619</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="res:review-result"/>
@@ -85,16 +67,11 @@
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx3:root/pfx3:disabled"/>
                     </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="'EFF-002'"/>
-                    </xsl:attribute>
                     <xsl:variable name="tempGrade" select="100 - count($Map-Data/root/result) * 20"/>
                     <xsl:attribute name="grade">
                         <xsl:value-of select="if($tempGrade &lt; 0) then 0 else $tempGrade"/>
                     </xsl:attribute>
-                    <xsl:attribute name="weight">
-                        <xsl:value-of select="10"/>
-                    </xsl:attribute>
+                    <xsl:copy-of select="$Rule-Card/cards/pfx2:rule"/>
                     <xsl:for-each select="$Map-Data/root/result">
                         <res:result>
                             <res:resource>
@@ -170,7 +147,7 @@
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>608</pd:x>
+        <pd:x>480</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element>
@@ -186,25 +163,33 @@
         <pd:inputBindings>
             <cards>
                 <pfx2:rule>
+                    <pfx2:category>
+                        <xsl:value-of select="&quot;EFF&quot;"/>
+                    </pfx2:category>
                     <pfx2:key>
                         <xsl:value-of select="&quot;EFF-002&quot;"/>
                     </pfx2:key>
-                    <pfx2:name>
-                        <xsl:value-of select="&quot;Critical Section on JobSharedVariable&quot;"/>
-                    </pfx2:name>
                     <pfx2:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx2:severity>
-                    <pfx2:description>
-                        <xsl:value-of select="&quot;Performance issue&quot;"/>
-                    </pfx2:description>
+                    <pfx2:weight>
+                        <xsl:value-of select="10"/>
+                    </pfx2:weight>
+                    <pfx2:infos>
+                        <pfx2:name>
+                            <xsl:value-of select="&quot;Critical Section on JobSharedVariable&quot;"/>
+                        </pfx2:name>
+                        <pfx2:description>
+                            <xsl:value-of select="&quot;Performance issue&quot;"/>
+                        </pfx2:description>
+                    </pfx2:infos>
                 </pfx2:rule>
             </cards>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -225,14 +210,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Null</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -248,7 +233,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Map Data</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -262,7 +247,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

@@ -12,7 +12,7 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx5:review-result"/>
-    <pd:endX>922</pd:endX>
+    <pd:endX>986</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables>
@@ -181,7 +181,7 @@
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>683</pd:x>
+        <pd:x>843</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="pfx5:review-result"/>
@@ -195,9 +195,6 @@
                     <xsl:attribute name="disabled">
                         <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
                     </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="'MAI-009'"/>
-                    </xsl:attribute>
                     <xsl:choose>
                         <xsl:when test="count($GetProcesses/pfx3:project/pfx3:file) > 0">
                             <xsl:attribute name="grade">
@@ -210,9 +207,7 @@
                             </xsl:attribute>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <xsl:attribute name="weight">
-                        <xsl:value-of select="10"/>
-                    </xsl:attribute>
+                    <xsl:copy-of select="$Rule-Card/cards/pfx6:rule"/>
                     <pfx5:param>
                         <pfx5:key>
                             <xsl:value-of select="&quot;OversizedProcesses_Height&quot;"/>
@@ -249,7 +244,7 @@
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>800</pd:x>
+        <pd:x>704</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element>
@@ -265,25 +260,33 @@
         <pd:inputBindings>
             <cards>
                 <pfx6:rule>
+                    <pfx6:category>
+                        <xsl:value-of select="&quot;MAI&quot;"/>
+                    </pfx6:category>
                     <pfx6:key>
                         <xsl:value-of select="&quot;MAI-009&quot;"/>
                     </pfx6:key>
-                    <pfx6:name>
-                        <xsl:value-of select="&quot;Oversized Processes&quot;"/>
-                    </pfx6:name>
                     <pfx6:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx6:severity>
-                    <pfx6:description>
-                        <xsl:value-of select="&quot;Oversized Processes&quot;"/>
-                    </pfx6:description>
+                    <pfx6:weight>
+                        <xsl:value-of select="10"/>
+                    </pfx6:weight>
+                    <pfx6:infos>
+                        <pfx6:name>
+                            <xsl:value-of select="&quot;Oversized Processes&quot;"/>
+                        </pfx6:name>
+                        <pfx6:description>
+                            <xsl:value-of select="&quot;Oversized Processes&quot;"/>
+                        </pfx6:description>
+                    </pfx6:infos>
                 </pfx6:rule>
             </cards>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
         <pd:from>Group</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -304,14 +307,14 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -320,7 +323,7 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
