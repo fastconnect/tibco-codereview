@@ -96,9 +96,9 @@ public class ConvertRulesToSonarMojo extends CodeReviewNoForkMojo {
 
 			Match rule = document.xpath("//rule:rule");
 			String ruleKey = rule.xpath("rule:key/xsl:value-of").attr("select");
-			String ruleName = rule.xpath("rule:name/xsl:value-of").attr("select");
+			String ruleName = rule.xpath("rule:infos/rule:name/xsl:value-of").attr("select"); // TODO: handle i18n
 			String ruleSeverity = rule.xpath("rule:severity/xsl:value-of").attr("select");
-			String ruleDescription = rule.xpath("rule:description/xsl:value-of").attr("select");
+			String ruleDescription = rule.xpath("rule:infos/rule:description/xsl:value-of").attr("select"); // TODO: handle i18n
 
 			if (ruleKey != null) {
 				ruleKey = ruleKey.replaceAll("^\"|\"$", "");
