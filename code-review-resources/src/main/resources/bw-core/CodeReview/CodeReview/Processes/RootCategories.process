@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
-    <pd:name>CodeReview/Processes/Main.categories.process</pd:name>
+    <pd:name>CodeReview/Processes/RootCategories.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>58</pd:startX>
     <pd:startY>130</pd:startY>
@@ -40,7 +40,41 @@
             </element>
         </config>
         <pd:inputBindings>
-            <categories/>
+            <categories>
+                <pfx:category>
+                    <pfx:category>
+                        <xsl:value-of select="'ERR'"/>
+                    </pfx:category>
+                    <pfx:name>
+                        <xsl:value-of select="'Errors'"/>
+                    </pfx:name>
+                    <pfx:description>
+                        <xsl:value-of select="'Errors category'"/>
+                    </pfx:description>
+                </pfx:category>
+                <pfx:category>
+                    <pfx:category>
+                        <xsl:value-of select="'CONF'"/>
+                    </pfx:category>
+                    <pfx:name>
+                        <xsl:value-of select="'Configuration'"/>
+                    </pfx:name>
+                    <pfx:description>
+                        <xsl:value-of select="'Configuration category'"/>
+                    </pfx:description>
+                </pfx:category>
+                <pfx:category>
+                    <pfx:category>
+                        <xsl:value-of select="'FILES'"/>
+                    </pfx:category>
+                    <pfx:name>
+                        <xsl:value-of select="'Files'"/>
+                    </pfx:name>
+                    <pfx:description>
+                        <xsl:value-of select="'Files category'"/>
+                    </pfx:description>
+                </pfx:category>
+            </categories>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
