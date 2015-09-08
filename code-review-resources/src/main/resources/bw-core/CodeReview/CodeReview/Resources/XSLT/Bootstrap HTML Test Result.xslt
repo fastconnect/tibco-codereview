@@ -113,6 +113,11 @@
 						<xsl:element name="p">
 							<xsl:value-of select="rc:description"/>
 						</xsl:element>
+						<xsl:if test="$current-category = 'GEN'">
+							<xsl:call-template name="render-rule">
+								<xsl:with-param name="rule" select="//rr:general"/>
+							</xsl:call-template>
+						</xsl:if>
 						<xsl:for-each select="//rr:rule[rc:rule/rc:category = $current-category]">
 							<xsl:call-template name="render-rule">
 								<xsl:with-param name="rule" select="."/>
@@ -259,47 +264,130 @@
 	<xsl:template name="render-rule">
 		<xsl:param name="rule" />
 
-		<xsl:call-template name="rule-header">
-			<xsl:with-param name="rule" select="$rule" />
-		</xsl:call-template>
-		<xsl:element name="span">
-			<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key"/></xsl:attribute>
-			<xsl:for-each-group select="$rule/rr:result" group-by="rr:key">
-				<table class="table table-striped">
-					<tr>
-						<th>
-							<xsl:value-of select="rr:key" />
-						</th>
-						<xsl:for-each select="rr:child">
-							<th>
-								<xsl:value-of select="rr:key" />
-							</th>
-						</xsl:for-each>
-					</tr>
-					<xsl:for-each select="current-group()">
-						<tr>
-							<xsl:element name="td">
-								<xsl:value-of select="rr:value" />
-							</xsl:element>
-							<xsl:for-each select="rr:child">
-								<xsl:element name="td">
-									<xsl:value-of select="rr:value" />
-								</xsl:element>
+		<div class="panel panel-default">
+			<xsl:attribute name="role" select="'button'" />
+			<xsl:attribute name="data-toggle" select="'collapse'" />
+			<xsl:attribute name="aria-expanded" select="'false'" />
+			<xsl:attribute name="href" select="concat('#collapse_', $rule/rc:rule/rc:key)" />
+			<xsl:attribute name="aria-controls" select="concat('collapse_', $rule/rc:rule/rc:key)" />
+
+			<div class="panel-heading">
+				<xsl:call-template name="rule-header">
+					<xsl:with-param name="rule" select="$rule" />
+				</xsl:call-template>
+			</div>
+			<xsl:element name="div">
+				<xsl:choose>			
+					<xsl:when test="$rule/local-name() = 'general'">
+						<xsl:attribute name="class" select="'collapse in'" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="class" select="'collapse'" />
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:attribute name="id"><xsl:value-of select="concat('collapse_', $rule/rc:rule/rc:key)" /></xsl:attribute>
+				<xsl:element name="div">
+					<xsl:attribute name="class" select="'panel-body'" />
+					<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key" /></xsl:attribute>
+					<p>
+						<i>Key: </i><xsl:value-of select="$rule/rc:rule/rc:key" /><br />
+						<i>Name: </i><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" /><br />
+						<i>Description: </i><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:description" /><br />
+						<i>Weight: </i><xsl:value-of select="$rule/rc:rule/rc:weight" /><br />
+						<xsl:if test="count($rule/rr:result)">
+							<i>Score: </i><xsl:value-of select="concat('min(100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ', 0) = ', $rule/@grade)" /><br />
+						</xsl:if>
+					</p>
+					<xsl:if test="count($rule/rr:param) > 0">
+						<hr />
+						<p><i>Parameters used: </i></p>
+						<table class="table table-striped">
+							<tr>
+								<th>
+									<xsl:value-of select="'key'" />
+								</th>
+								<th>
+									<xsl:value-of select="'value'" />
+								</th>
+							</tr>
+							<xsl:for-each select="$rule/rr:param">
+								<tr>
+									<td>
+										<xsl:value-of select="rr:key" />
+									</td>
+									<td>
+										<xsl:value-of select="rr:value" />
+									</td>
+								</tr>
 							</xsl:for-each>
-						</tr>
-					</xsl:for-each>
-					<!--</xsl:for-each>-->
-				</table>
-			</xsl:for-each-group>
-		</xsl:element>
+						</table>
+					</xsl:if>
+					<hr />
+					<xsl:choose>
+						<xsl:when test="count($rule/rr:result) > 0">
+							<xsl:element name="span">
+								<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key" /></xsl:attribute>
+								<p><i>Output: </i></p>
+								<xsl:for-each-group select="$rule/rr:result" group-by="rr:key">
+									<table class="table table-striped">
+										<tr>
+											<th>
+												<xsl:value-of select="rr:key" />
+											</th>
+											<xsl:for-each select="rr:child">
+												<th>
+													<xsl:value-of select="rr:key" />
+												</th>
+											</xsl:for-each>
+										</tr>
+										<xsl:for-each select="current-group()">
+											<tr>
+												<xsl:element name="td">
+													<xsl:value-of select="rr:value" />
+												</xsl:element>
+												<xsl:for-each select="rr:child">
+													<xsl:element name="td">
+														<xsl:value-of select="rr:value" />
+													</xsl:element>
+												</xsl:for-each>
+											</tr>
+										</xsl:for-each>
+									</table>
+								</xsl:for-each-group>
+							</xsl:element>
+						</xsl:when>
+						<xsl:when test="$rule/local-name() = 'general'">
+							<p>
+								<i>Number of processes: </i><xsl:value-of select="$rule/rr:number-of-processes" /><br />
+								<i>Number of activities: </i><xsl:value-of select="$rule/rr:number-of-activities" /><br />
+								<i>Number of files: </i><xsl:value-of select="$rule/rr:number-of-files" /><br />
+								<i>Number of libraries (Projlibs): </i><xsl:value-of select="$rule/rr:number-of-libs" /><br />
+								<i>Number of EARs: </i><xsl:value-of select="$rule/rr:number-of-ears" /><br />
+								<i>Number of PARs: </i><xsl:value-of select="$rule/rr:number-of-pars" /><br />
+								<i>Number of AARs: </i><xsl:value-of select="$rule/rr:number-of-aars" /><br />
+								<i>Number of library builder: </i><xsl:value-of select="$rule/rr:number-of-libbuilder" /><br />
+							</p>
+						</xsl:when>
+						<xsl:otherwise>
+							<p><i>No issue detected.</i></p>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:element>
+			</xsl:element>
+		</div>
 	</xsl:template>
 
 	<xsl:template name="rule-header">
 		<xsl:param name="rule" />
 
+		<xsl:element name="span">
+			<xsl:attribute name="class" select="'label label-default'" />
+			<xsl:value-of select="$rule/rc:rule/rc:key" />
+		</xsl:element>
+
 		<xsl:element name="h3">
 			<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key"/></xsl:attribute>
-			<xsl:value-of select="concat($rule/rc:rule/rc:key, ' - ', $rule/rc:rule/rc:infos/rc:name)" />
+			<xsl:value-of select="$rule/rc:rule/rc:infos/rc:name" />
 			<xsl:if test="$rule/@disabled = true()">
 				<xsl:value-of select="' - Disabled'" />
 			</xsl:if>
@@ -308,7 +396,7 @@
 			<xsl:choose>
 				<xsl:when test="$rule/@grade = '0'">
 					<xsl:call-template name="display-grade">
-						<xsl:with-param name="grade" select="1"/>
+						<xsl:with-param name="grade" select="0"/>
 					</xsl:call-template>
 				</xsl:when>			
 				<xsl:otherwise>				
@@ -318,7 +406,6 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:if>
-
 	</xsl:template>
 
 	<xsl:template name="display-grade">
@@ -326,7 +413,7 @@
 		<div class="progress" style="width: 150px;">
 			<xsl:element name="div">
 				<xsl:attribute name="role">progressbar</xsl:attribute>
-				<xsl:attribute name="style">width: <xsl:value-of select="$grade" />%; min-width: 10px;</xsl:attribute>
+				<xsl:attribute name="style">width: <xsl:value-of select="$grade" />%; min-width: 25px;</xsl:attribute>
 				<xsl:attribute name="aria-valuenow"><xsl:value-of select="$grade" /></xsl:attribute>
 				<xsl:attribute name="aria-valuemin">0</xsl:attribute>
 				<xsl:attribute name="aria-valuemax">100</xsl:attribute>
@@ -345,11 +432,11 @@
 					</xsl:when>
 					<xsl:otherwise/>
 				</xsl:choose>
-				<xsl:value-of select="$grade" />
+				<xsl:value-of select="concat($grade, ' %')" />
 				<xsl:element name="span">
 					<xsl:attribute name="class">sr-only</xsl:attribute>
-					<xsl:attribute name="style">visibility: hidden;</xsl:attribute>
-					<xsl:value-of select="$grade" />%
+					<xsl:attribute name="style">display: none; visibility: hidden;</xsl:attribute>
+					<xsl:value-of select="concat($grade, ' %')" />
 				</xsl:element>
 			</xsl:element>
 		</div>

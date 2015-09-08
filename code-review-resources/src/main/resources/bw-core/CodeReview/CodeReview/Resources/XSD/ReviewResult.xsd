@@ -381,7 +381,7 @@
 	<xs:element name="property" type="xs:string"/>
 	<xs:complexType name="RuleType">
 		<xs:sequence>
-			<xs:element ref="rc:rule" maxOccurs="unbounded"/>
+			<xs:element ref="rc:rule" minOccurs="1" maxOccurs="1"/>
 			<xs:element ref="rr:data" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="param" type="rr:entry" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="result" type="rr:result" minOccurs="0" maxOccurs="unbounded"/>

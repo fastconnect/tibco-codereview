@@ -14,9 +14,19 @@
                 <xsl:attribute name="disabled">
                     <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
                 </xsl:attribute>
-                <xsl:attribute name="grade">
-                    <xsl:value-of select="round(100)"/>
-                </xsl:attribute>
+                <xsl:variable name="tempGrade" select="round(100 - $Rule-Card/cards/pfx6:rule/pfx6:weight * count($Format-result/pfx5:review-result/pfx5:rule/pfx5:result))"/>
+                <xsl:choose>
+                    <xsl:when test="$tempGrade >= 0">
+                        <xsl:attribute name="grade">
+                            <xsl:value-of select="$tempGrade"/>
+                        </xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="grade">
+                            <xsl:value-of select="0"/>
+                        </xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:copy-of select="$Rule-Card/cards/pfx6:rule"/>
                 <xsl:copy-of select="$Format-result/pfx5:review-result/pfx5:rule/pfx5:result"/>
             </pfx5:rule>
@@ -273,7 +283,7 @@
                 <xsd:element name="cards">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element ref="pfx6:rule" maxOccurs="unbounded"/>
+                            <xsd:element ref="pfx6:rule"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

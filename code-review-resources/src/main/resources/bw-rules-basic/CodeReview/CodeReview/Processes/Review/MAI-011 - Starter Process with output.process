@@ -258,25 +258,27 @@
                     </xsl:choose>
                     <xsl:copy-of select="$Rule-Card/cards/pfx6:rule"/>
                     <xsl:for-each select="$Accum/AccumulatedOutput/root">
-                        <pfx5:result>
-                            <pfx5:resource>
-                                <xsl:value-of select="process"/>
-                            </pfx5:resource>
-                            <pfx5:key>
-                                <xsl:value-of select="local-name(process)"/>
-                            </pfx5:key>
-                            <pfx5:value>
-                                <xsl:value-of select="process"/>
-                            </pfx5:value>
-                            <pfx5:child>
+                        <xsl:if test="exists(starter) and exists(process)">
+                            <pfx5:result>
+                                <pfx5:resource>
+                                    <xsl:value-of select="process"/>
+                                </pfx5:resource>
                                 <pfx5:key>
-                                    <xsl:value-of select="local-name(starter)"/>
+                                    <xsl:value-of select="local-name(process)"/>
                                 </pfx5:key>
                                 <pfx5:value>
-                                    <xsl:value-of select="starter"/>
+                                    <xsl:value-of select="process"/>
                                 </pfx5:value>
-                            </pfx5:child>
-                        </pfx5:result>
+                                <pfx5:child>
+                                    <pfx5:key>
+                                        <xsl:value-of select="local-name(starter)"/>
+                                    </pfx5:key>
+                                    <pfx5:value>
+                                        <xsl:value-of select="starter"/>
+                                    </pfx5:value>
+                                </pfx5:child>
+                            </pfx5:result>
+                        </xsl:if>
                     </xsl:for-each>
                 </pfx5:rule>
             </pfx5:review-result>
@@ -292,7 +294,7 @@
                 <xsd:element name="cards">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element ref="pfx6:rule" maxOccurs="unbounded"/>
+                            <xsd:element ref="pfx6:rule"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>

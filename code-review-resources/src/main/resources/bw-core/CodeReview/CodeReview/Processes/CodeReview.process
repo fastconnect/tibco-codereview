@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
+<pd:ProcessDefinition xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
     <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
     <pd:name>CodeReview/Processes/CodeReview.process</pd:name>
     <pd:description/>
@@ -369,7 +369,7 @@ else $_globalVariables/pfx5:GlobalVariables/CodeReview/ResultType = 'XML'</pd:xp
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>xpath</pd:conditionType>
-        <pd:xpath>exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:fileAliasesFile)</pd:xpath>
+        <pd:xpath>exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:fileAliasesFile) and exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:load-projlibs) and $Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:load-projlibs='true'</pd:xpath>
     </pd:transition>
     <pd:transition>
         <pd:from>Load Projlibs</pd:from>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Created by TIBCO WSDL-->
-<wsdl:definitions xmlns:ns1="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:ns0="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="Untitled" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd">
+<wsdl:definitions xmlns:ns2="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns1="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:ns0="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="Untitled" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd">
     <wsdl:types>
-        <xs:schema xmlns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:ns0="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
+        <xs:schema xmlns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:ns1="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns0="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
             <xs:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd"/>
             <xs:element name="code-review">
                 <xs:complexType>
@@ -20,6 +20,11 @@
                         <xs:element ref="destination">
                             <xs:annotation>
                                 <xs:documentation>Path where to write the review results</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element minOccurs="0" ref="load-projlibs">
+                            <xs:annotation>
+                                <xs:documentation>Whether to load Projlibs when reviewing</xs:documentation>
                             </xs:annotation>
                         </xs:element>
                         <xs:element minOccurs="0" ref="project-encoding">
@@ -98,6 +103,11 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
+            <xs:element default="false" name="load-projlibs" type="xs:boolean">
+                <xs:annotation>
+                    <xs:documentation>Whether to load Projlibs when reviewing</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="project-encoding" type="xs:string">
                 <xs:annotation>
                     <xs:documentation>Encoding to be used to read projects files</xs:documentation>
@@ -114,12 +124,55 @@
                 </xs:annotation>
             </xs:element>
         </xs:schema>
-        <xs:schema xmlns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd">
+        <xs:schema xmlns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
+            <xs:element name="category">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="locale" type="xs:string"/>
+                        <xs:element name="category" type="xs:string"/>
+                        <xs:element name="name" type="xs:string"/>
+                        <xs:element name="description" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="rule">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="category" type="xs:string"/>
+                        <xs:element name="key" type="xs:string"/>
+                        <xs:element name="severity">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:token">
+                                    <xs:enumeration value="BLOCKER"/>
+                                    <xs:enumeration value="CRITICAL"/>
+                                    <xs:enumeration value="MAJOR"/>
+                                    <xs:enumeration value="MINOR"/>
+                                    <xs:enumeration value="INFO"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                        <xs:element name="weight" type="xs:unsignedShort"/>
+                        <xs:element maxOccurs="unbounded" name="infos">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element minOccurs="0" name="locale" type="xs:string"/>
+                                    <xs:element name="name" type="xs:string"/>
+                                    <xs:element name="description" type="xs:string"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:rr="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rc="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd">
+            <xs:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd"/>
             <xs:complexType name="RuleType">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:data"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="param" type="ns1:entry"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="result" type="ns1:result"/>
+                    <xs:element ref="rc:rule"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:data"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="param" type="rr:entry"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="result" type="rr:result"/>
                 </xs:sequence>
                 <xs:attribute name="disabled" type="xs:boolean" use="required"/>
                 <xs:attribute name="grade">
@@ -130,70 +183,61 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
-                <xs:attribute name="ruleId" type="xs:string" use="required"/>
-                <xs:attribute name="weight">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:int">
-                            <xs:maxInclusive value="100"/>
-                            <xs:minInclusive value="0"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:attribute>
             </xs:complexType>
             <xs:complexType name="activityRuleType">
                 <xs:complexContent>
-                    <xs:extension base="ns1:RuleType">
+                    <xs:extension base="rr:RuleType">
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:call"/>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:call"/>
                         </xs:sequence>
                     </xs:extension>
                 </xs:complexContent>
             </xs:complexType>
             <xs:complexType name="child">
                 <xs:sequence>
-                    <xs:element ref="ns1:key"/>
-                    <xs:element ref="ns1:value"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="child" type="ns1:child"/>
+                    <xs:element ref="rr:key"/>
+                    <xs:element ref="rr:value"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="child" type="rr:child"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="entry">
                 <xs:all>
-                    <xs:element ref="ns1:key"/>
-                    <xs:element ref="ns1:value"/>
+                    <xs:element ref="rr:key"/>
+                    <xs:element ref="rr:value"/>
                 </xs:all>
             </xs:complexType>
             <xs:complexType name="processRuleType">
                 <xs:complexContent>
-                    <xs:extension base="ns1:RuleType">
+                    <xs:extension base="rr:RuleType">
                         <xs:sequence>
-                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:process"/>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:process"/>
                         </xs:sequence>
                     </xs:extension>
                 </xs:complexContent>
             </xs:complexType>
             <xs:complexType name="result">
                 <xs:sequence>
-                    <xs:element ref="ns1:resource"/>
-                    <xs:element ref="ns1:key"/>
-                    <xs:element ref="ns1:value"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="child" type="ns1:child"/>
+                    <xs:element ref="rr:resource"/>
+                    <xs:element ref="rr:key"/>
+                    <xs:element ref="rr:value"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="child" type="rr:child"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:element name="activity" type="xs:string"/>
-            <xs:element name="activityRule" type="ns1:activityRuleType"/>
+            <xs:element name="activityRule" type="rr:activityRuleType"/>
             <xs:element name="additional-data">
                 <xs:complexType>
                     <xs:all>
-                        <xs:element minOccurs="0" ref="ns1:config"/>
-                        <xs:element minOccurs="0" ref="ns1:files"/>
+                        <xs:element minOccurs="0" ref="rr:config"/>
+                        <xs:element minOccurs="0" ref="rr:files"/>
                     </xs:all>
                 </xs:complexType>
             </xs:element>
             <xs:element name="call">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ns1:process"/>
-                        <xs:element ref="ns1:activity"/>
+                        <xs:element ref="rr:process"/>
+                        <xs:element ref="rr:activity"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -202,7 +246,7 @@
             <xs:element name="config">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="entry" type="ns1:entry"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="entry" type="rr:entry"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -219,7 +263,7 @@
             <xs:element name="errors">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:error"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:error"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -227,14 +271,14 @@
             <xs:element name="files">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:file"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:file"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="general">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element minOccurs="0" name="number-of-processes" type="xs:unsignedInt"/>
                                 <xs:element minOccurs="0" name="number-of-activities" type="xs:unsignedInt"/>
@@ -252,7 +296,7 @@
             <xs:element name="global-variable-in-connection-definition-error">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="connection">
                                     <xs:complexType>
@@ -270,7 +314,7 @@
             <xs:element name="invalid-imports">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="invalid-import" type="xs:string"/>
                             </xs:sequence>
@@ -283,17 +327,17 @@
             <xs:element name="namespace-collision">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ns1:namespace"/>
-                        <xs:element maxOccurs="unbounded" ref="ns1:file"/>
+                        <xs:element ref="rr:namespace"/>
+                        <xs:element maxOccurs="unbounded" ref="rr:file"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="namespace-collisions">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:namespace-collision"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:namespace-collision"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>
@@ -302,12 +346,12 @@
             <xs:element name="nested-loops">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="nested-loop">
                                     <xs:complexType>
                                         <xs:sequence maxOccurs="unbounded" minOccurs="0">
-                                            <xs:element ref="ns1:process"/>
+                                            <xs:element ref="rr:process"/>
                                             <xs:element name="group" type="xs:string"/>
                                         </xs:sequence>
                                     </xs:complexType>
@@ -321,15 +365,15 @@
             <xs:element name="nested-transactions">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="nested-transaction">
                                     <xs:complexType>
                                         <xs:sequence>
-                                            <xs:element ref="ns1:process1"/>
-                                            <xs:element ref="ns1:transaction1"/>
-                                            <xs:element ref="ns1:process2"/>
-                                            <xs:element ref="ns1:transaction2"/>
+                                            <xs:element ref="rr:process1"/>
+                                            <xs:element ref="rr:transaction1"/>
+                                            <xs:element ref="rr:process2"/>
+                                            <xs:element ref="rr:transaction2"/>
                                         </xs:sequence>
                                     </xs:complexType>
                                 </xs:element>
@@ -341,7 +385,7 @@
             <xs:element name="number-of-activity-by-process-error">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element name="max-accepted" type="xs:int"/>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="process-details">
@@ -362,16 +406,16 @@
             <xs:element name="process-call">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:process"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:process"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="process-call-depth">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:process-call"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:process-call"/>
                             </xs:sequence>
                             <xs:attribute name="max-depth" type="xs:short" use="required"/>
                         </xs:extension>
@@ -380,12 +424,12 @@
             </xs:element>
             <xs:element name="process1" type="xs:string"/>
             <xs:element name="process2" type="xs:string"/>
-            <xs:element name="processRule" type="ns1:processRuleType"/>
+            <xs:element name="processRule" type="rr:processRuleType"/>
             <xs:element name="property" type="xs:string"/>
             <xs:element name="recursive-call">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:process"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:process"/>
                         <xs:element name="checked-recursive" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -393,9 +437,9 @@
             <xs:element name="recursive-calls">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:recursive-call"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:recursive-call"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>
@@ -405,9 +449,9 @@
             <xs:element name="resourceRule">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:resource"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:resource"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>
@@ -416,9 +460,9 @@
             <xs:element name="review-result">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" ref="ns1:general"/>
-                        <xs:element minOccurs="0" ref="ns1:errors"/>
-                        <xs:element minOccurs="0" ref="ns1:additional-data"/>
+                        <xs:element minOccurs="0" ref="rr:general"/>
+                        <xs:element minOccurs="0" ref="rr:errors"/>
+                        <xs:element minOccurs="0" ref="rr:additional-data"/>
                         <xs:element minOccurs="0" name="aggregated-grades">
                             <xs:complexType>
                                 <xs:sequence>
@@ -434,7 +478,14 @@
                                 </xs:sequence>
                             </xs:complexType>
                         </xs:element>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="rule" type="ns1:RuleType"/>
+                        <xs:element minOccurs="0" name="categories">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element maxOccurs="unbounded" minOccurs="0" ref="rc:category"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="rule" type="rr:RuleType"/>
                     </xs:sequence>
                     <xs:attribute name="duration" type="xs:decimal"/>
                     <xs:attribute name="project-basedir" type="xs:string"/>
@@ -463,23 +514,23 @@
             <xs:element name="transition">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ns1:process"/>
+                        <xs:element ref="rr:process"/>
                         <xs:element name="from" type="xs:string"/>
                         <xs:element name="to" type="xs:string"/>
-                        <xs:element ref="ns1:condition"/>
+                        <xs:element ref="rr:condition"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="transition-colors">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
                                 <xs:element maxOccurs="unbounded" minOccurs="0" name="transition-color">
                                     <xs:complexType>
                                         <xs:sequence>
                                             <xs:element name="transition-type" type="xs:string"/>
-                                            <xs:element ref="ns1:color"/>
+                                            <xs:element ref="rr:color"/>
                                         </xs:sequence>
                                     </xs:complexType>
                                 </xs:element>
@@ -491,9 +542,9 @@
             <xs:element name="unknown-jms-properties">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:unknown-jms-property"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:unknown-jms-property"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>
@@ -502,17 +553,17 @@
             <xs:element name="unknown-jms-property">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element ref="ns1:resource"/>
-                        <xs:element ref="ns1:property"/>
+                        <xs:element ref="rr:resource"/>
+                        <xs:element ref="rr:property"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="unlabelled-transitions">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:transition"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:transition"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>
@@ -530,9 +581,9 @@
             <xs:element name="xsdRule">
                 <xs:complexType>
                     <xs:complexContent>
-                        <xs:extension base="ns1:RuleType">
+                        <xs:extension base="rr:RuleType">
                             <xs:sequence>
-                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="ns1:xsd"/>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" ref="rr:xsd"/>
                             </xs:sequence>
                         </xs:extension>
                     </xs:complexContent>

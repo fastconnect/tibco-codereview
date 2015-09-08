@@ -21,9 +21,9 @@
     <pd:returnBindings>
         <root>
             <current-project-uri>
-                <xsl:value-of select="$Get-current-project-URI/current-project-uri"/>
+                <xsl:value-of select="$PrepareCodeReview/root/currentProjectURI"/>
             </current-project-uri>
-            <xsl:copy-of select="$Format-results/pfx3:review-result"/>
+            <xsl:copy-of select="$SetGrades/pfx3:review-result"/>
             <lang>
                 <xsl:value-of select="if(string-length($Start/root/pfx2:code-review/pfx2:language)>0) then&#xA;$Start/root/pfx2:code-review/pfx2:language&#xA;else 'FR'"/>
             </lang>
@@ -49,8 +49,8 @@
     <pd:group name="Iterate over Review Rules">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>565</pd:x>
-        <pd:y>0</pd:y>
+        <pd:x>414</pd:x>
+        <pd:y>1</pd:y>
         <pd:width>182</pd:width>
         <pd:height>177</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
@@ -60,7 +60,7 @@
         <config>
             <pd:groupType>inputLoop</pd:groupType>
             <pd:serializable>false</pd:serializable>
-            <pd:over>$All-review-process/root/review-process[not(exists($Start/root/pfx2:code-review/pfx2:disabled-rules/pfx2:disabled-rule[text() = current()]))]</pd:over>
+            <pd:over>$PrepareCodeReview/root/review-process[not(exists($Start/root/pfx2:code-review/pfx2:disabled-rules/pfx2:disabled-rule[text() = current()]))]</pd:over>
             <pd:iterationElementSlot>act</pd:iterationElementSlot>
             <pd:indexSlot>pos</pd:indexSlot>
             <pd:outSlot>accu</pd:outSlot>
@@ -86,7 +86,7 @@
         <pd:activity name="Call Review Rule">
             <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
             <pd:resourceType>ae.process.subprocess</pd:resourceType>
-            <pd:x>659</pd:x>
+            <pd:x>499</pd:x>
             <pd:y>98</pd:y>
             <config>
                 <processName>/CodeReview/Processes/Review process interface.process</processName>
@@ -106,79 +106,10 @@
             </pd:inputBindings>
         </pd:activity>
     </pd:group>
-    <pd:activity name="All review process">
-        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
-        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>377</pd:x>
-        <pd:y>98</pd:y>
-        <config>
-            <element>
-                <xsd:element name="root">
-                    <xsd:complexType>
-                        <xsd:sequence>
-                            <xsd:element name="review-process" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
-                        </xsd:sequence>
-                    </xsd:complexType>
-                </xsd:element>
-            </element>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <xsl:for-each select="$List-Rules/ns:ListFilesActivityOutput/files/fileInfo/fullName">
-                    <xsl:sort select="."/>
-                    <review-process>
-                        <xsl:value-of select="concat(&quot;/&quot;,substring-after(translate(., '\', '/'), $Get-current-project-URI/current-project-uri))"/>
-                    </review-process>
-                </xsl:for-each>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Get current project URI">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>165</pd:x>
-        <pd:y>106</pd:y>
-        <config>
-            <processName>/CodeReview/Processes/Tools/Get current project URI.process</processName>
-        </config>
-        <pd:inputBindings/>
-    </pd:activity>
-    <pd:activity name="List Rules">
-        <pd:type>com.tibco.plugin.file.ListFilesActivity</pd:type>
-        <pd:resourceType>ae.activities.ListFilesActivity</pd:resourceType>
-        <pd:x>257</pd:x>
-        <pd:y>98</pd:y>
-        <config>
-            <mode>files-and-directories</mode>
-        </config>
-        <pd:inputBindings>
-            <ns:ListFilesActivityConfig>
-                <fileName>
-                    <xsl:value-of select="concat($Get-current-project-URI/current-project-uri,'/CodeReview/Processes/Review/*.process')"/>
-                </fileName>
-            </ns:ListFilesActivityConfig>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Build Review Informations">
-        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
-        <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>489</pd:x>
-        <pd:y>106</pd:y>
-        <config>
-            <processName>/CodeReview/Processes/Build Review Informations.process</processName>
-        </config>
-        <pd:inputBindings>
-            <root>
-                <baseDir>
-                    <xsl:value-of select="$Start/root/pfx2:code-review/pfx2:project-path"/>
-                </baseDir>
-            </root>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="GetVariable">
         <pd:type>com.tibco.pe.core.GetSharedVariableActivity</pd:type>
         <pd:resourceType>ae.activities.getSharedVariable</pd:resourceType>
-        <pd:x>838</pd:x>
+        <pd:x>678</pd:x>
         <pd:y>98</pd:y>
         <config>
             <variableConfig>/CodeReview/Resources/Shared Variables/Project Content.jobsharedvariable</variableConfig>
@@ -188,7 +119,7 @@
     <pd:activity name="Format results">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>1038</pd:x>
+        <pd:x>910</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element ref="pfx3:review-result"/>
@@ -256,90 +187,59 @@
             </pfx3:review-result>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Log rules">
-        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
-        <pd:resourceType>ae.activities.log</pd:resourceType>
-        <pd:x>314</pd:x>
-        <pd:y>226</pd:y>
-        <config>
-            <role>User</role>
-        </config>
-        <pd:inputBindings>
-            <ns4:ActivityInput>
-                <message>
-                    <xsl:value-of select="tib:render-xml($List-Rules/ns:ListFilesActivityOutput/files, true(), true())"/>
-                </message>
-                <msgCode>
-                    <xsl:value-of select="'CODEREVIEW-RULES'"/>
-                </msgCode>
-            </ns4:ActivityInput>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Log Project URI">
-        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
-        <pd:resourceType>ae.activities.log</pd:resourceType>
-        <pd:x>176</pd:x>
-        <pd:y>226</pd:y>
-        <config>
-            <role>User</role>
-        </config>
-        <pd:inputBindings>
-            <ns4:ActivityInput>
-                <message>
-                    <xsl:value-of select="$Get-current-project-URI/current-project-uri"/>
-                </message>
-                <msgCode>
-                    <xsl:value-of select="'CODEREVIEW-PROJECT-PATH'"/>
-                </msgCode>
-            </ns4:ActivityInput>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Log review processes">
-        <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
-        <pd:resourceType>ae.activities.log</pd:resourceType>
-        <pd:x>452</pd:x>
-        <pd:y>234</pd:y>
-        <config>
-            <role>User</role>
-        </config>
-        <pd:inputBindings>
-            <ns4:ActivityInput>
-                <message>
-                    <xsl:value-of select="tib:render-xml($All-review-process/root, true(), true())"/>
-                </message>
-                <msgCode>
-                    <xsl:value-of select="'CODEREVIEW-PROCESSES'"/>
-                </msgCode>
-            </ns4:ActivityInput>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:activity name="Categories">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>932</pd:x>
+        <pd:x>804</pd:x>
         <pd:y>98</pd:y>
         <config>
             <processName>/CodeReview/Processes/Categories.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>
+    <pd:activity name="PrepareCodeReview">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>191</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/PrepareCodeReview.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Start/root"/>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Build Review Informations">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>329</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Build Review Informations.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <baseDir>
+                    <xsl:value-of xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Start/root/pfx2:code-review/pfx2:project-path"/>
+                </baseDir>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SetGrades">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>1027</pd:x>
+        <pd:y>98</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/SetGrades.process</processName>
+        </config>
+        <pd:inputBindings>
+            <xsl:copy-of select="$Format-results/pfx3:review-result"/>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Get current project URI</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Get current project URI</pd:from>
-        <pd:to>List Rules</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>List Rules</pd:from>
-        <pd:to>All review process</pd:to>
+        <pd:to>PrepareCodeReview</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -352,64 +252,8 @@
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>All review process</pd:from>
-        <pd:to>Build Review Informations</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Build Review Informations</pd:from>
-        <pd:to>Iterate over Review Rules</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Format results</pd:from>
-        <pd:to>End</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>List Rules</pd:from>
-        <pd:to>Log rules</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Log rules</pd:from>
-        <pd:to>All review process</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Get current project URI</pd:from>
-        <pd:to>Log Project URI</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Log Project URI</pd:from>
-        <pd:to>List Rules</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>All review process</pd:from>
-        <pd:to>Log review processes</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Log review processes</pd:from>
-        <pd:to>Build Review Informations</pd:to>
+        <pd:to>SetGrades</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -424,6 +268,27 @@
     <pd:transition>
         <pd:from>Categories</pd:from>
         <pd:to>Format results</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>PrepareCodeReview</pd:from>
+        <pd:to>Build Review Informations</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Build Review Informations</pd:from>
+        <pd:to>Iterate over Review Rules</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SetGrades</pd:from>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>

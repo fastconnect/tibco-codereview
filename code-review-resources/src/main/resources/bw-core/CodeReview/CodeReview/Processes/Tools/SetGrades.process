@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd">
+    <xs:import xmlns:xs="http://www.w3.org/2001/XMLSchema" namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <pd:name>CodeReview/Processes/Tools/SetGrades.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType ref="pfx:review-result"/>
+    <pd:startX>58</pd:startX>
+    <pd:startY>130</pd:startY>
+    <pd:returnBindings>
+        <pfx:review-result>
+            <xsl:if test="$Start/pfx:review-result/@duration">
+                <xsl:attribute name="duration">
+                    <xsl:value-of select="$Start/pfx:review-result/@duration"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$Start/pfx:review-result/@project-basedir">
+                <xsl:attribute name="project-basedir">
+                    <xsl:value-of select="$Start/pfx:review-result/@project-basedir"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$Start/pfx:review-result/@project-name">
+                <xsl:attribute name="project-name">
+                    <xsl:value-of select="$Start/pfx:review-result/@project-name"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$Start/pfx:review-result/@timestamp">
+                <xsl:attribute name="timestamp">
+                    <xsl:value-of select="$Start/pfx:review-result/@timestamp"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:copy-of select="$Start/pfx:review-result/pfx:general"/>
+            <xsl:copy-of select="$Start/pfx:review-result/pfx:errors"/>
+            <xsl:copy-of select="$Start/pfx:review-result/pfx:additional-data"/>
+            <xsl:copy-of select="$Start/pfx:review-result/pfx:aggregated-grades"/>
+            <xsl:copy-of select="$Start/pfx:review-result/pfx:categories"/>
+            <xsl:for-each select="$Start/pfx:review-result/pfx:rule">
+                <pfx:rule>
+                    <xsl:variable name="tempGrade" select="100 - ns:rule/ns:weight * count(pfx:result)"/>
+                    <xsl:attribute name="disabled">
+                        <xsl:value-of select="@disabled"/>
+                    </xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="$tempGrade > 0">
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="$tempGrade"/>
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="grade">
+                                <xsl:value-of select="0"/>
+                            </xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:copy-of select="ns:rule"/>
+                    <xsl:for-each select="pfx:data">
+                        <pfx:data>
+                            <xsl:value-of select="."/>
+                        </pfx:data>
+                    </xsl:for-each>
+                    <xsl:for-each select="pfx:param">
+                        <pfx:param>
+                            <pfx:key>
+                                <xsl:value-of select="pfx:key"/>
+                            </pfx:key>
+                            <pfx:value>
+                                <xsl:value-of select="pfx:value"/>
+                            </pfx:value>
+                        </pfx:param>
+                    </xsl:for-each>
+                    <xsl:for-each select="pfx:result">
+                        <pfx:result>
+                            <pfx:resource>
+                                <xsl:value-of select="pfx:resource"/>
+                            </pfx:resource>
+                            <pfx:key>
+                                <xsl:value-of select="pfx:key"/>
+                            </pfx:key>
+                            <pfx:value>
+                                <xsl:value-of select="pfx:value"/>
+                            </pfx:value>
+                            <xsl:for-each select="pfx:child">
+                                <pfx:child>
+                                    <pfx:key>
+                                        <xsl:value-of select="pfx:key"/>
+                                    </pfx:key>
+                                    <pfx:value>
+                                        <xsl:value-of select="pfx:value"/>
+                                    </pfx:value>
+                                    <xsl:for-each select="pfx:child">
+                                        <pfx:child>
+                                            <pfx:key>
+                                                <xsl:value-of select="pfx:key"/>
+                                            </pfx:key>
+                                            <pfx:value>
+                                                <xsl:value-of select="pfx:value"/>
+                                            </pfx:value>
+                                        </pfx:child>
+                                    </xsl:for-each>
+                                </pfx:child>
+                            </xsl:for-each>
+                        </pfx:result>
+                    </xsl:for-each>
+                </pfx:rule>
+            </xsl:for-each>
+        </pfx:review-result>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType ref="pfx:review-result"/>
+    <pd:endX>346</pd:endX>
+    <pd:endY>130</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1441723947642</pd:targetNamespace>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

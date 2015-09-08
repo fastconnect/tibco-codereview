@@ -64,6 +64,9 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 	@Parameter(property = "codereview.language", defaultValue = "FR")
 	private String lang; // can be FR or EN / TODO: constraint to available languages
 
+	@Parameter(property = "codereview.loadProjlibs", defaultValue = "false")
+	private Boolean loadProjlibs; // can be FR or EN / TODO: constraint to available languages
+
 	@Parameter
 	private List<String> outputFormats;
 
@@ -227,6 +230,7 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 		settings.setProjectPath(actualSrcDirectory.getAbsolutePath());
 		settings.setSrcProjectPath(projectDirectory.getAbsolutePath());
 		settings.setDestination(outputDirectory.getAbsolutePath());
+		settings.setLoadProjlibs(loadProjlibs);
 		settings.setProjectEncoding(sourceEncoding);
 		settings.setProjectName(getProject().getName());
 		settings.setFormats(formats);
