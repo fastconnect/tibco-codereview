@@ -40,6 +40,9 @@
                     <ns:description>
                         <xsl:value-of select="'Connections not configurable'"/>
                     </ns:description>
+                    <ns:descriptionHTML>
+                        <xsl:value-of select="'Connections not configurable'"/>
+                    </ns:descriptionHTML>
                 </ns:infos>
             </ns:rule>
             <xsl:copy-of select="$accu/AccumulatedOutput/pfx4:global-variable-in-connection-definition-error/pfx4:connection"/>

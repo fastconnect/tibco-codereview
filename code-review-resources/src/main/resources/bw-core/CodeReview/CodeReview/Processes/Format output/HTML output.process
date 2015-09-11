@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://fastconnect.fr/Lang.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://fastconnect.fr/Lang.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://fastconnect.fr/Lang.xsd" schemaLocation="/CodeReview/Resources/XSD/Lang.xsd"/>
     <pd:name>CodeReview/Processes/Format output/HTML output.process</pd:name>
@@ -13,6 +13,7 @@
                     <xsd:element name="project-name" type="xsd:string" minOccurs="0"/>
                     <xsd:element ref="pfx3:review-result"/>
                     <xsd:element name="svg-filename" type="xsd:string"/>
+                    <xsd:element name="filenameWithoutExtension" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -28,7 +29,7 @@
     <pd:endType>
         <xsd:element name="html-string" type="xsd:string"/>
     </pd:endType>
-    <pd:endX>570</pd:endX>
+    <pd:endX>314</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -36,7 +37,7 @@
     <pd:activity name="Create HTML">
         <pd:type>com.tibco.plugin.xml.XMLTransformActivity</pd:type>
         <pd:resourceType>ae.activities.XMLTransformActivity</pd:resourceType>
-        <pd:x>425</pd:x>
+        <pd:x>169</pd:x>
         <pd:y>98</pd:y>
         <config>
             <inputStyle>text</inputStyle>
@@ -48,17 +49,6 @@
                 <xmlString>
                     <xsl:value-of select="tib:render-xml($Start/root/pfx3:review-result)"/>
                 </xmlString>
-                <parameter>
-                    <name>
-                        <xsl:value-of select="'lang'"/>
-                    </name>
-                    <value>
-                        <xsl:value-of select="tib:render-xml($Parse-XML/pfx2:lang)"/>
-                    </value>
-                    <isXMLDocument>
-                        <xsl:value-of select="true()"/>
-                    </isXMLDocument>
-                </parameter>
                 <parameter>
                     <name>
                         <xsl:value-of select="'svg-filename'"/>
@@ -84,41 +74,6 @@
             </textInput>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Read File">
-        <pd:type>com.tibco.plugin.file.FileReadActivity</pd:type>
-        <pd:resourceType>ae.activities.FileReadActivity</pd:resourceType>
-        <pd:x>158</pd:x>
-        <pd:y>98</pd:y>
-        <config>
-            <encoding>binary</encoding>
-        </config>
-        <pd:inputBindings>
-            <ns1:ReadActivityInputClass>
-                <fileName>
-                    <xsl:value-of select="concat($Start/root/current-project-uri, '/CodeReview/Resources/Lang/', $Start/root/lang, '.xml')"/>
-                </fileName>
-            </ns1:ReadActivityInputClass>
-        </pd:inputBindings>
-    </pd:activity>
-    <pd:activity name="Parse XML">
-        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
-        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
-        <pd:x>257</pd:x>
-        <pd:y>98</pd:y>
-        <config>
-            <inputStyle>binary</inputStyle>
-            <xsdVersion>default</xsdVersion>
-            <validateOutput>true</validateOutput>
-            <term ref="pfx2:lang"/>
-        </config>
-        <pd:inputBindings>
-            <xmlBinary>
-                <bytes>
-                    <xsl:value-of select="$Read-File/ns1:ReadActivityOutputBinaryClass/fileContent/binaryContent"/>
-                </bytes>
-            </xmlBinary>
-        </pd:inputBindings>
-    </pd:activity>
     <pd:transition>
         <pd:from>Create HTML</pd:from>
         <pd:to>End</pd:to>
@@ -128,20 +83,6 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Read File</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Read File</pd:from>
-        <pd:to>Parse XML</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>always</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
-        <pd:from>Parse XML</pd:from>
         <pd:to>Create HTML</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

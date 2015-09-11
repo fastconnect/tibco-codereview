@@ -53,6 +53,16 @@
                                 <xs:documentation>List of disabled rules for this review.</xs:documentation>
                             </xs:annotation>
                         </xs:element>
+                        <xs:element minOccurs="0" ref="output-file-name">
+                            <xs:annotation>
+                                <xs:documentation>Optional output filename (without directory, without extension)</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element minOccurs="0" ref="home-page">
+                            <xs:annotation>
+                                <xs:documentation>Optional home page href link to be displayed in HTML output</xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -91,6 +101,11 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="home-page" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Optional home page href link to be displayed in HTML output</xs:documentation>
+                </xs:annotation>
+            </xs:element>
             <xs:element name="is-started" type="xs:boolean"/>
             <xs:element name="language">
                 <xs:annotation>
@@ -106,6 +121,11 @@
             <xs:element default="false" name="load-projlibs" type="xs:boolean">
                 <xs:annotation>
                     <xs:documentation>Whether to load Projlibs when reviewing</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="output-file-name" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation>Optional output filename (without directory, without extension)</xs:documentation>
                 </xs:annotation>
             </xs:element>
             <xs:element name="project-encoding" type="xs:string">
@@ -132,6 +152,7 @@
                         <xs:element name="category" type="xs:string"/>
                         <xs:element name="name" type="xs:string"/>
                         <xs:element name="description" type="xs:string"/>
+                        <xs:element name="descriptionHTML" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -158,6 +179,8 @@
                                     <xs:element minOccurs="0" name="locale" type="xs:string"/>
                                     <xs:element name="name" type="xs:string"/>
                                     <xs:element name="description" type="xs:string"/>
+                                    <xs:element name="descriptionHTML" type="xs:string"/>
+                                    <xs:element minOccurs="0" name="correctionHTML" type="xs:string"/>
                                 </xs:sequence>
                             </xs:complexType>
                         </xs:element>
@@ -488,6 +511,8 @@
                         <xs:element maxOccurs="unbounded" minOccurs="0" name="rule" type="rr:RuleType"/>
                     </xs:sequence>
                     <xs:attribute name="duration" type="xs:decimal"/>
+                    <xs:attribute name="home-page" type="xs:string"/>
+                    <xs:attribute name="language" type="xs:string"/>
                     <xs:attribute name="project-basedir" type="xs:string"/>
                     <xs:attribute name="project-name" type="xs:string"/>
                     <xs:attribute name="timestamp" type="xs:dateTime"/>

@@ -61,16 +61,15 @@
                                 <xsl:value-of select="pfx5:process[1]"/>
                             </pfx5:resource>
                             <pfx5:key>
-                                <xsl:value-of select="&quot;checked-recursive&quot;"/>
+                                <xsl:value-of select="&quot;called process&quot;"/>
                             </pfx5:key>
                             <pfx5:value>
-                                <xsl:value-of select="true()"/>
+                                <xsl:value-of select="pfx5:process[1]"/>
                             </pfx5:value>
-                            <xsl:for-each select="pfx5:process">
-                                <xsl:sort select="position()" order="descending" data-type="number"/>
+                            <xsl:for-each select="pfx5:process[position()>1]">
                                 <pfx5:child>
                                     <pfx5:key>
-                                        <xsl:value-of select="local-name(.)"/>
+                                        <xsl:value-of select="&quot;process&quot;"/>
                                     </pfx5:key>
                                     <pfx5:value>
                                         <xsl:value-of select="."/>
@@ -190,6 +189,9 @@
                         <pfx6:description>
                             <xsl:value-of select="&quot;Recursive Calls&quot;"/>
                         </pfx6:description>
+                        <pfx6:descriptionHTML>
+                            <xsl:value-of select="&quot;Recursive Calls&quot;"/>
+                        </pfx6:descriptionHTML>
                     </pfx6:infos>
                 </pfx6:rule>
             </cards>
@@ -266,5 +268,12 @@
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Parse XML</pd:from>
+        <pd:to>Log</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
     </pd:transition>
 </pd:ProcessDefinition>

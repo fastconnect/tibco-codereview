@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://fastconnect.fr/Lang.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx2="http://fastconnect.fr/Lang.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd">
     <xsd:import namespace="http://fastconnect.fr/Lang.xsd" schemaLocation="/CodeReview/Resources/XSD/Lang.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <pd:name>CodeReview/Processes/Format output/SVG output.process</pd:name>
@@ -13,6 +13,7 @@
                     <xsd:element name="project-name" type="xsd:string" minOccurs="0"/>
                     <xsd:element ref="pfx3:review-result"/>
                     <xsd:element name="destination" type="xsd:string"/>
+                    <xsd:element name="filenameWithoutExtension" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
         </xsd:element>
@@ -36,7 +37,7 @@
             </xsd:complexType>
         </xsd:element>
     </pd:endType>
-    <pd:endX>378</pd:endX>
+    <pd:endX>410</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -71,7 +72,7 @@
         <pd:inputBindings>
             <ns1:WriteActivityInputTextClass>
                 <fileName>
-                    <xsl:value-of select="concat($Start/root/destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$Start/root/pfx3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$Start/root/pfx3:review-result/@timestamp),&#xA;&#x9;'.svg')"/>
+                    <xsl:value-of select="concat($Start/root/filenameWithoutExtension, '.svg')"/>
                 </fileName>
                 <textContent>
                     <xsl:value-of select="$Create-SVG/xmlString"/>

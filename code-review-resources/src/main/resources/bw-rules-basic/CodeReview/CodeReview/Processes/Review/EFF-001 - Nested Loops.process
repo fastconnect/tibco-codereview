@@ -312,6 +312,9 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                         <pfx:description>
                             <xsl:value-of select="&quot;Nested loop&quot;"/>
                         </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                        </pfx:descriptionHTML>
                     </pfx:infos>
                 </pfx:rule>
             </cards>

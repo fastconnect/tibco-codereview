@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<!--
-
-    (C) Copyright 2011-2015 FastConnect SAS
-    (http://www.fastconnect.fr/) and others.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <rules>
     <rule>
         <key>EFF-001</key>
@@ -68,9 +50,9 @@
     </rule>
     <rule>
         <key>GEN-003</key>
-        <name>XSD namespace defined</name>
-        <description>XSD namespace defined</description>
-        <severity>MAJOR</severity>
+        <name>Default targetNameSpace in schema definition</name>
+        <description>The targetNameSpace of the XML Schema Definition (XSD) starts with 'http://www.tibco.com'. It is most likely the default value set by the Designer. A good targetNameSpace should be customized with a mnemonic name such as 'http://company.com/category/feature.xsd'.</description>
+        <severity>MINOR</severity>
     </rule>
     <rule>
         <key>GEN-004</key>
@@ -133,7 +115,7 @@
         <severity>MAJOR</severity>
     </rule>
     <rule>
-        <key>MAI-010</key>
+        <key>'MAI-010'</key>
         <name>Unlabelled Transitions</name>
         <description>Unlabelled Transitions</description>
         <severity>MAJOR</severity>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" xmlns:pfx="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" xmlns:pfx="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewProcessInput.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
@@ -202,6 +202,9 @@
                         <pfx5:description>
                             <xsl:value-of select="&quot;GVs in connections configuration&quot;"/>
                         </pfx5:description>
+                        <pfx5:descriptionHTML>
+                            <xsl:value-of select="&quot;GVs in connections configuration&quot;"/>
+                        </pfx5:descriptionHTML>
                     </pfx5:infos>
                 </pfx5:rule>
             </cards>

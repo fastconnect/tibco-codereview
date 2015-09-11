@@ -22,7 +22,7 @@
         <version>1</version>
         <author>debovema</author>
         <fileLocation>C:\ProjectLibrary.projlib</fileLocation>
-		<resources>/CodeReview/Processes/Review/NEW-001 - New rule.process</resources>
+		<resources>/CodeReview/Processes/Categories/Custom.categories.process,/CodeReview/Processes/Review/NEW-001 - New rule.process</resources>
         <resources/>
     </name>
 </Repository:repository>

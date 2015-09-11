@@ -69,7 +69,15 @@
 			<!-- Nav tabs -->
 			<div>
 				<ul class="nav nav-tabs" role="tablist">
-					<li><a class="brand"><strong><span class="color-highlight">FC</span> Code Review</strong></a></li>
+					<li>
+						<xsl:element name="a">
+							<xsl:attribute name="class" select="'brand'" />
+							<xsl:if test="string-length(//rr:review-result/@home-page)>0">
+								<xsl:attribute name="href" select="//rr:review-result/@home-page" />
+							</xsl:if>
+							<strong><span class="color-highlight">FC</span> Code Review</strong>
+						</xsl:element>
+					</li>
 					<xsl:for-each select="//rr:categories/rc:category">
 						<xsl:variable name="current-category" select="./rc:category"/>
 						<xsl:element name="li">
@@ -289,89 +297,142 @@
 				<xsl:element name="div">
 					<xsl:attribute name="class" select="'panel-body'" />
 					<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key" /></xsl:attribute>
-					<p>
-						<i>Key: </i><xsl:value-of select="$rule/rc:rule/rc:key" /><br />
-						<i>Name: </i><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" /><br />
-						<i>Description: </i><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:description" /><br />
-						<i>Weight: </i><xsl:value-of select="$rule/rc:rule/rc:weight" /><br />
-						<xsl:if test="count($rule/rr:result)">
-							<i>Score: </i><xsl:value-of select="concat('min(100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ', 0) = ', $rule/@grade)" /><br />
-						</xsl:if>
-					</p>
-					<xsl:if test="count($rule/rr:param) > 0">
-						<hr />
-						<p><i>Parameters used: </i></p>
-						<table class="table table-striped">
-							<tr>
-								<th>
-									<xsl:value-of select="'key'" />
-								</th>
-								<th>
-									<xsl:value-of select="'value'" />
-								</th>
-							</tr>
-							<xsl:for-each select="$rule/rr:param">
-								<tr>
-									<td>
-										<xsl:value-of select="rr:key" />
-									</td>
-									<td>
-										<xsl:value-of select="rr:value" />
-									</td>
-								</tr>
-							</xsl:for-each>
-						</table>
-					</xsl:if>
-					<hr />
-					<xsl:choose>
-						<xsl:when test="count($rule/rr:result) > 0">
-							<xsl:element name="span">
-								<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key" /></xsl:attribute>
-								<p><i>Output: </i></p>
-								<xsl:for-each-group select="$rule/rr:result" group-by="rr:key">
+					<div>
+						<div class="row">
+							<div class="col-md-3">
+								<p>
+									<strong><em>Key: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:key" /></tt><br />
+									<strong><em>Name: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" /></tt><br />
+									<strong><em>Weight: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:weight" /></tt><br />
+									<xsl:if test="count($rule/rr:result)">
+										<xsl:choose>
+											<xsl:when test="$rule/@grade > 0 ">
+												<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' = ', $rule/@grade)" /></tt><br />
+											</xsl:when>
+											<xsl:otherwise>
+												<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' &lt;= ', $rule/@grade)" /></tt><br />
+											</xsl:otherwise>
+										</xsl:choose>
+									</xsl:if>
+								</p>
+							</div>
+							<xsl:choose>
+								<xsl:when test="$rule/local-name() = 'general'">
+									<div class="col-md-4">
+										<p>
+											<strong><em>Description: </em></strong><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" /><br /><br />
+											<strong><em>Number of processes: </em></strong><xsl:value-of select="$rule/rr:number-of-processes" /><br />
+											<strong><em>Number of activities: </em></strong><xsl:value-of select="$rule/rr:number-of-activities" /><br />
+											<strong><em>Number of files: </em></strong><xsl:value-of select="$rule/rr:number-of-files" /><br />
+											<strong><em>Number of libraries (Projlibs): </em></strong><xsl:value-of select="$rule/rr:number-of-libs" /><br />
+											<strong><em>Number of EARs: </em></strong><xsl:value-of select="$rule/rr:number-of-ears" /><br />
+											<strong><em>Number of PARs: </em></strong><xsl:value-of select="$rule/rr:number-of-pars" /><br />
+											<strong><em>Number of AARs: </em></strong><xsl:value-of select="$rule/rr:number-of-aars" /><br />
+											<strong><em>Number of library builder: </em></strong><xsl:value-of select="$rule/rr:number-of-libbuilder" /><br />
+										</p>
+									</div>
+									<div class="col-md-5">
+										<xsl:element name="embed">
+											<xsl:attribute name="src"><xsl:value-of select="$svg-filename" /></xsl:attribute>
+											<xsl:attribute name="style" select="'float: right;'" />
+											<xsl:attribute name="width">250</xsl:attribute>
+											<xsl:attribute name="height">250</xsl:attribute>
+										</xsl:element>
+									</div>
+								</xsl:when>
+								<xsl:otherwise>
+									<div class="col-md-9">
+										<p>
+											<strong><em>Description</em></strong><br />
+											<pre>
+												<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" />
+											</pre>
+											<br />
+										</p>
+										<xsl:if test="exists($rule/rc:rule/rc:infos[1]/rc:correctionHTML)">
+											<p>
+												<strong><em>Correction</em></strong><br />
+												<pre>
+													<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:correctionHTML" />
+												</pre>
+												<br />
+											</p>
+										</xsl:if>
+									</div>
+								</xsl:otherwise>
+							</xsl:choose>
+							<!-- display parameters -->
+							<xsl:if test="count($rule/rr:param) > 0">
+								<hr />
+								<xsl:element name="div">
+									<xsl:attribute name="class" select="'col-md-12'"/>
+									<p><strong><em>Parameters used</em></strong></p>
 									<table class="table table-striped">
 										<tr>
 											<th>
-												<xsl:value-of select="rr:key" />
+												<xsl:value-of select="'key'" />
 											</th>
-											<xsl:for-each select="rr:child">
-												<th>
-													<xsl:value-of select="rr:key" />
-												</th>
-											</xsl:for-each>
+											<th>
+												<xsl:value-of select="'value'" />
+											</th>
 										</tr>
-										<xsl:for-each select="current-group()">
+										<xsl:for-each select="$rule/rr:param">
 											<tr>
-												<xsl:element name="td">
+												<td>
+													<xsl:value-of select="rr:key" />
+												</td>
+												<td>
 													<xsl:value-of select="rr:value" />
-												</xsl:element>
-												<xsl:for-each select="rr:child">
-													<xsl:element name="td">
-														<xsl:value-of select="rr:value" />
-													</xsl:element>
-												</xsl:for-each>
+												</td>
 											</tr>
 										</xsl:for-each>
 									</table>
-								</xsl:for-each-group>
+								</xsl:element>
+							</xsl:if>
+							<hr />
+							<!-- display issues -->
+							<xsl:element name="div">
+								<xsl:attribute name="class" select="'col-md-12'"/>
+								<xsl:choose>
+									<xsl:when test="count($rule/rr:result) > 0">
+											<p><strong><em>Output</em></strong></p>
+											<xsl:for-each-group select="$rule/rr:result" group-by="rr:key">
+												<xsl:element name="div">
+													<xsl:attribute name="class" select="'table-responsive'"/>
+													<table class="table table-striped">
+														<tr>
+															<th>
+																<xsl:value-of select="rr:key" />
+															</th>
+															<xsl:for-each select="rr:child">
+																<th>
+																	<xsl:value-of select="rr:key" />
+																</th>
+															</xsl:for-each>
+														</tr>
+														<xsl:for-each select="current-group()">
+															<tr>
+																<xsl:element name="td">
+																	<xsl:value-of select="rr:value" />
+																</xsl:element>
+																<xsl:for-each select="rr:child">
+																	<xsl:element name="td">
+																		<xsl:value-of select="rr:value" />
+																	</xsl:element>
+																</xsl:for-each>
+															</tr>
+														</xsl:for-each>
+													</table>
+												</xsl:element>
+											</xsl:for-each-group>
+									</xsl:when>
+									<xsl:otherwise>
+										<p><i>No issue detected.</i></p>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:element>
-						</xsl:when>
-						<xsl:when test="$rule/local-name() = 'general'">
-							<p>
-								<i>Number of processes: </i><xsl:value-of select="$rule/rr:number-of-processes" /><br />
-								<i>Number of activities: </i><xsl:value-of select="$rule/rr:number-of-activities" /><br />
-								<i>Number of files: </i><xsl:value-of select="$rule/rr:number-of-files" /><br />
-								<i>Number of libraries (Projlibs): </i><xsl:value-of select="$rule/rr:number-of-libs" /><br />
-								<i>Number of EARs: </i><xsl:value-of select="$rule/rr:number-of-ears" /><br />
-								<i>Number of PARs: </i><xsl:value-of select="$rule/rr:number-of-pars" /><br />
-								<i>Number of AARs: </i><xsl:value-of select="$rule/rr:number-of-aars" /><br />
-								<i>Number of library builder: </i><xsl:value-of select="$rule/rr:number-of-libbuilder" /><br />
-							</p>
-						</xsl:when>
-						<xsl:otherwise>
-							<p><i>No issue detected.</i></p>
-						</xsl:otherwise>
-					</xsl:choose>
+						</div>
+					</div>
 				</xsl:element>
 			</xsl:element>
 		</div>
@@ -387,7 +448,7 @@
 
 		<xsl:element name="h3">
 			<xsl:attribute name="id"><xsl:value-of select="$rule/rc:rule/rc:key"/></xsl:attribute>
-			<xsl:value-of select="$rule/rc:rule/rc:infos/rc:name" />
+			<xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" />
 			<xsl:if test="$rule/@disabled = true()">
 				<xsl:value-of select="' - Disabled'" />
 			</xsl:if>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BWSharedResource>
+    <name>FTP Connection</name>
+    <resourceType>ae.shared.FTPuserChannel</resourceType>
+    <config>
+        <Timeout>60000</Timeout>
+        <Port>21</Port>
+        <Encoding>UTF8</Encoding>
+        <FireWall>false</FireWall>
+        <Mode>Passive</Mode>
+        <Host>localhost</Host>
+        <UserName>user</UserName>
+        <Password>#!sDcNcIkIQOEWzvXe6sfaXo+6i13a0omPjieCBxyu+70=</Password>
+    </config>
+</BWSharedResource>

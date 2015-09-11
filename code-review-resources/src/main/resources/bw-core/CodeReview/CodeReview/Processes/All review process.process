@@ -154,6 +154,14 @@
                 <xsl:attribute name="project-basedir">
                     <xsl:value-of select="$Start/root/reviewed-project-basedir"/>
                 </xsl:attribute>
+                <xsl:if test="$Start/root/pfx2:code-review/pfx2:home-page">
+                    <xsl:attribute name="home-page">
+                        <xsl:value-of select="$Start/root/pfx2:code-review/pfx2:home-page"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="language">
+                    <xsl:value-of select="$Start/root/pfx2:code-review/pfx2:language"/>
+                </xsl:attribute>
                 <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:general"/>
                 <pfx3:errors>
                     <xsl:copy-of select="$accu/AccumulatedOutput/pfx3:review-result/pfx3:errors/pfx3:error"/>
@@ -193,7 +201,7 @@
         <pd:x>804</pd:x>
         <pd:y>98</pd:y>
         <config>
-            <processName>/CodeReview/Processes/Categories.process</processName>
+            <processName>/CodeReview/Processes/Categories/Categories.process</processName>
         </config>
         <pd:inputBindings/>
     </pd:activity>

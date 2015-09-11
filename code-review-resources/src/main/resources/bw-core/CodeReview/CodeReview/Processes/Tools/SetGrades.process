@@ -7,112 +7,210 @@
     <pd:startX>58</pd:startX>
     <pd:startY>130</pd:startY>
     <pd:returnBindings>
-        <pfx:review-result>
-            <xsl:if test="$Start/pfx:review-result/@duration">
-                <xsl:attribute name="duration">
-                    <xsl:value-of select="$Start/pfx:review-result/@duration"/>
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$Start/pfx:review-result/@project-basedir">
-                <xsl:attribute name="project-basedir">
-                    <xsl:value-of select="$Start/pfx:review-result/@project-basedir"/>
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$Start/pfx:review-result/@project-name">
-                <xsl:attribute name="project-name">
-                    <xsl:value-of select="$Start/pfx:review-result/@project-name"/>
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$Start/pfx:review-result/@timestamp">
-                <xsl:attribute name="timestamp">
-                    <xsl:value-of select="$Start/pfx:review-result/@timestamp"/>
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:copy-of select="$Start/pfx:review-result/pfx:general"/>
-            <xsl:copy-of select="$Start/pfx:review-result/pfx:errors"/>
-            <xsl:copy-of select="$Start/pfx:review-result/pfx:additional-data"/>
-            <xsl:copy-of select="$Start/pfx:review-result/pfx:aggregated-grades"/>
-            <xsl:copy-of select="$Start/pfx:review-result/pfx:categories"/>
-            <xsl:for-each select="$Start/pfx:review-result/pfx:rule">
-                <pfx:rule>
-                    <xsl:variable name="tempGrade" select="100 - ns:rule/ns:weight * count(pfx:result)"/>
-                    <xsl:attribute name="disabled">
-                        <xsl:value-of select="@disabled"/>
-                    </xsl:attribute>
-                    <xsl:choose>
-                        <xsl:when test="$tempGrade > 0">
-                            <xsl:attribute name="grade">
-                                <xsl:value-of select="$tempGrade"/>
-                            </xsl:attribute>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="grade">
-                                <xsl:value-of select="0"/>
-                            </xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:copy-of select="ns:rule"/>
-                    <xsl:for-each select="pfx:data">
-                        <pfx:data>
-                            <xsl:value-of select="."/>
-                        </pfx:data>
-                    </xsl:for-each>
-                    <xsl:for-each select="pfx:param">
-                        <pfx:param>
-                            <pfx:key>
-                                <xsl:value-of select="pfx:key"/>
-                            </pfx:key>
-                            <pfx:value>
-                                <xsl:value-of select="pfx:value"/>
-                            </pfx:value>
-                        </pfx:param>
-                    </xsl:for-each>
-                    <xsl:for-each select="pfx:result">
-                        <pfx:result>
-                            <pfx:resource>
-                                <xsl:value-of select="pfx:resource"/>
-                            </pfx:resource>
-                            <pfx:key>
-                                <xsl:value-of select="pfx:key"/>
-                            </pfx:key>
-                            <pfx:value>
-                                <xsl:value-of select="pfx:value"/>
-                            </pfx:value>
-                            <xsl:for-each select="pfx:child">
-                                <pfx:child>
-                                    <pfx:key>
-                                        <xsl:value-of select="pfx:key"/>
-                                    </pfx:key>
-                                    <pfx:value>
-                                        <xsl:value-of select="pfx:value"/>
-                                    </pfx:value>
-                                    <xsl:for-each select="pfx:child">
-                                        <pfx:child>
-                                            <pfx:key>
-                                                <xsl:value-of select="pfx:key"/>
-                                            </pfx:key>
-                                            <pfx:value>
-                                                <xsl:value-of select="pfx:value"/>
-                                            </pfx:value>
-                                        </pfx:child>
-                                    </xsl:for-each>
-                                </pfx:child>
-                            </xsl:for-each>
-                        </pfx:result>
-                    </xsl:for-each>
-                </pfx:rule>
-            </xsl:for-each>
-        </pfx:review-result>
+        <xsl:copy-of select="$Set-Aggregated-Grade/pfx:review-result"/>
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="pfx:review-result"/>
-    <pd:endX>346</pd:endX>
+    <pd:endX>474</pd:endX>
     <pd:endY>130</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
     <pd:targetNamespace>http://xmlns.example.com/1441723947642</pd:targetNamespace>
+    <pd:activity name="Set Grades">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>196</pd:x>
+        <pd:y>130</pd:y>
+        <config>
+            <element ref="pfx:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:review-result>
+                <xsl:if test="$Start/pfx:review-result/@duration">
+                    <xsl:attribute name="duration">
+                        <xsl:value-of select="$Start/pfx:review-result/@duration"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:review-result/@project-basedir">
+                    <xsl:attribute name="project-basedir">
+                        <xsl:value-of select="$Start/pfx:review-result/@project-basedir"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:review-result/@project-name">
+                    <xsl:attribute name="project-name">
+                        <xsl:value-of select="$Start/pfx:review-result/@project-name"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:review-result/@timestamp">
+                    <xsl:attribute name="timestamp">
+                        <xsl:value-of select="$Start/pfx:review-result/@timestamp"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:review-result/@home-page">
+                    <xsl:attribute name="home-page">
+                        <xsl:value-of select="$Start/pfx:review-result/@home-page"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Start/pfx:review-result/@language">
+                    <xsl:attribute name="language">
+                        <xsl:value-of select="$Start/pfx:review-result/@language"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:copy-of select="$Start/pfx:review-result/pfx:general"/>
+                <xsl:copy-of select="$Start/pfx:review-result/pfx:errors"/>
+                <xsl:copy-of select="$Start/pfx:review-result/pfx:additional-data"/>
+                <xsl:copy-of select="$Start/pfx:review-result/pfx:aggregated-grades"/>
+                <xsl:copy-of select="$Start/pfx:review-result/pfx:categories"/>
+                <xsl:for-each xmlns:xsl="http://www.w3.org/1999/XSL/Transform" select="$Start/pfx:review-result/pfx:rule">
+                    <pfx:rule>
+                        <xsl:variable name="tempGrade" select="100 - ns:rule/ns:weight * count(pfx:result)"/>
+                        <xsl:attribute name="disabled">
+                            <xsl:value-of select="@disabled"/>
+                        </xsl:attribute>
+                        <xsl:choose>
+                            <xsl:when test="$tempGrade > 0">
+                                <xsl:attribute name="grade">
+                                    <xsl:value-of select="$tempGrade"/>
+                                </xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="grade">
+                                    <xsl:value-of select="0"/>
+                                </xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:copy-of select="ns:rule"/>
+                        <xsl:for-each select="pfx:data">
+                            <pfx:data>
+                                <xsl:value-of select="."/>
+                            </pfx:data>
+                        </xsl:for-each>
+                        <xsl:for-each select="pfx:param">
+                            <pfx:param>
+                                <pfx:key>
+                                    <xsl:value-of select="pfx:key"/>
+                                </pfx:key>
+                                <pfx:value>
+                                    <xsl:value-of select="pfx:value"/>
+                                </pfx:value>
+                            </pfx:param>
+                        </xsl:for-each>
+                        <xsl:for-each select="pfx:result">
+                            <pfx:result>
+                                <pfx:resource>
+                                    <xsl:value-of select="pfx:resource"/>
+                                </pfx:resource>
+                                <pfx:key>
+                                    <xsl:value-of select="pfx:key"/>
+                                </pfx:key>
+                                <pfx:value>
+                                    <xsl:value-of select="pfx:value"/>
+                                </pfx:value>
+                                <xsl:for-each select="pfx:child">
+                                    <pfx:child>
+                                        <pfx:key>
+                                            <xsl:value-of select="pfx:key"/>
+                                        </pfx:key>
+                                        <pfx:value>
+                                            <xsl:value-of select="pfx:value"/>
+                                        </pfx:value>
+                                        <xsl:for-each select="pfx:child">
+                                            <pfx:child>
+                                                <pfx:key>
+                                                    <xsl:value-of select="pfx:key"/>
+                                                </pfx:key>
+                                                <pfx:value>
+                                                    <xsl:value-of select="pfx:value"/>
+                                                </pfx:value>
+                                            </pfx:child>
+                                        </xsl:for-each>
+                                    </pfx:child>
+                                </xsl:for-each>
+                            </pfx:result>
+                        </xsl:for-each>
+                    </pfx:rule>
+                </xsl:for-each>
+            </pfx:review-result>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Set Aggregated Grade">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>337</pd:x>
+        <pd:y>138</pd:y>
+        <config>
+            <element ref="pfx:review-result"/>
+        </config>
+        <pd:inputBindings>
+            <pfx:review-result>
+                <xsl:if test="$Set-Grades/pfx:review-result/@project-name">
+                    <xsl:attribute name="project-name">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@project-name"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Set-Grades/pfx:review-result/@timestamp">
+                    <xsl:attribute name="timestamp">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@timestamp"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Set-Grades/pfx:review-result/@duration">
+                    <xsl:attribute name="duration">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@duration"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Set-Grades/pfx:review-result/@project-basedir">
+                    <xsl:attribute name="project-basedir">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@project-basedir"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Set-Grades/pfx:review-result/@home-page">
+                    <xsl:attribute name="home-page">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@home-page"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$Set-Grades/pfx:review-result/@language">
+                    <xsl:attribute name="language">
+                        <xsl:value-of select="$Set-Grades/pfx:review-result/@language"/>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:copy-of select="$Set-Grades/pfx:review-result/pfx:general"/>
+                <xsl:copy-of select="$Set-Grades/pfx:review-result/pfx:errors"/>
+                <xsl:copy-of select="$Set-Grades/pfx:review-result/pfx:additional-data"/>
+                <pfx:aggregated-grades>
+                    <xsl:for-each select="$Set-Grades/pfx:review-result/pfx:categories/ns:category">
+                        <xsl:variable name="category" select="./ns:category"/>
+                        <xsl:variable name="grades" select="../../pfx:rule[ns:rule/ns:category=$category]/@grade"/>
+                        <xsl:if test="exists($grades) and count($grades) > 0">
+                            <pfx:aggregated-grade>
+                                <xsl:attribute name="category">
+                                    <xsl:value-of select="ns:category"/>
+                                </xsl:attribute>
+                                <xsl:value-of select="round(sum(for $g in $grades return $g) div count($grades))"/>
+                            </pfx:aggregated-grade>
+                        </xsl:if>
+                    </xsl:for-each>
+                </pfx:aggregated-grades>
+                <xsl:copy-of select="$Set-Grades/pfx:review-result/pfx:categories"/>
+                <xsl:copy-of select="$Set-Grades/pfx:review-result/pfx:rule"/>
+            </pfx:review-result>
+        </pd:inputBindings>
+    </pd:activity>
     <pd:transition>
         <pd:from>Start</pd:from>
+        <pd:to>Set Grades</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set Grades</pd:from>
+        <pd:to>Set Aggregated Grade</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Set Aggregated Grade</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

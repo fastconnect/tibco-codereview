@@ -21,6 +21,8 @@
 				<xs:element ref="fileAliasesFile" minOccurs="0"/>
 				<xs:element ref="language"/>
 				<xs:element ref="disabled-rules" minOccurs="0"/>
+				<xs:element ref="output-file-name" minOccurs="0"/>
+				<xs:element ref="home-page" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -91,4 +93,14 @@
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="disabled-rule" type="xs:token"/>
+	<xs:element name="output-file-name" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Optional output filename (without directory, without extension)</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:element name="home-page" type="xs:string">
+		<xs:annotation>
+			<xs:documentation>Optional home page href link to be displayed in HTML output</xs:documentation>
+		</xs:annotation>
+	</xs:element>
 </xs:schema>

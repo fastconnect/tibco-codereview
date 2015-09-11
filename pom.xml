@@ -90,6 +90,7 @@
 				<module>code-review-assemblies</module>
 				<module>code-review-sonar-plugin</module>
 				<module>archetypes/archetype-new-rules</module>
+				<module>src/it</module>
 			</modules>
 		</profile>
 	</profiles>

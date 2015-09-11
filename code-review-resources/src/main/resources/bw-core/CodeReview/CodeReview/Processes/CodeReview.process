@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns2="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:ns3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.tibco.com/pe/DeployedVarsType" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx2="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd">
     <wsdl:import namespace="http://www.fastconnect.fr/FCTibcoFactory/ws/abstract/CodeReview.xsd" location="/CodeReview/Resources/WSDL/CodeReview-abstract.wsdl"/>
     <pd:name>CodeReview/Processes/CodeReview.process</pd:name>
     <pd:description/>
@@ -28,7 +28,7 @@
         <pd:inputBindings>
             <root>
                 <start>
-                    <xsl:value-of select="$Generate-Start-Timestamp/root/start"/>
+                    <xsl:value-of select="$Generate-Start-Timestamp-and-FileName/root/start"/>
                 </start>
                 <xsl:copy-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review"/>
                 <xsl:if test="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name">
@@ -84,7 +84,7 @@
         <pd:inputBindings>
             <ns:WriteActivityInputTextClass>
                 <fileName>
-                    <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$All-review-process/root/ns3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$All-review-process/root/ns3:review-result/@timestamp),&#xA;&#x9;'.html')"/>
+                    <xsl:value-of select="concat($Generate-Start-Timestamp-and-FileName/root/filenameWithoutExtension, '.html')"/>
                 </fileName>
                 <textContent>
                     <xsl:value-of select="$HTML-output/html-string"/>
@@ -120,6 +120,9 @@
                 <svg-filename>
                     <xsl:value-of select="$SVG-output/root/svgFile"/>
                 </svg-filename>
+                <filenameWithoutExtension>
+                    <xsl:value-of select="$Generate-Start-Timestamp-and-FileName/root/filenameWithoutExtension"/>
+                </filenameWithoutExtension>
             </root>
         </pd:inputBindings>
     </pd:activity>
@@ -137,7 +140,7 @@
         <pd:inputBindings>
             <ns:WriteActivityInputTextClass>
                 <fileName>
-                    <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$All-review-process/root/ns3:review-result/@project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$All-review-process/root/ns3:review-result/@timestamp),&#xA;&#x9;'.xml')"/>
+                    <xsl:value-of select="concat($Generate-Start-Timestamp-and-FileName/root/filenameWithoutExtension, '.xml')"/>
                 </fileName>
                 <textContent>
                     <xsl:value-of select="tib:render-xml($All-review-process/root/ns3:review-result, false(), true())"/>
@@ -161,37 +164,51 @@
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:activity name="Generate Start Timestamp">
+    <pd:activity name="Generate Start Timestamp and FileName">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>174</pd:x>
-        <pd:y>106</pd:y>
+        <pd:x>177</pd:x>
+        <pd:y>113</pd:y>
         <config>
             <element>
                 <xsd:element name="root">
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="start" type="xsd:dateTime"/>
+                            <xsd:element name="filenameWithoutExtension" type="xsd:string"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
             </element>
         </config>
         <pd:inputBindings>
+            <xsl:variable name="currentTimestamp" select="current-dateTime()"/>
             <root>
                 <start>
-                    <xsl:value-of select="current-dateTime()"/>
+                    <xsl:value-of select="$currentTimestamp"/>
                 </start>
+                <xsl:choose>
+                    <xsl:when test="exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:output-file-name) and string-length($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:output-file-name) > 0">
+                        <filenameWithoutExtension>
+                            <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,'/',$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:output-file-name)"/>
+                        </filenameWithoutExtension>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <filenameWithoutExtension>
+                            <xsl:value-of select="concat($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination,&#xA;&#x9;'/Review_',&#xA;&#x9;$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:project-name,&#xA;&#x9; tib:format-dateTime(&quot;_yyyy-MM-dd_HH-mm-ss&quot;,$currentTimestamp))"/>
+                        </filenameWithoutExtension>
+                    </xsl:otherwise>
+                </xsl:choose>
             </root>
         </pd:inputBindings>
     </pd:activity>
-    <pd:group name="Group">
+    <pd:group name="Iterate over custom formats">
         <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
         <pd:resourceType>ae.process.group</pd:resourceType>
-        <pd:x>571</pd:x>
-        <pd:y>424</pd:y>
+        <pd:x>572</pd:x>
+        <pd:y>422</pd:y>
         <pd:width>319</pd:width>
-        <pd:height>163</pd:height>
+        <pd:height>167</pd:height>
         <pd:collapsedWidth>57</pd:collapsedWidth>
         <pd:collapsedHeight>70</pd:collapsedHeight>
         <pd:groupVariables/>
@@ -308,6 +325,9 @@
                     <destination>
                         <xsl:value-of select="$Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:destination"/>
                     </destination>
+                    <filenameWithoutExtension>
+                        <xsl:value-of select="$Generate-Start-Timestamp-and-FileName/root/filenameWithoutExtension"/>
+                    </filenameWithoutExtension>
                 </root>
             </xsl:for-each>
         </pd:inputBindings>
@@ -387,13 +407,13 @@ else $_globalVariables/pfx5:GlobalVariables/CodeReview/ResultType = 'XML'</pd:xp
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
-        <pd:to>Generate Start Timestamp</pd:to>
+        <pd:to>Generate Start Timestamp and FileName</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Generate Start Timestamp</pd:from>
+        <pd:from>Generate Start Timestamp and FileName</pd:from>
         <pd:to>Load project</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -401,7 +421,7 @@ else $_globalVariables/pfx5:GlobalVariables/CodeReview/ResultType = 'XML'</pd:xp
     </pd:transition>
     <pd:transition>
         <pd:from>All review process</pd:from>
-        <pd:to>Group</pd:to>
+        <pd:to>Iterate over custom formats</pd:to>
         <pd:xpathDescription>Custom</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
@@ -411,7 +431,7 @@ then exists($Start/pfx2:code-review-msg/code-review/pfx:code-review/pfx:formats/
 else false()</pd:xpath>
     </pd:transition>
     <pd:transition>
-        <pd:from>Group</pd:from>
+        <pd:from>Iterate over custom formats</pd:from>
         <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

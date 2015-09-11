@@ -367,6 +367,8 @@
 			<xs:attribute name="timestamp" type="xs:dateTime"/>
 			<xs:attribute name="duration" type="xs:decimal"/>
 			<xs:attribute name="project-basedir" type="xs:string"/>
+			<xs:attribute name="home-page" type="xs:string"/>
+			<xs:attribute name="language" type="xs:string"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="key" type="xs:string"/>
@@ -381,7 +383,7 @@
 	<xs:element name="property" type="xs:string"/>
 	<xs:complexType name="RuleType">
 		<xs:sequence>
-			<xs:element ref="rc:rule" minOccurs="1" maxOccurs="1"/>
+			<xs:element ref="rc:rule"/>
 			<xs:element ref="rr:data" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="param" type="rr:entry" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="result" type="rr:result" minOccurs="0" maxOccurs="unbounded"/>

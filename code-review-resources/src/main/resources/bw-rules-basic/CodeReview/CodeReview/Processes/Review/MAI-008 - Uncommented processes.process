@@ -311,6 +311,9 @@
                         <pfx6:description>
                             <xsl:value-of select="&quot;Uncommented processes&quot;"/>
                         </pfx6:description>
+                        <pfx6:descriptionHTML>
+                            <xsl:value-of select="&quot;Uncommented processes&quot;"/>
+                        </pfx6:descriptionHTML>
                     </pfx6:infos>
                 </pfx6:rule>
             </cards>

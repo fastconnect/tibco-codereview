@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:pfx31="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:ns="http://www.tibco.com/namespaces/tnt/plugins/file/v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx31="http://fastconnect.fr/tibco/bw/fccodereview/projectcontent" xmlns:pfx4="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:pfx3="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/TestResult.xsd" xmlns:pfx2="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:pfx="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.tibco.com/schemas/AuditProcesses/CodeReview/SharedRessources/Configuration/TestGlobalVariablesInConnectionDefinitions/Schema.xsd" schemaLocation="/CodeReview/Resources/Shared Variables/Connection parameter schema.xsd"/>
     <pd:name>CodeReview/Processes/Review/Test global variables in connection definitions/Test connection.process</pd:name>
@@ -42,6 +42,9 @@
                     <ns1:description>
                         <xsl:value-of select="'Connections not configurable'"/>
                     </ns1:description>
+                    <ns1:descriptionHTML>
+                        <xsl:value-of select="'Connections not configurable'"/>
+                    </ns1:descriptionHTML>
                 </ns1:infos>
             </ns1:rule>
             <xsl:if test="exists($accu/AccumulatedOutput/root/valide[. = &quot;false&quot;])">

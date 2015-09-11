@@ -79,17 +79,14 @@
                                     <xsl:value-of select="transaction1"/>
                                 </pfx4:value>
                             </pfx4:child>
-                        </pfx4:result>
-                        <pfx4:result>
-                            <pfx4:resource>
-                                <xsl:value-of select="process2"/>
-                            </pfx4:resource>
-                            <pfx4:key>
-                                <xsl:value-of select="local-name(process2)"/>
-                            </pfx4:key>
-                            <pfx4:value>
-                                <xsl:value-of select="process2"/>
-                            </pfx4:value>
+                            <pfx4:child>
+                                <pfx4:key>
+                                    <xsl:value-of select="local-name(process2)"/>
+                                </pfx4:key>
+                                <pfx4:value>
+                                    <xsl:value-of select="process2"/>
+                                </pfx4:value>
+                            </pfx4:child>
                             <pfx4:child>
                                 <pfx4:key>
                                     <xsl:value-of select="local-name(transaction2)"/>
@@ -213,6 +210,9 @@
                         <pfx5:description>
                             <xsl:value-of select="&quot;Nested Transactions&quot;"/>
                         </pfx5:description>
+                        <pfx5:descriptionHTML>
+                            <xsl:value-of select="&quot;Nested Transactions&quot;"/>
+                        </pfx5:descriptionHTML>
                     </pfx5:infos>
                 </pfx5:rule>
             </cards>

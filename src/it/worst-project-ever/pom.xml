@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+		<artifactId>code-review-it</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>fr.fastconnect.factory.tibco.bw.codereview.examples</groupId>
+ 	<artifactId>worst-project-ever</artifactId>
+	<packaging>bw-ear</packaging>
+
+	<name>Code Review Plugin for TIBCO BusinessWorks - IT - WorstProjectEver project</name>
+
+	<properties>
+		<bw.project.name>WorstProjectEver</bw.project.name>
+		<maven.site.deploy.skip>false</maven.site.deploy.skip>
+		<codereview.homePage>../../index.html</codereview.homePage>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>fr.fastconnect.factory.tibco.bw.maven</groupId>
+				<artifactId>bw-maven-plugin</artifactId>
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+				<artifactId>code-review-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+			<artifactId>code-review-resources</artifactId>
+			<type>zip</type>
+			<classifier>display</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>fr.fastconnect.factory.tibco.bw.codereview</groupId>
+			<artifactId>code-review-rules-basic</artifactId>
+			<type>zip</type>
+			<classifier>bw</classifier>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>site-local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<local.site.suffix>code-review-plugin/examples/worst-project-ever</local.site.suffix>
+			</properties>
+			<distributionManagement>
+				<site>
+					<id>fc.local</id>
+					<url>dav:${repositorySiteURL}</url>
+				</site>
+			</distributionManagement>
+		</profile>
+		<profile>
+			<id>site-github</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+
+				<repositorySiteURL>git@github.com/fastconnect/tibco-factory.git</repositorySiteURL>
+				<repositorySiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.path}</repositorySiteDisplayURL>
+				<rootSiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.prefix}</rootSiteDisplayURL>
+				<github.site.suffix>/code-review-plugin/examples/worst-project-ever</github.site.suffix>
+			</properties>
+			<distributionManagement>
+				<site>
+					<id>fc.github</id>
+					<url>gitsite:${repositorySiteURL}/${github.site.prefix}/code-review-plugin/examples/worst-project-ever</url>
+				</site>
+			</distributionManagement>
+		</profile>
+	</profiles>
+
+	<url>${repositorySiteDisplayURL}</url>
+
+</project>

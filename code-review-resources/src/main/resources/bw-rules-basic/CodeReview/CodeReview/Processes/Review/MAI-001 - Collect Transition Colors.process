@@ -118,19 +118,19 @@
         <pd:expanded>true</pd:expanded>
         <pd:transition>
             <pd:from>start</pd:from>
-            <pd:to>Group</pd:to>
+            <pd:to>Iterate over files</pd:to>
             <pd:lineType>Default</pd:lineType>
             <pd:lineColor>-16777216</pd:lineColor>
             <pd:conditionType>always</pd:conditionType>
         </pd:transition>
         <pd:transition>
-            <pd:from>Group</pd:from>
+            <pd:from>Iterate over files</pd:from>
             <pd:to>end</pd:to>
             <pd:lineType>Default</pd:lineType>
             <pd:lineColor>-16777216</pd:lineColor>
             <pd:conditionType>always</pd:conditionType>
         </pd:transition>
-        <pd:group name="Group">
+        <pd:group name="Iterate over files">
             <pd:type>com.tibco.pe.core.LoopGroup</pd:type>
             <pd:resourceType>ae.process.group</pd:resourceType>
             <pd:x>291</pd:x>
@@ -415,6 +415,9 @@ public class MAI001CollectTransitionColorsJavaCode{
                                         <pfx5:description>
                                             <xsl:value-of select="&quot;Collect Transition Colors&quot;"/>
                                         </pfx5:description>
+                                        <pfx5:descriptionHTML>
+                                            <xsl:value-of select="&quot;Collect Transition Colors&quot;"/>
+                                        </pfx5:descriptionHTML>
                                     </pfx5:infos>
                                 </pfx5:rule>
                                 <xsl:for-each select="$Java-Code/javaCodeActivityOutput/outValues">
@@ -497,6 +500,9 @@ public class MAI001CollectTransitionColorsJavaCode{
                         <pfx5:description>
                             <xsl:value-of select="&quot;Collect Transition Colors&quot;"/>
                         </pfx5:description>
+                        <pfx5:descriptionHTML>
+                            <xsl:value-of select="&quot;Collect Transition Colors&quot;"/>
+                        </pfx5:descriptionHTML>
                     </pfx5:infos>
                 </pfx5:rule>
             </cards>

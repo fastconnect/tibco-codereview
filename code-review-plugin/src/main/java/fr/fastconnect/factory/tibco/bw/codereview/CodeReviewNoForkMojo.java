@@ -55,6 +55,18 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 
 //	protected static Integer uniqueEnginePort = null;
 
+    /**
+     * Name of the generated artifact (without file extension).
+     */
+    @Parameter(property = "project.build.finalName", required = true)
+    protected String finalName;
+
+    /**
+     * Optional href link to use in HTML output on the top-left caption
+     */
+    @Parameter(property = "codereview.homePage")
+    protected String homePage;
+
 	@Parameter(property = "codereview.timeout", defaultValue = "100")
 	private int timeOut; // in seconds
 
@@ -237,6 +249,10 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 		settings.setFileAliasesFile(aliasesFileName);
 		settings.setLanguage(lang);
 		settings.setDisabledRules(disabledRules);
+		settings.setOutputFileName(finalName);
+		if (homePage != null) {
+			settings.setHomePage(homePage);
+		}
 
 		// exécution des tests en appelant la méthode "review" du Service Agent de CodeReview
 		if (((FCCodeReviewService) serviceAgent).review(settings)) {
