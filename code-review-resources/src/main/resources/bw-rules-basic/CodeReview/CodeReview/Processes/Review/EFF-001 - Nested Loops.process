@@ -307,14 +307,17 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                     </pfx:weight>
                     <pfx:infos>
                         <pfx:name>
-                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                            <xsl:value-of select="&quot;Nested loops&quot;"/>
                         </pfx:name>
                         <pfx:description>
-                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                            <xsl:value-of select="&quot;Nested loops should be avoided for performance issue.&quot;"/>
                         </pfx:description>
                         <pfx:descriptionHTML>
-                            <xsl:value-of select="&quot;Nested loop&quot;"/>
+                            <xsl:value-of select="&quot;Nested loops should be avoided for performance issue.&quot;"/>
                         </pfx:descriptionHTML>
+                        <pfx:correctionHTML>
+                            <xsl:value-of select="&quot;When a mapper is inside a loop, it can be replaced by a simple mapper with XSLT 'for-each' construct.&quot;"/>
+                        </pfx:correctionHTML>
                     </pfx:infos>
                 </pfx:rule>
             </cards>
