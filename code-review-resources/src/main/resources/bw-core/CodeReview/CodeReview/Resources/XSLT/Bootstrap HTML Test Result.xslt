@@ -87,7 +87,7 @@
 								<xsl:attribute name="aria-controls" select="rc:category"/>
 								<xsl:attribute name="role" select="'tab'"/>
 								<xsl:attribute name="data-toggle" select="'tab'"/>
-								<xsl:value-of select="concat(rc:name, ' ')" />
+								<xsl:value-of select="concat(rc:infos[1]/rc:name, ' ')" />
 								<xsl:variable name="rules_count" select="count(//rr:rule[rc:rule/rc:category = $current-category])" />
 								<xsl:if test="$rules_count > 0">
 									<xsl:variable name="issues_count" select="count(//rr:rule[rc:rule/rc:category = $current-category and count(rr:result) > 0])" />
@@ -116,10 +116,10 @@
 						<xsl:attribute name="id" select="rc:category"/>
 
 						<xsl:element name="h1">
-							<xsl:value-of select="rc:name"/>
+							<xsl:value-of select="rc:infos[1]/rc:name"/>
 						</xsl:element>
 						<xsl:element name="p">
-							<xsl:value-of select="rc:description"/>
+							<xsl:value-of select="rc:infos[1]/rc:descriptionHTML"/>
 						</xsl:element>
 						<xsl:if test="$current-category = 'GEN'">
 							<xsl:call-template name="render-rule">
@@ -142,10 +142,10 @@
 
 				<xsl:variable name="error_category" select="//rr:categories/rc:category[rc:category = 'ERR']"/>
 				<xsl:element name="h1">
-					<xsl:value-of select="$error_category/rc:name"/>
+					<xsl:value-of select="$error_category/rc:infos[1]/rc:name"/>
 				</xsl:element>
 				<xsl:element name="p">
-					<xsl:value-of select="$error_category/rc:description"/>
+					<xsl:value-of select="$error_category/rc:infos[1]/rc:descriptionHTML"/>
 				</xsl:element>
 			</xsl:element>
 
@@ -156,10 +156,10 @@
 
 				<xsl:variable name="conf_category" select="//rr:categories/rc:category[rc:category = 'CONF']"/>
 				<xsl:element name="h1">
-					<xsl:value-of select="$conf_category/rc:name"/>
+					<xsl:value-of select="$conf_category/rc:infos[1]/rc:name"/>
 				</xsl:element>
 				<xsl:element name="p">
-					<xsl:value-of select="$conf_category/rc:description"/>
+					<xsl:value-of select="$conf_category/rc:infos[1]/rc:description"/>
 				</xsl:element>
 				<table class="table table-striped">
 					<tr>
@@ -189,15 +189,15 @@
 				<xsl:attribute name="class" select="'tab-pane'"/>
 				<xsl:variable name="files_category" select="//rr:categories/rc:category[rc:category = 'FILES']"/>
 				<xsl:element name="h1">
-					<xsl:value-of select="$files_category/rc:name"/>
+					<xsl:value-of select="$files_category/rc:infos[1]/rc:name"/>
 				</xsl:element>
 				<xsl:element name="p">
-					<xsl:value-of select="$files_category/rc:description"/>
+					<xsl:value-of select="$files_category/rc:infos[1]/rc:description"/>
 				</xsl:element>
 				<table class="table table-striped">
 					<tr>
 						<th>
-							<xsl:value-of select="$files_category/rc:name" />
+							<xsl:value-of select="$files_category/rc:infos[1]/rc:name" />
 						</th>
 					</tr>
 					<xsl:for-each select="rr:additional-data/rr:files/rr:file">
@@ -220,7 +220,7 @@
 					<xsl:element name="li">
 						<xsl:element name="a">
 							<xsl:attribute name="href" select="concat('#', rc:category)"/>
-							<xsl:value-of select="rc:name" />
+							<xsl:value-of select="rc:infos[1]/rc:name" />
 						</xsl:element>
 
 						<xsl:element name="ul">
