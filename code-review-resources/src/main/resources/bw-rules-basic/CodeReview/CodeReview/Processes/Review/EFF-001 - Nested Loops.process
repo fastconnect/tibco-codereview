@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
@@ -50,7 +50,7 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
         <pd:x>619</pd:x>
-        <pd:y>98</pd:y>
+        <pd:y>97</pd:y>
         <config>
             <element ref="res:review-result"/>
         </config>
@@ -310,10 +310,10 @@ Seule les boucles Iterate, Repeat Until True et While sont pris en compte. Les a
                             <xsl:value-of select="&quot;Nested loops&quot;"/>
                         </pfx:name>
                         <pfx:description>
-                            <xsl:value-of select="&quot;Nested loops should be avoided for performance issue.&quot;"/>
+                            <xsl:value-of select="&quot;Nested loops should be avoided for performance reason.&quot;"/>
                         </pfx:description>
                         <pfx:descriptionHTML>
-                            <xsl:value-of select="&quot;Nested loops should be avoided for performance issue.&quot;"/>
+                            <xsl:value-of select="&quot;Nested loops should be avoided for performance reason.&quot;"/>
                         </pfx:descriptionHTML>
                         <pfx:correctionHTML>
                             <xsl:value-of select="&quot;When a mapper is inside a loop, it can be replaced by a simple mapper with XSLT 'for-each' construct.&quot;"/>
