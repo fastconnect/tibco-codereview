@@ -45,71 +45,81 @@
                     <pfx:category>
                         <xsl:value-of select="'GEN'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'General'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'General category'"/>
-                    </pfx:description>
-                    <pfx:descriptionHTML>
-                        <xsl:value-of select="'General category'"/>
-                    </pfx:descriptionHTML>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'General'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="''"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="''"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
                 <pfx:category>
                     <pfx:category>
                         <xsl:value-of select="'REL'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'Reliability'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'Reliability category'"/>
-                    </pfx:description>
-                    <pfx:descriptionHTML>
-                        <xsl:value-of select="'Reliability category'"/>
-                    </pfx:descriptionHTML>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'Reliability'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="''"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="''"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
                 <pfx:category>
                     <pfx:category>
                         <xsl:value-of select="'EFF'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'Efficiency'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'Efficiency category'"/>
-                    </pfx:description>
-                    <pfx:descriptionHTML>
-                        <xsl:value-of select="'Efficiency category'"/>
-                    </pfx:descriptionHTML>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'Efficiency'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="''"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="''"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
                 <pfx:category>
                     <pfx:category>
                         <xsl:value-of select="'MAI'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'Maintainability'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'Maintainability category'"/>
-                    </pfx:description>
-                    <pfx:descriptionHTML>
-                        <xsl:value-of select="'Maintainability category'"/>
-                    </pfx:descriptionHTML>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'Maintainability'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="''"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="''"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
                 <pfx:category>
                     <pfx:category>
                         <xsl:value-of select="'POR'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'Portability'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'Portability category'"/>
-                    </pfx:description>
-                    <pfx:descriptionHTML>
-                        <xsl:value-of select="'Portability category'"/>
-                    </pfx:descriptionHTML>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'Portability'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="''"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="''"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
             </categories>
         </pd:inputBindings>

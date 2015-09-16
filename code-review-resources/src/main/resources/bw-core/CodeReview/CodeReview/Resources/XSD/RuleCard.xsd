@@ -57,11 +57,17 @@
 	<xs:element name="category">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:element name="locale" type="xs:string" minOccurs="0"/>
 				<xs:element name="category" type="xs:string"/>
-				<xs:element name="name" type="xs:string"/>
-				<xs:element name="description" type="xs:string"/>
-				<xs:element name="descriptionHTML" type="xs:string"/>
+				<xs:element name="infos" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="locale" type="xs:string" minOccurs="0"/>
+							<xs:element name="name" type="xs:string"/>
+							<xs:element name="description" type="xs:string"/>
+							<xs:element name="descriptionHTML" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

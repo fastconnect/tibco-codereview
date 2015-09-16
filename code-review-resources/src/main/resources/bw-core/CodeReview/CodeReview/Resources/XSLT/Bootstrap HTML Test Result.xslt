@@ -273,13 +273,13 @@
 		<xsl:param name="rule" />
 
 		<div class="panel panel-default">
-			<xsl:attribute name="role" select="'button'" />
-			<xsl:attribute name="data-toggle" select="'collapse'" />
-			<xsl:attribute name="aria-expanded" select="'false'" />
-			<xsl:attribute name="href" select="concat('#collapse_', $rule/rc:rule/rc:key)" />
-			<xsl:attribute name="aria-controls" select="concat('collapse_', $rule/rc:rule/rc:key)" />
-
 			<div class="panel-heading">
+				<xsl:attribute name="role" select="'button'" />
+				<xsl:attribute name="data-toggle" select="'collapse'" />
+				<xsl:attribute name="aria-expanded" select="'false'" />
+				<xsl:attribute name="href" select="concat('#collapse_', $rule/rc:rule/rc:key)" />
+				<xsl:attribute name="aria-controls" select="concat('collapse_', $rule/rc:rule/rc:key)" />
+
 				<xsl:call-template name="rule-header">
 					<xsl:with-param name="rule" select="$rule" />
 				</xsl:call-template>
@@ -300,36 +300,45 @@
 					<div>
 						<div class="row">
 							<div class="col-md-3">
-								<p>
-									<strong><em>Key: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:key" /></tt><br />
-									<strong><em>Name: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" /></tt><br />
-									<strong><em>Weight: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:weight" /></tt><br />
-									<xsl:if test="count($rule/rr:result)">
-										<xsl:choose>
-											<xsl:when test="$rule/@grade > 0 ">
-												<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' = ', $rule/@grade)" /></tt><br />
-											</xsl:when>
-											<xsl:otherwise>
-												<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' &lt;= ', $rule/@grade)" /></tt><br />
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:if>
-								</p>
+								<div class="panel panel-info">
+									<div class="panel-heading">
+										<strong><em>Rule</em></strong>
+									</div>
+									<div class="panel-body">
+										<strong><em>Key: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:key" /></tt><br />
+										<strong><em>Name: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:name" /></tt><br />
+										<strong><em>Weight: </em></strong><tt><xsl:value-of select="$rule/rc:rule/rc:weight" /></tt><br />
+										<xsl:if test="count($rule/rr:result)">
+											<xsl:choose>
+												<xsl:when test="$rule/@grade > 0 ">
+													<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' = ', $rule/@grade)" /></tt><br />
+												</xsl:when>
+												<xsl:otherwise>
+													<strong><em>Score: </em></strong><tt><xsl:value-of select="concat('100 - ', $rule/rc:rule/rc:weight, ' * ', count($rule/rr:result), ' &lt;= ', $rule/@grade)" /></tt><br />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:if>
+									</div>
+								</div>
 							</div>
 							<xsl:choose>
 								<xsl:when test="$rule/local-name() = 'general'">
 									<div class="col-md-4">
-										<p>
-											<strong><em>Description: </em></strong><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" /><br /><br />
-											<strong><em>Number of processes: </em></strong><xsl:value-of select="$rule/rr:number-of-processes" /><br />
-											<strong><em>Number of activities: </em></strong><xsl:value-of select="$rule/rr:number-of-activities" /><br />
-											<strong><em>Number of files: </em></strong><xsl:value-of select="$rule/rr:number-of-files" /><br />
-											<strong><em>Number of libraries (Projlibs): </em></strong><xsl:value-of select="$rule/rr:number-of-libs" /><br />
-											<strong><em>Number of EARs: </em></strong><xsl:value-of select="$rule/rr:number-of-ears" /><br />
-											<strong><em>Number of PARs: </em></strong><xsl:value-of select="$rule/rr:number-of-pars" /><br />
-											<strong><em>Number of AARs: </em></strong><xsl:value-of select="$rule/rr:number-of-aars" /><br />
-											<strong><em>Number of library builder: </em></strong><xsl:value-of select="$rule/rr:number-of-libbuilder" /><br />
-										</p>
+										<div class="panel panel-success">
+											<div class="panel-heading">
+												<strong><em><xsl:value-of select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" /></em></strong>
+											</div>
+											<div class="panel-body">
+												<strong><em>Number of processes: </em></strong><xsl:value-of select="$rule/rr:number-of-processes" /><br />
+												<strong><em>Number of activities: </em></strong><xsl:value-of select="$rule/rr:number-of-activities" /><br />
+												<strong><em>Number of files: </em></strong><xsl:value-of select="$rule/rr:number-of-files" /><br />
+												<strong><em>Number of libraries (Projlibs): </em></strong><xsl:value-of select="$rule/rr:number-of-libs" /><br />
+												<strong><em>Number of EARs: </em></strong><xsl:value-of select="$rule/rr:number-of-ears" /><br />
+												<strong><em>Number of PARs: </em></strong><xsl:value-of select="$rule/rr:number-of-pars" /><br />
+												<strong><em>Number of AARs: </em></strong><xsl:value-of select="$rule/rr:number-of-aars" /><br />
+												<strong><em>Number of library builder: </em></strong><xsl:value-of select="$rule/rr:number-of-libbuilder" /><br />
+											</div>
+										</div>
 									</div>
 									<div class="col-md-5">
 										<xsl:element name="embed">
@@ -342,21 +351,27 @@
 								</xsl:when>
 								<xsl:otherwise>
 									<div class="col-md-9">
-										<p>
-											<strong><em>Description</em></strong><br />
-											<pre>
-												<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" />
-											</pre>
-											<br />
-										</p>
+										<div class="panel panel-warning">
+											<div class="panel-heading">
+												<strong><em>Description</em></strong>
+											</div>
+											<div class="panel-body">
+												<p>
+													<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:descriptionHTML" />
+												</p>
+											</div>
+										</div>
 										<xsl:if test="exists($rule/rc:rule/rc:infos[1]/rc:correctionHTML)">
-											<p>
-												<strong><em>Correction</em></strong><br />
-												<pre>
-													<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:correctionHTML" />
-												</pre>
-												<br />
-											</p>
+											<div class="panel panel-success">
+												<div class="panel-heading">
+													<strong><em>Correction</em></strong>
+												</div>
+												<div class="panel-body">
+													<p>
+														<xsl:value-of disable-output-escaping="yes" select="$rule/rc:rule/rc:infos[1]/rc:correctionHTML" />
+													</p>
+												</div>
+											</div>
 										</xsl:if>
 									</div>
 								</xsl:otherwise>
