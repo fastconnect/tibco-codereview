@@ -35,7 +35,7 @@
 	<name>Code Review Plugin for TIBCO BusinessWorks - IT</name>
 
 	<modules>
-		<module>worst-project-ever</module>
+		<module>demo</module>
 	</modules>
 
 	<properties>

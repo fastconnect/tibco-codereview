@@ -28,15 +28,15 @@
 	</parent>
 
 	<groupId>fr.fastconnect.factory.tibco.bw.codereview.examples</groupId>
- 	<artifactId>worst-project-ever</artifactId>
+	<artifactId>demo</artifactId>
 	<packaging>bw-ear</packaging>
 
-	<name>Code Review Plugin for TIBCO BusinessWorks - IT - WorstProjectEver project</name>
+	<name>Code Review Plugin for TIBCO BusinessWorks - IT - Demo project</name>
 
 	<properties>
-		<bw.project.name>WorstProjectEver</bw.project.name>
+		<bw.project.name>Demo</bw.project.name>
 		<maven.site.deploy.skip>false</maven.site.deploy.skip>
-		<codereview.homePage>../../index.html</codereview.homePage>
+		<codereview.homePage>../index.html</codereview.homePage>
 	</properties>
 
 	<build>
@@ -81,7 +81,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<local.site.suffix>code-review-plugin/examples/worst-project-ever</local.site.suffix>
+				<local.site.suffix>code-review-plugin/demo</local.site.suffix>
 			</properties>
 			<distributionManagement>
 				<site>
@@ -100,12 +100,12 @@
 				<repositorySiteURL>git@github.com/fastconnect/tibco-factory.git</repositorySiteURL>
 				<repositorySiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.path}</repositorySiteDisplayURL>
 				<rootSiteDisplayURL>http://fastconnect.github.io/tibco-factory/${github.site.prefix}</rootSiteDisplayURL>
-				<github.site.suffix>/code-review-plugin/examples/worst-project-ever</github.site.suffix>
+				<github.site.suffix>/code-review-plugin/demo</github.site.suffix>
 			</properties>
 			<distributionManagement>
 				<site>
 					<id>fc.github</id>
-					<url>gitsite:${repositorySiteURL}/${github.site.prefix}/code-review-plugin/examples/worst-project-ever</url>
+					<url>gitsite:${repositorySiteURL}/${github.site.prefix}/code-review-plugin/demo</url>
 				</site>
 			</distributionManagement>
 		</profile>

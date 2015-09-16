@@ -36,7 +36,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	 xmlns="hello"
-	 targetNamespace="http://www.tibco.com/schemas/WorstProjectEver/Issues/General/GEN-003/Schema.xsd"
+	 targetNamespace="http://www.tibco.com/schemas/Demo/Issues/General/GEN-003/Schema.xsd"
 	 elementFormDefault="qualified"
 	 attributeFormDefault="unqualified">
 	<xs:element name="root">

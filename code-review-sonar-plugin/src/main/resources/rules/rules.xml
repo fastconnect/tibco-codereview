@@ -2,14 +2,14 @@
 <rules>
     <rule>
         <key>EFF-001</key>
-        <name>Nested loop</name>
-        <description>Nested loop</description>
+        <name>Nested loops</name>
+        <description>Nested loops should be avoided for performance reason.</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
         <key>EFF-002</key>
         <name>Critical Section on JobSharedVariable</name>
-        <description>Performance issue</description>
+        <description>Critical Section around JobSharedVariable is useless</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
@@ -44,8 +44,8 @@
     </rule>
     <rule>
         <key>GEN-002</key>
-        <name>GVs in connections configuration</name>
-        <description>GVs in connections configuration</description>
+        <name>Connection configuration hardcoded</name>
+        <description>All fields of a connection should be parameterized with Global Variables.</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
@@ -69,7 +69,7 @@
     <rule>
         <key>MAI-002</key>
         <name>Dynamic Process Calls</name>
-        <description>Dynamic Process Calls</description>
+        <description>Dynamic process calls reduce maintanibility.</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
@@ -165,13 +165,13 @@
     <rule>
         <key>REL-005</key>
         <name>No out Transition</name>
-        <description>No out Transition</description>
+        <description>When an activity has no transition to another activity, the behaviour of the process at runtime might become undefined. All activities must have at least one successor in the process graph, except the End activity.</description>
         <severity>MAJOR</severity>
     </rule>
     <rule>
         <key>REL-006</key>
         <name>No otherwise Transition</name>
-        <description>No otherwise Transition</description>
+        <description>When an activity has transitions with condition(s), the Otherwise transition is mandatory.</description>
         <severity>MAJOR</severity>
     </rule>
 </rules>
