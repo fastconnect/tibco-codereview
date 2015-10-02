@@ -91,8 +91,7 @@ public class FCCodeReviewService extends ServiceAgentInEngine<CodeReview_Proxy> 
 		try {
 			codeReview.review(config);
 		} catch (ClientTransportException e) {
-			e.printStackTrace();
-			return false;
+			return false; // the isStarted method in the WebService is used to ping
 		}
 
 		return true;

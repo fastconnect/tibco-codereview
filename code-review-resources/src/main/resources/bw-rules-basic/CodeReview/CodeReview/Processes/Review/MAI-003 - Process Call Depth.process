@@ -203,7 +203,7 @@
                     </pfx6:weight>
                     <pfx6:infos>
                         <pfx6:name>
-                            <xsl:value-of select="&quot;Process Call Depth&quot;"/>
+                            <xsl:value-of select="&quot;Process Call Tree Too Deep&quot;"/>
                         </pfx6:name>
                         <pfx6:description>
                             <xsl:value-of select="&quot;Process Call Depth&quot;"/>

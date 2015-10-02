@@ -43,14 +43,14 @@ import de.schlichtherle.truezip.socket.sl.IOPoolLocator;
 
 /**
  * <p>
- * This goal will execute the Code Review on the target project.
+ * This goal will prepare the target project for the Code Review.
  * </p>
  *
  * @author Mathieu Debove
  *
  */
 @Mojo(name = "prepare-code-review", defaultPhase = LifecyclePhase.PROCESS_TEST_RESOURCES, requiresProject = true, requiresDependencyResolution = ResolutionScope.TEST)
-public class PrepareCodeReviewLauncherMojo extends CodeReviewNoForkMojo {
+public class PrepareCodeReviewMojo extends CodeReviewNoForkMojo {
 
 	@Parameter (property = "code.review.artifactFilter", defaultValue = "code-review-")
 	private String artifactIdPrefixFilter;

@@ -74,7 +74,7 @@
     </rule>
     <rule>
         <key>MAI-003</key>
-        <name>Process Call Depth</name>
+        <name>Process Call Tree Too Deep</name>
         <description>Process Call Depth</description>
         <severity>MAJOR</severity>
     </rule>

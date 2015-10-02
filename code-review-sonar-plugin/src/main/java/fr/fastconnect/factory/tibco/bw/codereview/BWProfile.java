@@ -16,15 +16,12 @@
  */
 package fr.fastconnect.factory.tibco.bw.codereview;
 
-import java.io.File;
 import java.io.InputStream;
-import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.codehaus.plexus.classworlds.realm.ClassRealm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.profiles.ProfileDefinition;
