@@ -72,6 +72,18 @@
 			</plugin>
 		</plugins>
 	</build>
+	<reporting> <!-- to remove after FC TIBCO Factory > 2.4.1 is released -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<configuration>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<properties>
 		<maven.site.skip>true</maven.site.skip>
