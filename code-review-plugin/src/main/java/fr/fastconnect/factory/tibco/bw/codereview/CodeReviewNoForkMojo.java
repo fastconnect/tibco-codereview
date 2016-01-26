@@ -17,6 +17,7 @@
 package fr.fastconnect.factory.tibco.bw.codereview;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -131,6 +132,9 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 				systemDesigner5Prefs.getParentFile().mkdirs();
 				systemDesigner5Prefs.createNewFile(); // touch the system file to avoid crash
 			}
+		} catch (IOException e) {
+			throw new MojoExecutionException(e.getLocalizedMessage(), e);
+		}
 
 		getLog().debug("codeReviewProjectDirectory"	+ codeReviewProjectDirectory.getAbsolutePath());
 		getLog().debug("displayResourcesDırectory" + displayResourcesDırectory.getAbsolutePath());
