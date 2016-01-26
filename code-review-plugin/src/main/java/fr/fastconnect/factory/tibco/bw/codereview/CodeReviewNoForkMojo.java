@@ -124,6 +124,14 @@ public class CodeReviewNoForkMojo extends AbstractServiceEngineMojo {
 			return;
 		}
 
+		// this try-block can be removed when BWMaven > 2.4.1 is released
+		try {
+			File systemDesigner5Prefs = new File(System.getProperty("user.home") + "/" + TIBCO_HOME_DIR + "/" + DESIGNER5_PREFS);
+			if (!systemDesigner5Prefs.exists()) {
+				systemDesigner5Prefs.getParentFile().mkdirs();
+				systemDesigner5Prefs.createNewFile(); // touch the system file to avoid crash
+			}
+
 		getLog().debug("codeReviewProjectDirectory"	+ codeReviewProjectDirectory.getAbsolutePath());
 		getLog().debug("displayResourcesDırectory" + displayResourcesDırectory.getAbsolutePath());
 
