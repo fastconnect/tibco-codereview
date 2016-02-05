@@ -34,7 +34,7 @@
     </pd:returnBindings>
     <pd:endName>End</pd:endName>
     <pd:endType ref="res:review-result"/>
-    <pd:endX>730</pd:endX>
+    <pd:endX>634</pd:endX>
     <pd:endY>98</pd:endY>
     <pd:errorSchemas/>
     <pd:processVariables/>
@@ -42,23 +42,30 @@
     <pd:activity name="Catch All">
         <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
         <pd:resourceType>ae.activities.catch</pd:resourceType>
-        <pd:x>382</pd:x>
-        <pd:y>322</pd:y>
+        <pd:x>62</pd:x>
+        <pd:y>354</pd:y>
         <pd:handler>true</pd:handler>
         <config>
             <catchAll>true</catchAll>
         </config>
         <pd:inputBindings/>
     </pd:activity>
-    <pd:activity name="Extract Project Structure">
+    <pd:activity name="Process Rule">
         <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
         <pd:resourceType>ae.process.subprocess</pd:resourceType>
-        <pd:x>175</pd:x>
-        <pd:y>202</pd:y>
+        <pd:x>331</pd:x>
+        <pd:y>194</pd:y>
         <config>
-            <processName>/CodeReview/Processes/Tools/Extract Project Structure - No Activities.process</processName>
+            <processName>/CodeReview/Processes/Implementation/NEW-001 - New rule.process</processName>
         </config>
-        <pd:inputBindings/>
+        <pd:inputBindings>
+            <rule>
+                <xsl:copy-of select="$Rule-Card/cards/pfx:rule"/>
+                <disabled>
+                    <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                </disabled>
+            </rule>
+        </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Format result">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
@@ -85,28 +92,32 @@
                         </res:error>
                     </xsl:for-each>
                 </res:errors>
-                <res:rule>
-                    <xsl:attribute name="disabled">
-                        <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="ruleId">
-                        <xsl:value-of select="'NEW-001'"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="grade">
-                        <xsl:value-of select="100"/>
-                    </xsl:attribute>
-                    <xsl:attribute name="weight">
-                        <xsl:value-of select="10"/>
-                    </xsl:attribute>
-                </res:rule>
+                <xsl:choose>
+                    <xsl:when test="count($Process-Rule/rules/res:rule)>0">
+                        <xsl:copy-of select="$Process-Rule/rules/res:rule"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:for-each select="$Rule-Card/cards/pfx:rule">
+                            <res:rule>
+                                <xsl:attribute name="disabled">
+                                    <xsl:value-of select="$Start/pfx4:root/pfx4:disabled"/>
+                                </xsl:attribute>
+                                <xsl:attribute name="grade">
+                                    <xsl:value-of select="100"/>
+                                </xsl:attribute>
+                                <xsl:copy-of select="."/>
+                            </res:rule>
+                        </xsl:for-each>
+                    </xsl:otherwise>
+                </xsl:choose>
             </res:review-result>
         </pd:inputBindings>
     </pd:activity>
     <pd:activity name="Log">
         <pd:type>com.tibco.pe.core.WriteToLogActivity</pd:type>
         <pd:resourceType>ae.activities.log</pd:resourceType>
-        <pd:x>491</pd:x>
-        <pd:y>322</pd:y>
+        <pd:x>186</pd:x>
+        <pd:y>354</pd:y>
         <config>
             <role>User</role>
         </config>
@@ -121,14 +132,14 @@
     <pd:activity name="Rule Card">
         <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
         <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
-        <pd:x>608</pd:x>
+        <pd:x>192</pd:x>
         <pd:y>98</pd:y>
         <config>
             <element>
                 <xsd:element name="cards">
                     <xsd:complexType>
                         <xsd:sequence>
-                            <xsd:element ref="pfx:rule" maxOccurs="unbounded"/>
+                            <xsd:element ref="pfx:rule"/>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
@@ -137,32 +148,69 @@
         <pd:inputBindings>
             <cards>
                 <pfx:rule>
+                    <pfx:category>
+                        <xsl:value-of select="&quot;NEW&quot;"/>
+                    </pfx:category>
                     <pfx:key>
                         <xsl:value-of select="&quot;NEW-001&quot;"/>
                     </pfx:key>
-                    <pfx:name>
-                        <xsl:value-of select="&quot;New custom rule&quot;"/>
-                    </pfx:name>
                     <pfx:severity>
                         <xsl:value-of select="&quot;MAJOR&quot;"/>
                     </pfx:severity>
-                    <pfx:description>
-                        <xsl:value-of select="&quot;New custom rule description&quot;"/>
-                    </pfx:description>
+                    <pfx:weight>
+                        <xsl:value-of select="10"/>
+                    </pfx:weight>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="&quot;New custom rule&quot;"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="&quot;New custom rule description&quot;"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="&quot;&lt;strong>New custom rule&lt;/strong> description&quot;"/>
+                        </pfx:descriptionHTML>
+                        <pfx:display>
+                            <pfx:key>
+                                <xsl:value-of select="'process'"/>
+                            </pfx:key>
+                            <pfx:value>
+                                <xsl:value-of select="'Processes'"/>
+                            </pfx:value>
+                            <pfx:descriptionHTML>
+                                <xsl:value-of select="'It happened something &lt;em>wrong&lt;/em> in &lt;strong>processes&lt;/strong> below'"/>
+                            </pfx:descriptionHTML>
+                        </pfx:display>
+                        <pfx:display>
+                            <pfx:key>
+                                <xsl:value-of select="'activity'"/>
+                            </pfx:key>
+                            <pfx:value>
+                                <xsl:value-of select="'Activity'"/>
+                            </pfx:value>
+                            <pfx:descriptionHTML>
+                                <xsl:value-of select="'The activity with a problem'"/>
+                            </pfx:descriptionHTML>
+                        </pfx:display>
+                        <pfx:display>
+                            <pfx:key>
+                                <xsl:value-of select="'activity-type'"/>
+                            </pfx:key>
+                            <pfx:value>
+                                <xsl:value-of select="'Type'"/>
+                            </pfx:value>
+                            <pfx:descriptionHTML>
+                                <xsl:value-of select="'Type of the activity'"/>
+                            </pfx:descriptionHTML>
+                        </pfx:display>
+                    </pfx:infos>
                 </pfx:rule>
             </cards>
         </pd:inputBindings>
     </pd:activity>
     <pd:transition>
-        <pd:from>Start</pd:from>
-        <pd:to>Extract Project Structure</pd:to>
-        <pd:lineType>Default</pd:lineType>
-        <pd:lineColor>-16777216</pd:lineColor>
-        <pd:conditionType>otherwise</pd:conditionType>
-    </pd:transition>
-    <pd:transition>
         <pd:from>Format result</pd:from>
-        <pd:to>Rule Card</pd:to>
+        <pd:to>End</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
@@ -176,13 +224,21 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Log</pd:from>
-        <pd:to>Format result</pd:to>
+        <pd:to>Rule Card</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
         <pd:from>Start</pd:from>
+        <pd:to>Rule Card</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Rule Card</pd:from>
         <pd:to>Format result</pd:to>
         <pd:xpathDescription>Disabled</pd:xpathDescription>
         <pd:lineType>Default</pd:lineType>
@@ -192,13 +248,13 @@
     </pd:transition>
     <pd:transition>
         <pd:from>Rule Card</pd:from>
-        <pd:to>End</pd:to>
+        <pd:to>Process Rule</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>
         <pd:conditionType>always</pd:conditionType>
     </pd:transition>
     <pd:transition>
-        <pd:from>Extract Project Structure</pd:from>
+        <pd:from>Process Rule</pd:from>
         <pd:to>Format result</pd:to>
         <pd:lineType>Default</pd:lineType>
         <pd:lineColor>-16777216</pd:lineColor>

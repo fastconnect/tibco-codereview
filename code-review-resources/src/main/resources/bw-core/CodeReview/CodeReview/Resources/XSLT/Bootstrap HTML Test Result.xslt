@@ -261,10 +261,8 @@
 		<script type='text/javascript' src="resources/bootstrap.min.js">//</script>
 		<script type="text/javascript" src="resources/docs.js">//</script>
 		<script type='text/javascript'>
-	        $(document).ready(function() {
-				$('body').scrollspy({ target: '.navbar-fixed-top' })
-	        });
-
+			$('[data-toggle="tooltip"]').tooltip();
+			$('body').scrollspy({ target: '.navbar-fixed-top' });
 	        $('#top-menu-tabs li:eq(1) a').tab('show'); // Select first tab
         </script>
 	</xsl:template>
@@ -417,25 +415,156 @@
 													<table class="table table-striped">
 														<tr>
 															<th>
-																<xsl:value-of select="rr:key" />
+																<xsl:variable name="display" select="$rule/rc:rule/rc:infos[1]/rc:display[rc:key=current-group()/rr:key]"/>
+																<xsl:choose>
+																	<xsl:when test="string-length($display/rc:value)>0">
+																		<xsl:choose>
+																			<xsl:when test="string-length($display/rc:descriptionHTML)>0">
+																				<xsl:element name="span">
+																					<xsl:attribute name="data-toggle" select="'tooltip'"/>
+																					<xsl:attribute name="data-placement" select="'right'"/>
+																					<xsl:attribute name="data-html" select="'true'"/>
+																					<xsl:attribute name="title" select="$display/rc:descriptionHTML"/>
+																					<xsl:value-of select="$display/rc:value" />
+																				</xsl:element>
+																			</xsl:when>
+																			<xsl:otherwise>																	
+																				<xsl:value-of select="$display/rc:value" />
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:when>
+																	<xsl:otherwise>
+																		<xsl:value-of select="rr:key" />
+																	</xsl:otherwise>
+																</xsl:choose>
 															</th>
-															<xsl:for-each select="rr:child">
-																<th>
-																	<xsl:value-of select="rr:key" />
-																</th>
-															</xsl:for-each>
+															<xsl:if test="count(current-group()/rr:child) > 0">
+																<xsl:for-each-group select="current-group()/rr:child" group-by="rr:key">
+																	<th>
+																		<xsl:variable name="display" select="$rule/rc:rule/rc:infos[1]/rc:display[rc:key=current-group()/rr:key]"/>
+																		<xsl:choose>
+																			<xsl:when test="string-length($display/rc:value)>0">
+																				<xsl:choose>
+																					<xsl:when test="string-length($display/rc:descriptionHTML)>0">
+																						<xsl:element name="span">
+																							<xsl:attribute name="data-toggle" select="'tooltip'"/>
+																							<xsl:attribute name="data-placement" select="'right'"/>
+																							<xsl:attribute name="data-html" select="'true'"/>
+																							<xsl:attribute name="title" select="$display/rc:descriptionHTML"/>
+																							<xsl:value-of select="$display/rc:value" />
+																						</xsl:element>
+																					</xsl:when>
+																					<xsl:otherwise>																	
+																						<xsl:value-of select="$display/rc:value" />
+																					</xsl:otherwise>
+																				</xsl:choose>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<xsl:value-of select="rr:key" />
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</th>
+ 																	<xsl:if test="count(current-group()/rr:child) > 0">
+																		<xsl:for-each-group select="current-group()/rr:child" group-by="rr:key">
+																			<th>
+																				<xsl:variable name="display" select="$rule/rc:rule/rc:infos[1]/rc:display[rc:key=current-group()/rr:key]"/>
+																				<xsl:choose>
+																					<xsl:when test="string-length($display/rc:value)>0">
+																						<xsl:choose>
+																							<xsl:when test="string-length($display/rc:descriptionHTML)>0">
+																								<xsl:element name="span">
+																									<xsl:attribute name="data-toggle" select="'tooltip'"/>
+																									<xsl:attribute name="data-placement" select="'right'"/>
+																									<xsl:attribute name="data-html" select="'true'"/>
+																									<xsl:attribute name="title" select="$display/rc:descriptionHTML"/>
+																									<xsl:value-of select="$display/rc:value" />
+																								</xsl:element>
+																							</xsl:when>
+																							<xsl:otherwise>																	
+																								<xsl:value-of select="$display/rc:value" />
+																							</xsl:otherwise>
+																						</xsl:choose>
+																					</xsl:when>
+																					<xsl:otherwise>
+																						<xsl:value-of select="rr:key" />
+																					</xsl:otherwise>
+																				</xsl:choose>
+																			</th>
+																		</xsl:for-each-group>
+																	</xsl:if>
+																</xsl:for-each-group>
+															</xsl:if>
 														</tr>
 														<xsl:for-each select="current-group()">
-															<tr>
+															<xsl:element name="tr">
 																<xsl:element name="td">
 																	<xsl:value-of select="rr:value" />
 																</xsl:element>
-																<xsl:for-each select="rr:child">
-																	<xsl:element name="td">
-																		<xsl:value-of select="rr:value" />
-																	</xsl:element>
-																</xsl:for-each>
-															</tr>
+																<xsl:choose>
+																	<xsl:when test="rr:child[1]/rr:key != rr:child[2]/rr:key">
+																		<xsl:for-each select="rr:child">
+																			<xsl:element name="td">
+																				<xsl:value-of select="rr:value" />
+																			</xsl:element>
+																		</xsl:for-each>
+																	</xsl:when>
+																	<xsl:otherwise>
+																		<xsl:for-each select="rr:child">
+																			<xsl:choose>
+																				<xsl:when test="position() = 1">
+																					<xsl:element name="td">
+																						<xsl:value-of select="rr:value" />
+																					</xsl:element>
+																					<xsl:for-each select="rr:child">
+																						<xsl:choose>
+																							<xsl:when test="position() = 1">
+																								<xsl:element name="td">
+																									<xsl:value-of select="rr:value" />
+																								</xsl:element>
+																							</xsl:when>
+																							<xsl:otherwise>
+																								<xsl:element name="tr">
+																									<xsl:element name="td"/>
+																									<xsl:element name="td"/>
+																									<xsl:element name="td">
+																										<xsl:value-of select="rr:value" />
+																									</xsl:element>
+																								</xsl:element>																							
+																							</xsl:otherwise>
+																						</xsl:choose>
+																					</xsl:for-each>
+																				</xsl:when>
+																				<xsl:otherwise>
+																					<xsl:element name="tr">
+																						<xsl:element name="td"/>
+																						<xsl:element name="td">
+																							<xsl:value-of select="rr:value" />
+																						</xsl:element>
+																						<xsl:for-each select="rr:child">
+																							<xsl:choose>
+																								<xsl:when test="position() = 1">
+																									<xsl:element name="td">
+																										<xsl:value-of select="rr:value" />
+																									</xsl:element>
+																								</xsl:when>
+																								<xsl:otherwise>
+																									<xsl:element name="tr">
+																										<xsl:element name="td"/>
+																										<xsl:element name="td"/>
+																										<xsl:element name="td">
+																											<xsl:value-of select="rr:value" />
+																										</xsl:element>
+																									</xsl:element>																							
+																								</xsl:otherwise>
+																							</xsl:choose>
+																						</xsl:for-each>
+																					</xsl:element>
+																				</xsl:otherwise>
+																			</xsl:choose>
+																		</xsl:for-each>
+																	</xsl:otherwise>
+																</xsl:choose>
+															</xsl:element>
 														</xsl:for-each>
 													</table>
 												</xsl:element>

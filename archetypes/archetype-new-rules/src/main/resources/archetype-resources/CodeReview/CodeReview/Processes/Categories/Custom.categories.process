@@ -17,9 +17,9 @@
     limitations under the License.
 
 -->
-<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
+<pd:ProcessDefinition xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/file" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd">
     <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
-    <pd:name>CodeReview/Processes/Main.categories.process</pd:name>
+    <pd:name>CodeReview/Processes/Categories/Custom.categories.process</pd:name>
     <pd:startName>Start</pd:startName>
     <pd:startX>58</pd:startX>
     <pd:startY>130</pd:startY>
@@ -58,18 +58,22 @@
             </element>
         </config>
         <pd:inputBindings>
-        <pd:inputBindings>
             <categories>
                 <pfx:category>
                     <pfx:category>
                         <xsl:value-of select="'NEW'"/>
                     </pfx:category>
-                    <pfx:name>
-                        <xsl:value-of select="'New'"/>
-                    </pfx:name>
-                    <pfx:description>
-                        <xsl:value-of select="'New category'"/>
-                    </pfx:description>
+                    <pfx:infos>
+                        <pfx:name>
+                            <xsl:value-of select="'New'"/>
+                        </pfx:name>
+                        <pfx:description>
+                            <xsl:value-of select="'New category'"/>
+                        </pfx:description>
+                        <pfx:descriptionHTML>
+                            <xsl:value-of select="'New category'"/>
+                        </pfx:descriptionHTML>
+                    </pfx:infos>
                 </pfx:category>
             </categories>
         </pd:inputBindings>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    (C) Copyright 2011-2015 FastConnect SAS
+    (http://www.fastconnect.fr/) and others.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:res="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:rev="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" xmlns:lp="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" xmlns:log="http://www.tibco.com/pe/WriteToLogActivitySchema" xmlns:pfx="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:ns1="http://www.tibco.com/pe/EngineTypes" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:pfx5="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" xmlns:pfx4="http://www.fastconnect.fr/FCCodeReview/ReviewProcessInput.xsd" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions">
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ProcessGroup.xsd" schemaLocation="/CodeReview/Resources/XSD/ProcessesAndGroups.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/ReviewResult.xsd" schemaLocation="/CodeReview/Resources/XSD/ReviewResult.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview.xsd" schemaLocation="/CodeReview/Resources/XSD/CodeReview.xsd"/>
+    <xsd:import namespace="http://fastconnect.fr/tibco/bw/fccodereview/lightprocess" schemaLocation="/CodeReview/Resources/XSD/LightProcess.xsd"/>
+    <xsd:import namespace="http://www.fastconnect.fr/FCTibcoFactory/CodeReview/RuleCard.xsd" schemaLocation="/CodeReview/Resources/XSD/RuleCard.xsd"/>
+    <pd:name>CodeReview/Processes/Implementation/NEW-001 - New rule.process</pd:name>
+    <pd:description/>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="rule">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:rule"/>
+                    <xsd:element name="disabled" type="xsd:boolean"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>58</pd:startX>
+    <pd:startY>98</pd:startY>
+    <pd:returnBindings>
+        <rules>
+            <res:rule>
+                <xsl:attribute name="disabled">
+                    <xsl:value-of select="$Start/rule/disabled"/>
+                </xsl:attribute>
+                <xsl:copy-of select="$Start/rule/pfx:rule"/>
+                <xsl:for-each select="$Extract-Project-Structure/lp:project/lp:process[count(lp:activity)>0]">
+                    <!--For this example : all processes of the project with at least one activity will fail the rule-->
+                    <!--To implement a real rule, only bad processes should be put in the 'result' element-->
+                    <res:result>
+                        <res:resource>
+                            <xsl:value-of select="@name"/>
+                        </res:resource>
+                        <!--key is the first column, displayed caption can be configured in the Rule Card-->
+                        <res:key>
+                            <xsl:value-of select="'process'"/>
+                        </res:key>
+                        <res:value>
+                            <xsl:value-of select="@name"/>
+                        </res:value>
+                        <!--Each child key will be another column, each child value will be another line-->
+                        <xsl:for-each select="lp:activity">
+                            <res:child>
+                                <res:key>
+                                    <xsl:value-of select="'activity'"/>
+                                </res:key>
+                                <res:value>
+                                    <xsl:value-of select="@name"/>
+                                </res:value>
+                                <xsl:for-each select=".">
+                                    <res:child>
+                                        <res:key>
+                                            <xsl:value-of select="'activity-type'"/>
+                                        </res:key>
+                                        <res:value>
+                                            <xsl:value-of select="@type"/>
+                                        </res:value>
+                                    </res:child>
+                                </xsl:for-each>
+                            </res:child>
+                        </xsl:for-each>
+                    </res:result>
+                </xsl:for-each>
+            </res:rule>
+        </rules>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="rules">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="res:rule" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>602</pd:endX>
+    <pd:endY>98</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1357291677611</pd:targetNamespace>
+    <pd:activity name="Extract Project Structure">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>207</pd:x>
+        <pd:y>106</pd:y>
+        <config>
+            <processName>/CodeReview/Processes/Tools/Extract Project Structure.process</processName>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>Extract Project Structure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Extract Project Structure</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:label>
+        <pd:name>Label</pd:name>
+        <pd:description>Implement rule here</pd:description>
+        <pd:x>350</pd:x>
+        <pd:y>176</pd:y>
+        <pd:width>125</pd:width>
+        <pd:height>33</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-16724941</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+    <pd:label>
+        <pd:name>Label (1)</pd:name>
+        <pd:description>Format result in the End</pd:description>
+        <pd:x>616</pd:x>
+        <pd:y>176</pd:y>
+        <pd:width>145</pd:width>
+        <pd:height>33</pd:height>
+        <pd:fontColor>-16777216</pd:fontColor>
+        <pd:color>-16724941</pd:color>
+        <pd:type>solid</pd:type>
+        <pd:thickness>0</pd:thickness>
+        <pd:fade>true</pd:fade>
+    </pd:label>
+</pd:ProcessDefinition>

@@ -381,6 +381,7 @@
 	<xs:element name="namespace" type="xs:string"/>
 	<xs:element name="resource" type="xs:string"/>
 	<xs:element name="property" type="xs:string"/>
+	<xs:element name="rule" type="rr:RuleType"/>
 	<xs:complexType name="RuleType">
 		<xs:sequence>
 			<xs:element ref="rc:rule"/>

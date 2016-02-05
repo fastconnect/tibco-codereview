@@ -28,7 +28,10 @@
 			</xsl:attribute>
 			<xsl:apply-templates select="pd:group" />
 			<xsl:apply-templates select="pd:activity[pd:type != 'com.tibco.pe.core.CallProcessActivity']" />
-			<xsl:apply-templates select="pd:activity[pd:type = 'com.tibco.pe.core.CallProcessActivity']" />
+			<xsl:apply-templates select="pd:activity[pd:type = 'com.tibco.pe.core.CallProcessActivity']" /> 
+			<xsl:if test="count(/pd:ProcessDefinition/pd:endType[node()|@*]) &gt; 0">
+				<xsl:apply-templates select="pd:returnBindings" />
+			</xsl:if>
 		</lp:process>
 	</xsl:template>
 
@@ -84,10 +87,21 @@
 	<xsl:template match="pd:activity" priority="0">
 		<lp:activity>
 			<xsl:attribute name="name">
-			<xsl:value-of select="@name" />
+				<xsl:value-of select="@name" />
 			</xsl:attribute>
 			<xsl:attribute name="type">
 				<xsl:value-of select="pd:type" />
+			</xsl:attribute>
+		</lp:activity>
+	</xsl:template>
+
+	<xsl:template match="pd:returnBindings" priority="0">
+		<lp:activity>
+			<xsl:attribute name="name">
+				<xsl:value-of select="'End'" />
+			</xsl:attribute>
+			<xsl:attribute name="type">
+				<xsl:value-of select="'com.tibco.pe.core.End'" /> <!-- supposing it does not exist yet -->
 			</xsl:attribute>
 		</lp:activity>
 	</xsl:template>

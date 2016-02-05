@@ -148,11 +148,17 @@
             <xs:element name="category">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="locale" type="xs:string"/>
                         <xs:element name="category" type="xs:string"/>
-                        <xs:element name="name" type="xs:string"/>
-                        <xs:element name="description" type="xs:string"/>
-                        <xs:element name="descriptionHTML" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" name="infos">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element minOccurs="0" name="locale" type="xs:string"/>
+                                    <xs:element name="name" type="xs:string"/>
+                                    <xs:element name="description" type="xs:string"/>
+                                    <xs:element minOccurs="0" name="descriptionHTML" type="xs:string"/>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -181,6 +187,15 @@
                                     <xs:element name="description" type="xs:string"/>
                                     <xs:element name="descriptionHTML" type="xs:string"/>
                                     <xs:element minOccurs="0" name="correctionHTML" type="xs:string"/>
+                                    <xs:element maxOccurs="unbounded" minOccurs="0" name="display">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="key" type="xs:string"/>
+                                                <xs:element name="value" type="xs:string"/>
+                                                <xs:element name="descriptionHTML" type="xs:string"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
                                 </xs:sequence>
                             </xs:complexType>
                         </xs:element>
@@ -518,6 +533,7 @@
                     <xs:attribute name="timestamp" type="xs:dateTime"/>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="rule" type="rr:RuleType"/>
             <xs:element name="stack">
                 <xs:complexType>
                     <xs:choice maxOccurs="unbounded" minOccurs="0">
